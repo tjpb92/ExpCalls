@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+<xs:element name="call">
+    <xs:annotation>
+        <xs:documentation>Commentaire</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element type="xs:short" name="id"/>
+            <xs:element type="xs:short" name="idClient"/>
+            <xs:element type="xs:short" name="numéroTicket" minOccurs="0"/>
+            <xs:element type="xs:string" name="date"/>
+            <xs:element type="xs:string" name="heure"/>
+            <xs:element type="xs:string" name="nom"/>
+            <xs:element type="xs:string" name="telephone"/>
+            <xs:element type="xs:string" name="raisonAppel"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="calls">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="call" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+</xs:schema>

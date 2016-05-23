@@ -1,0 +1,299 @@
+/*
+ * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
+ * commande à un programme.
+ * @version Mai 2016.
+ * @author Thierry Baribaud.
+ */
+package expcalls;
+
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+public class GetArgs {
+
+    private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/YYYY");
+
+    /**
+     * SourceServer : prod pour le serveur de production, dev pour le serveur de
+     * développement. Valeur par défaut : dev.
+     */
+    private String SourceServer = "dev";
+
+    /**
+     * Unum : Référence du client. Valeur par défaut : doit être spécifié en
+     * ligne de commande.
+     */
+    private int unum = 0;
+
+    /**
+     * FileOut : fichier qui recevra les résultats du chargement. Valeur par
+     * défaut : calls_0000.xml.
+     */
+    private String FileOut = "calls_0000.xml";
+
+    /**
+     * BegDate : date de début de l'export à 0h.
+     */
+    private Timestamp BegDate = new Timestamp((new java.util.Date().getTime())-1000*60*60*24);
+    
+    /**
+     * EndDate : date de fin de l'export à 0h.
+     */
+    private Timestamp EndDate = new Timestamp(new java.util.Date().getTime());
+    
+    /**
+     * debugMode : fonctionnement du programme en mode debug (true/false).
+     * Valeur par défaut : false.
+     */
+    private boolean debugMode = false;
+
+    /**
+     * testMode : fonctionnement du programme en mode test (true/false). Valeur
+     * par défaut : false.
+     */
+    private boolean testMode = false;
+
+    /**
+     * @return SourceServer : retourne la valeur pour le serveur source.
+     */
+    public String getSourceServer() {
+        return (SourceServer);
+    }
+
+    /**
+     * @return FileOut : retourne le nom du fichier où envoyer les résultats.
+     */
+    public String getFileOut() {
+        return (FileOut);
+    }
+
+    /**
+     * @return Unum : retourne la référence du client.
+     */
+    public int getUnum() {
+        return (unum);
+    }
+
+    /**
+     * @return BegDate : date de début de l'export à 0h.
+     */
+    public Timestamp getBegDate() {
+        return (BegDate);
+    }
+
+    /**
+     * @return EndDate : date de fin de l'export à 0h.
+     */
+    public Timestamp getEndDate() {
+        return (EndDate);
+    }
+
+    /**
+     * @return daemonMode : retourne le mode de fonctionnement debug.
+     */
+    public boolean getDebugMode() {
+        return (debugMode);
+    }
+
+    /**
+     * @return testMode : retourne le mode de fonctionnement test.
+     */
+    public boolean getTestMode() {
+        return (testMode);
+    }
+
+    /**
+     * @param SourceServer : définit le serveur source.
+     */
+    public void setSourceServer(String SourceServer) {
+        this.SourceServer = SourceServer;
+    }
+
+    /**
+     * @param FileOut : définit le fichier où envoyer les résultats.
+     */
+    public void setFileOut(String FileOut) {
+        this.FileOut = FileOut;
+    }
+
+    /**
+     * @param unum : définit la référence client.
+     */
+    public void setUnum(int unum) {
+        this.unum = unum;
+    }
+
+    /**
+     *  @param BegDate : date de début de l'export à 0h.
+     */
+    public void setBegDate(Timestamp BegDate) {
+        this.BegDate = BegDate;
+    }
+
+    /**
+     * @param EndDate : date de fin de l'export à 0h.
+     */
+    public void setEndDate(Timestamp EndDate) {
+        this.EndDate = EndDate;
+    }
+
+    /**
+     * @param debugMode : fonctionnement du programme en mode debug (true/false).
+     */
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+    /**
+     * @param testMode : fonctionnement du programme en mode test (true/false).
+     */
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
+
+    /**
+     * <p>Les arguments en ligne de commande permettent de changer le mode de 
+     * fonctionnement.</p><ul>
+     * <li>-dbserver : référence à la base de donnée, par défaut fait référence 
+     * à la base de développement,  cf. fichier de paramètres 
+     * <i>myDatabases.prop</i> (optionnel)</li>
+     * <li>-u unum : identifiant du service d'urgence (obligatoire).</li>
+     * <li>-b début : date de début de l'extraction à 0h, hier par défaut, 
+     * format DD/MM/AAAA (optionnel).</li>
+     * <li>-b fin : date de fin de l'extraction à 0h, aujourd'hui par défaut, 
+     * format DD/MM/AAAA (optionnel).</li>
+     * <li>-o fichier : fichier vers lequel exporter les données de l'agence, 
+     * nom par défaut <i>calls_0000.xml</i>(optionnel).</li>
+     * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux, 
+     * désactivé par défaut (optionnel).</li>
+     * <li>-t : le programme fonctionne en mode de test, les transactions en base 
+     *      de données ne sont pas exécutées, désactivé par défaut (optionnel).</li>
+     * </ul>
+     * @param Args arguments de la ligne de commande. 
+     */
+    public GetArgs(String Args[]) {
+
+        String[] Errmsg = {"Erreur n°1 : Mauvaise source de données",
+            "Erreur n°2 : Mauvaise référence client",
+            "Erreur n°3 : Mauvais fichier résultat",
+            "Erreur n°4 : Mauvaise date de début",
+            "Erreur n°5 : Mauvaise date de fin",
+            "Erreur n°6 : Mauvais argument"};
+        String ErrorValue = "";
+        int errNo = Errmsg.length;
+        int i;
+        int n;
+        int ip1;
+
+        n = Args.length;
+
+        System.out.println("nargs=" + n);
+//    for(i=0; i<n; i++) System.out.println("args["+i+"]="+Args[i]);
+        i = 0;
+        while (i < n) {
+//            System.out.println("args[" + i + "]=" + Args[i]);
+            ip1 = i + 1;
+            if (Args[i].equals("-dbserver")) {
+                if (ip1 < n) {
+                    if (Args[ip1].equals("dev") || Args[ip1].equals("prod") || Args[ip1].equals("mysql")) {
+                        setSourceServer(Args[ip1]);
+                    } else {
+                        errNo = 0;
+                        ErrorValue = Args[ip1];
+                    }
+                    i = ip1;
+                } else {
+                    errNo = 0;
+                    ErrorValue = "base de données non définie";
+                }
+            } else if (Args[i].equals("-u")) {
+                if (ip1 < n) {
+                    try {
+                        setUnum(Integer.parseInt(Args[ip1]));
+                        i = ip1;
+                    }
+                    catch (Exception MyException) {
+                        errNo = 1;
+                        ErrorValue = "La référence client doit être numérique";
+                    }
+                } else {
+                    errNo = 1;
+                    ErrorValue = "référence client non définie";
+                }
+            } else if (Args[i].equals("-b")) {
+                if (ip1 < n) {
+                    try {
+                        setBegDate(Timestamp.valueOf(Args[ip1]));
+                        i = ip1;
+                    }
+                    catch (Exception MyException) {
+                        errNo = 3;
+                        ErrorValue = "La date de début doit être valide jj/mm/aaaa";
+                    }
+                } else {
+                    errNo = 1;
+                    ErrorValue = "date de début non définie";
+                }
+            } else if (Args[i].equals("-e")) {
+                if (ip1 < n) {
+                    try {
+                        setEndDate(Timestamp.valueOf(Args[ip1]));
+                        i = ip1;
+                    }
+                    catch (Exception MyException) {
+                        errNo = 4;
+                        ErrorValue = "La date de fin doit être valide jj/mm/aaaa";
+                    }
+                } else {
+                    errNo = 1;
+                    ErrorValue = "date de fin non définie";
+                }
+            } else if (Args[i].equals("-o")) {
+                if (ip1 < n) {
+                    setFileOut(Args[ip1]);
+                    i = ip1;
+                } else {
+                    errNo = 2;
+                    ErrorValue = "nom de fichier non défini";
+                }
+            } else if (Args[i].equals("-d")) {
+                setDebugMode(true);
+            } else if (Args[i].equals("-t")) {
+                setTestMode(true);
+            } else {
+                errNo = 5;
+                ErrorValue = Args[i];
+            }
+            i++;
+        }
+//        System.out.println("errNo=" + errNo);
+//        if (errNo != Errmsg.length) {
+//            throw new ExpAgencyException(Errmsg[errNo] + " : " + ErrorValue);
+        }
+        
+    /**
+     * Affiche le mode d'utilisation du programme.
+     */
+    public void usage() {
+        System.out.println("Usage : java ExpCalls -dbserver prod -u unum " +
+                           " [-b début] [-f fin] [-o fichier.xml] [-d] [-t]");
+    }
+    
+    /**
+     * Affiche le contenu de GetArgs.
+     * @return retourne le contenu de GetArgs.
+     */
+    @Override
+    public String toString() {
+    return this.getClass().getName() +
+           " : {dbServer=" + SourceServer + 
+           ", unum=" + unum + 
+           ", début=" + MyDateFormat.format(BegDate) +
+           ", fin=" + MyDateFormat.format(EndDate) +
+           ", fichier=" + FileOut +
+           ", debugMode=" + debugMode + 
+           ", testMode=" + testMode +
+           "}";
+    }
+}
