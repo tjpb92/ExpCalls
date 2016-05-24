@@ -10,7 +10,7 @@ Ce fichier est importable dans Microsoft Excel.
 ```
 java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-d] [-t] 
 
--dbserver db est la rélérence à la base de données, par défaut désinge la base de données de développement. Voir fichier myDatabases.prop (optionnel).
+-dbserver db est la rélérence à la base de données, par défaut désinge la base de données de développement. Voir fichier *myDatabases.prop* (optionnel).
 -u unum est la référence du service d'urgence (obligatoire).
 -b début : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (optionnel).
 -e fin : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (optionnel).

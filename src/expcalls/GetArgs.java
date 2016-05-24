@@ -9,10 +9,11 @@ package expcalls;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GetArgs {
 
-    private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/YYYY");
+    private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * SourceServer : prod pour le serveur de production, dev pour le serveur de
@@ -171,21 +172,17 @@ public class GetArgs {
      *      de données ne sont pas exécutées, désactivé par défaut (optionnel).</li>
      * </ul>
      * @param Args arguments de la ligne de commande. 
+     * @throws expcalls.GetArgsException 
      */
-    public GetArgs(String Args[]) {
+    public GetArgs(String Args[]) throws GetArgsException {
 
-        String[] Errmsg = {"Erreur n°1 : Mauvaise source de données",
-            "Erreur n°2 : Mauvaise référence client",
-            "Erreur n°3 : Mauvais fichier résultat",
-            "Erreur n°4 : Mauvaise date de début",
-            "Erreur n°5 : Mauvaise date de fin",
-            "Erreur n°6 : Mauvais argument"};
-        String ErrorValue = "";
-        int errNo = Errmsg.length;
         int i;
         int n;
         int ip1;
+        Date MyDate;
 
+        // Demande une analyse d'une date valide
+        MyDateFormat.setLenient(false); 
         n = Args.length;
 
         System.out.println("nargs=" + n);
@@ -199,83 +196,73 @@ public class GetArgs {
                     if (Args[ip1].equals("dev") || Args[ip1].equals("prod") || Args[ip1].equals("mysql")) {
                         setSourceServer(Args[ip1]);
                     } else {
-                        errNo = 0;
-                        ErrorValue = Args[ip1];
+                        throw new GetArgsException("Mauvaise source de données : " + Args[ip1]);
                     }
                     i = ip1;
                 } else {
-                    errNo = 0;
-                    ErrorValue = "base de données non définie";
+                    throw new GetArgsException("Base de données non définie");
                 }
             } else if (Args[i].equals("-u")) {
                 if (ip1 < n) {
                     try {
                         setUnum(Integer.parseInt(Args[ip1]));
                         i = ip1;
-                    }
-                    catch (Exception MyException) {
-                        errNo = 1;
-                        ErrorValue = "La référence client doit être numérique";
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("La référence client doit être numérique : " + Args[ip1]);
                     }
                 } else {
-                    errNo = 1;
-                    ErrorValue = "référence client non définie";
+                    throw new GetArgsException("Référence client non définie");
                 }
             } else if (Args[i].equals("-b")) {
                 if (ip1 < n) {
                     try {
-                        setBegDate(Timestamp.valueOf(Args[ip1]));
+                        MyDate = (Date) MyDateFormat.parse(Args[ip1]);
+                        setBegDate(new Timestamp(MyDate.getTime()));
                         i = ip1;
-                    }
-                    catch (Exception MyException) {
-                        errNo = 3;
-                        ErrorValue = "La date de début doit être valide jj/mm/aaaa";
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("La date de début doit être valide jj/mm/aaaa : "  + Args[ip1]);
                     }
                 } else {
-                    errNo = 1;
-                    ErrorValue = "date de début non définie";
+                    throw new GetArgsException("Date de début non définie");
                 }
             } else if (Args[i].equals("-e")) {
                 if (ip1 < n) {
                     try {
-                        setEndDate(Timestamp.valueOf(Args[ip1]));
+                        MyDate = (Date) MyDateFormat.parse(Args[ip1]);
+                        setEndDate(new Timestamp(MyDate.getTime()));
                         i = ip1;
-                    }
-                    catch (Exception MyException) {
-                        errNo = 4;
-                        ErrorValue = "La date de fin doit être valide jj/mm/aaaa";
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("La date de fin doit être valide jj/mm/aaaa : " + Args[ip1]);
                     }
                 } else {
-                    errNo = 1;
-                    ErrorValue = "date de fin non définie";
+                    throw new GetArgsException("Date de fin non définie");
                 }
             } else if (Args[i].equals("-o")) {
                 if (ip1 < n) {
                     setFileOut(Args[ip1]);
                     i = ip1;
                 } else {
-                    errNo = 2;
-                    ErrorValue = "nom de fichier non défini";
+                    throw new GetArgsException("Nom de fichier non défini");
                 }
             } else if (Args[i].equals("-d")) {
                 setDebugMode(true);
             } else if (Args[i].equals("-t")) {
                 setTestMode(true);
             } else {
-                errNo = 5;
-                ErrorValue = Args[i];
+                throw new GetArgsException("Mauvais argument : " + Args[i]);
             }
             i++;
         }
-//        System.out.println("errNo=" + errNo);
-//        if (errNo != Errmsg.length) {
-//            throw new ExpAgencyException(Errmsg[errNo] + " : " + ErrorValue);
+        if (getBegDate().after(getEndDate())) {
+            throw new GetArgsException("La date de début "+ MyDateFormat.format(getBegDate())
+                    + " doit être antérieure à la date de fin " + MyDateFormat.format(getEndDate()));
         }
+    }
         
     /**
      * Affiche le mode d'utilisation du programme.
      */
-    public void usage() {
+    public static void usage() {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum " +
                            " [-b début] [-f fin] [-o fichier.xml] [-d] [-t]");
     }

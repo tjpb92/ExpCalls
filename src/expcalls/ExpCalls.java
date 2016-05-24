@@ -6,6 +6,9 @@
  */
 package expcalls;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ExpCalls {
 
     /**
@@ -14,10 +17,13 @@ public class ExpCalls {
      * @param Args arguments de la ligne de commande. 
      */
     public static void main(String[] Args) {
-        GetArgs MyArgs = new GetArgs(Args);
-        
-        MyArgs.usage();
-        System.out.println(MyArgs);
+        try {
+            GetArgs MyArgs = new GetArgs(Args);
+            System.out.println(MyArgs);
+        } catch (GetArgsException ex) {
+            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, ex);
+            GetArgs.usage();
+        }
     }
     
 }
