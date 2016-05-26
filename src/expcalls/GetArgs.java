@@ -91,7 +91,7 @@ public class GetArgs {
     }
 
     /**
-     * @return daemonMode : retourne le mode de fonctionnement debug.
+     * @return debugMode : retourne le mode de fonctionnement debug.
      */
     public boolean getDebugMode() {
         return (debugMode);
@@ -164,7 +164,7 @@ public class GetArgs {
      * format DD/MM/AAAA (optionnel).</li>
      * <li>-b fin : date de fin de l'extraction à 0h, aujourd'hui par défaut, 
      * format DD/MM/AAAA (optionnel).</li>
-     * <li>-o fichier : fichier vers lequel exporter les données de l'agence, 
+     * <li>-o fichier : fichier vers lequel exporter les données des appels, 
      * nom par défaut <i>calls_0000.xml</i>(optionnel).</li>
      * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux, 
      * désactivé par défaut (optionnel).</li>
