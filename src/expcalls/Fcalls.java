@@ -25,6 +25,8 @@ public class Fcalls {
   private String Ctime;
   private Timestamp Cdate2;
   private String Ctime2;
+  private String Corp;
+  private String Cnumber5;
 
   public int getCnum() {
     return cnum;
@@ -76,6 +78,14 @@ public class Fcalls {
 
   public String getCtime2() {
     return Ctime2;
+    }
+
+  public String getCorp() {
+    return Corp;
+    }
+
+  public String getCnumber5() {
+    return Cnumber5;
     }
 
   public String getCnumber4() {
@@ -142,6 +152,14 @@ public class Fcalls {
     this.Ctime2 = (Ctime2 != null)?Ctime2.trim():null;
     }
 
+  public void setCorp(String Corp) {
+    this.Corp = (Corp != null)?Corp.trim():null;
+    }
+
+  public void setCnumber5(String Cnumber5) {
+    this.Cnumber5 = (Cnumber5 != null)?Cnumber5.trim():null;
+    }
+
   public void setCnumber4(String Cnumber4) {
     this.Cnumber4 = (Cnumber4 != null)?Cnumber4.trim():null;
     }
@@ -173,6 +191,8 @@ public class Fcalls {
            ", Ctime=" + Ctime + 
            ", Cdate2=" + Cdate2 +
            ", Ctime2=" + Ctime2 + 
+           ", Corp=" + Corp + 
+           ", Cnumber5=" + Cnumber5 + 
            "}";
   }
 }

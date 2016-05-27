@@ -32,7 +32,8 @@ public class FcallsDAO extends PaternDAO {
 
     Stmt = new StringBuffer("select cnum, cunum, cname, ctel, caddress, caddress2," +
              " caccess, cposcode, city, csympt," +
-             " cnumber4, cc6num, cdate, ctime, cdate2, ctime2" +
+             " cnumber4, cc6num, cdate, ctime, cdate2, ctime2," +
+             " corp, cnumber5" +
              " from fcalls" +
              " where (cinternal = 0 or cinternal is null)" +
              " and (ctest = 0 or ctest is null)");
@@ -48,17 +49,20 @@ public class FcallsDAO extends PaternDAO {
     setReadResultSet();
 
     setUpdateStatement("update fcalls" +
-                       " set cunum=?, cname=?, a6name=?, caddress=?, caddress2=?," +
+                       " set cunum=?, cname=?, ctel=?, caddress=?, caddress2=?," +
                        " caccess=?, cposcode=?, city=?, csympt=?," +
-                       " cnumber4=?, cc6num=?, cdate=?, ctime=?, cdate2=?, ctime2=?" +
+                       " cnumber4=?, cc6num=?, cdate=?, ctime=?, cdate2=?, ctime2=?," +
+                       " corp=?, cnumber5=?" +
                        " where cnum=?;");
     setUpdatePreparedStatement();
   
     setInsertStatement("insert into fcalls" +
-                       " (cunum, cname, a6name, caddress, caddress2," +
+                       " (cunum, cname, ctel, caddress, caddress2," +
                        " caccess, cposcode, city, csympt," +
                        " cnumber4, cc6num, cdate, ctime, cdate2, ctime2)" +
-                       " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                       " corp, cnumber5" +
+                       " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+                       " ?,?");
     setInsertPreparedStatement();
 
     setDeleteStatement("delete from fcalls where cnum=?;");
@@ -92,6 +96,8 @@ public class FcallsDAO extends PaternDAO {
         MyFcalls.setCtime(ReadResultSet.getString("ctime"));
         MyFcalls.setCdate2(ReadResultSet.getTimestamp("cdate2"));
         MyFcalls.setCtime2(ReadResultSet.getString("ctime2"));
+        MyFcalls.setCorp(ReadResultSet.getString("corp"));
+        MyFcalls.setCnumber5(ReadResultSet.getString("cnumber5"));
         }
       else {
         System.out.println("No more record in fcalls");
@@ -126,7 +132,9 @@ public class FcallsDAO extends PaternDAO {
       UpdatePreparedStatement.setString(11, MyFcalls.getCtime());
       UpdatePreparedStatement.setTimestamp(15, MyFcalls.getCdate2());
       UpdatePreparedStatement.setString(12, MyFcalls.getCtime2());
-      UpdatePreparedStatement.setInt(16, MyFcalls.getCc6num());
+      UpdatePreparedStatement.setString(16, MyFcalls.getCorp());
+      UpdatePreparedStatement.setString(17, MyFcalls.getCnumber5());
+      UpdatePreparedStatement.setInt(18, MyFcalls.getCc6num());
       setNbAffectedRow(UpdatePreparedStatement.executeUpdate());
       if (getNbAffectedRow() == 0) {
         System.out.println("Failed to update data into fcalls");
@@ -180,6 +188,8 @@ public class FcallsDAO extends PaternDAO {
       InsertPreparedStatement.setString(11, MyFcalls.getCtime());
       InsertPreparedStatement.setTimestamp(15, MyFcalls.getCdate2());
       InsertPreparedStatement.setString(12, MyFcalls.getCtime2());
+      InsertPreparedStatement.setString(16, MyFcalls.getCorp());
+      InsertPreparedStatement.setString(17, MyFcalls.getCnumber5());
       setNbAffectedRow(InsertPreparedStatement.executeUpdate());
       if (getNbAffectedRow() == 0) {
         System.out.println("Failed to insert data into fcalls");
@@ -234,7 +244,7 @@ public class FcallsDAO extends PaternDAO {
       MyFcalls1.setCtel("01.01.01.01.01");
       MyFcalls1.setCaddress("UTOPIA");
       MyFcalls1.setCaddress2("utopia@gmail.com");
-      MyFcalls1.setCaccess("12, rue des rèves");
+      MyFcalls1.setCaccess("12, rue des r�ves");
       MyFcalls1.setCposcode("92400");
       MyFcalls1.setCity("UTOPIA CITY");
       MyFcalls1.setCsympt("appel de test");
@@ -244,12 +254,14 @@ public class FcallsDAO extends PaternDAO {
       MyFcalls1.setCtime("14:00:00");
       MyFcalls1.setCdate2(Timestamp.valueOf("2050-12-31 23:59:59.0"));
       MyFcalls1.setCtime2("15:00:00");
+      MyFcalls1.setCorp("anstel");
+      MyFcalls1.setCnumber5("5678");
       System.out.println("Fcalls(before insert)=" + MyFcalls1);
       MyFcallsDAO.insert(MyFcalls1);
       System.out.println("Fcalls(after insert)=" + MyFcalls1);
       System.out.println("Affected row(s)=" + MyFcallsDAO.getNbAffectedRow());
 
-// Essai mise Ã  jour
+// Essai mise à jour
       MyFcalls1.setCaddress2(MyFcalls1.getCaddress2() + ",utopia@free.fr");
       MyFcallsDAO.update(MyFcalls1);
       System.out.println("Fcalls(after update)=" + MyFcalls1);
@@ -278,6 +290,8 @@ public class FcallsDAO extends PaternDAO {
         System.out.println("  getCtime()=" + MyFcalls.getCtime());
         System.out.println("  getCdate2()=" + MyFcalls.getCdate2());
         System.out.println("  getCtime2()=" + MyFcalls.getCtime2());
+        System.out.println("  getCorp()=" + MyFcalls.getCorp());
+        System.out.println("  getCnumber5()=" + MyFcalls.getCnumber5());
         }
 
 // Essai suppression
@@ -286,7 +300,16 @@ public class FcallsDAO extends PaternDAO {
       System.out.println("Affected row(s)=" + MyFcallsDAO.getNbAffectedRow());
 
       }
-    catch (IOException | DBServerException | ClassNotFoundException | SQLException MyException) {
+    catch (IOException MyException) {
+      System.out.println("Problem while creating FcallsDAO " + MyException);
+    }
+    catch (DBServerException MyException) {
+      System.out.println("Problem while creating FcallsDAO " + MyException);
+    }
+    catch (ClassNotFoundException MyException) {
+      System.out.println("Problem while creating FcallsDAO " + MyException);
+    }
+    catch (SQLException MyException) {
       System.out.println("Problem while creating FcallsDAO " + MyException);
     }
   }

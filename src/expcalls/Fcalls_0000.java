@@ -32,8 +32,8 @@ public class Fcalls_0000 extends Fcalls {
     }
 
     public final static String CSV_Title() {
-        return ("ID;Nom;TÃ©lÃ©phone;Adresse;ComplÃ©ment;AccÃ¨s;CP;Ville"
-                + "Raison d'appel;Digicode;Saisi le;Ã ;ModifiÃ© le;Ã ");
+        return ("ID;Nom;Téléphone;Adresse;Complément;Accès;CP;Ville"
+                + "Raison d'appel;Digicode;Saisi le;à;Modifié le;à");
     }
 
     public String toCSV() {

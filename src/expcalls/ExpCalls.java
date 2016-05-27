@@ -19,7 +19,7 @@ public class ExpCalls {
 
     /**
      * Les arguments en ligne de commande permettent de changer le mode de
-     * fonctionnement. Voir GetArgs pour plus de dÃ©tails.
+     * fonctionnement. Voir GetArgs pour plus de détails.
      *
      * @param Args arguments de la ligne de commande.
      * @throws java.io.IOException
@@ -29,8 +29,11 @@ public class ExpCalls {
     public ExpCalls(String[] Args) throws IOException, DBServerException, SQLException {
         Fcalls MyFcalls;
         FcallsDAO MyFcallsDAO;
-        Fcalls_0000 MyFcalls_0000;
+//        Fcalls_0000 MyFcalls_0000;
 //        CallsXMLDocument MyXMLDocument;
+        Fcomplmt MyFcomplmt;
+        FcomplmtDAO MyFcomplmtDAO;
+        Ticket_0000 MyTicket_0000;
 
         GetArgs MyArgs;
         ApplicationProperties MyApplicationProperties;
@@ -39,16 +42,16 @@ public class ExpCalls {
 
         int i;
 
-        // On rÃ©cupÃ¨re les arguments de la ligne de commande.
-        System.out.println("RÃ©cupÃ©ration des arguments en ligne de commande ...");
+        // On récupère les arguments de la ligne de commande.
+        System.out.println("Récupération des arguments en ligne de commande ...");
         try {
             MyArgs = new GetArgs(Args);
             System.out.println(MyArgs);
 
-            System.out.println("Lecture du fichier de paramÃ¨tres ...");
+            System.out.println("Lecture du fichier de paramètres ...");
             MyApplicationProperties = new ApplicationProperties("MyDatabases.prop");
 
-            System.out.println("Lecture des paramÃ¨tres de base de donnÃ©es ...");
+            System.out.println("Lecture des paramètres de base de données ...");
             MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
             System.out.println("  " + MyDBServer);
 
@@ -57,12 +60,22 @@ public class ExpCalls {
 
             MyFcallsDAO = new FcallsDAO(MyDBManager.getConnection(), 0, MyArgs.getUnum());
             i = 0;
-            Fcalls_0000.CSV_Title();
+//            System.out.println(Fcalls_0000.CSV_Title());
             while ((MyFcalls = MyFcallsDAO.select()) != null) {
                 i++;
-                MyFcalls_0000 = new Fcalls_0000(MyFcalls);
-                MyFcalls_0000.toCSV();
+                if (MyFcalls.getCc6num() > 0 ) {
+                    MyFcomplmtDAO = new FcomplmtDAO(MyDBManager.getConnection(), MyFcalls.getCc6num());
+                    MyFcomplmt = MyFcomplmtDAO.select();
+                    MyTicket_0000 = new Ticket_0000(MyFcalls, MyFcomplmt);
+                }
+                else {
+                    MyFcomplmt = null;
+                    MyTicket_0000 = new Ticket_0000(MyFcalls);
+                }
+//                MyFcalls_0000 = new Fcalls_0000(MyFcalls);
+//                System.out.println(MyFcalls_0000.toCSV());
 //                System.out.println("Fcalls(" + i + ")=" + MyFcalls);
+                System.out.println("Ticket(" + i + ")=" + MyTicket_0000);
 //                MyXMLDocument.AddToXMLDocument(MyFcalls);
             }
 //            MyXMLDocument.FinalizeXMLDocument(MyArgs.getFileOut());
@@ -85,10 +98,10 @@ public class ExpCalls {
         try {
             MyExpCalls = new ExpCalls(Args);
         } catch (Exception MyException) {
-            System.out.println("ProblÃ¨me lors du lancement de ExpCalls" + MyException);
+            System.out.println("Problème lors du lancement de ExpCalls" + MyException);
         }
 
-        System.out.println("Traitement terminÃ©.");
+        System.out.println("Traitement terminé.");
 
     }
 
