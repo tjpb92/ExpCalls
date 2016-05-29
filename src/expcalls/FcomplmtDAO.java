@@ -9,7 +9,8 @@ import liba2pi.DBServer;
 import liba2pi.DBServerException;
 
 /**
- * Class that describes the ways to access table fcomplmt through JDBC.
+ * Classe qui décrit les méthodes pour accéder à la table fcomplmt au
+ * travers de JDBC.
  *
  * @author Thierry Baribaud.
  * @version May 2016.
@@ -20,7 +21,7 @@ public class FcomplmtDAO extends PaternDAO {
      * Class constructor.
      *
      * @param MyConnection an active connection to a database.
-     * @param myC6num call complement's ID,
+     * @param myC6num identiant du complément d'appel.
      * @throws ClassNotFoundException classe non trouvée.
      * @throws java.sql.SQLException erreur SQL.
      */
@@ -36,14 +37,14 @@ public class FcomplmtDAO extends PaternDAO {
                 + " c6alpha5, c6alpha6, c6alpha7,"
                 + " c6int1, c6date, c6date1, c6int3, c6int4, c6onum,"
                 + " c6corp, c6address, c6address2, c6poscode"
-                + " from fcomplmt"
-                + " where c6num > 0");
+                + " from fcomplmt");
         if (myC6num > 0) {
-            Stmt.append(" and c6num = ").append(myC6num);
+            Stmt.append(" where c6num = ").append(myC6num);
         }
         Stmt.append(" order by c6num;");
         setReadStatement(Stmt.toString());
         setReadPreparedStatement();
+//        System.out.println(Stmt);
         setReadResultSet();
 
         setUpdateStatement("update fcomplmt"
@@ -70,9 +71,9 @@ public class FcomplmtDAO extends PaternDAO {
     }
 
     /**
-     * Select a record.
+   * Selectionne un complément d'appel.
      *
-     * @return the selected call complmt
+     * @return le complément d'appel sélectionné.
      */
     @Override
     public Fcomplmt select() {
@@ -101,22 +102,22 @@ public class FcomplmtDAO extends PaternDAO {
                 MyFcomplmt.setC6int4(ReadResultSet.getInt("c6int4"));
                 MyFcomplmt.setC6onum(ReadResultSet.getInt("c6onum"));
                 MyFcomplmt.setC6corp(ReadResultSet.getString("c6corp"));
-                MyFcomplmt.setC6address(ReadResultSet.getString("c6aaddress"));
+                MyFcomplmt.setC6address(ReadResultSet.getString("c6address"));
                 MyFcomplmt.setC6address(ReadResultSet.getString("c6address2"));
                 MyFcomplmt.setC6poscode(ReadResultSet.getString("c6poscode"));
             } else {
-                System.out.println("No more record in fcomplmt");
+                System.out.println("Lecture de fcomplmt terminée");
             }
         } catch (SQLException MyException) {
-            System.out.println("Problem reading fcomplmt record " + MyException.getMessage());
+            System.out.println("Erreur en lecture de fcomplmt " + MyException.getMessage());
         }
         return MyFcomplmt;
     }
 
     /**
-     * Update a record.
+     * Met à jour un complément d'appel.
      *
-     * @param MyFcomplmt call complement to update
+     * @param MyFcomplmt complément d'appel à mettre à jour.
      */
     public void update(Fcomplmt MyFcomplmt) {
         try {
@@ -145,18 +146,18 @@ public class FcomplmtDAO extends PaternDAO {
             UpdatePreparedStatement.setInt(23, MyFcomplmt.getC6num());
             setNbAffectedRow(UpdatePreparedStatement.executeUpdate());
             if (getNbAffectedRow() == 0) {
-                System.out.println("Failed to update data into fcomplmt");
+                System.out.println("Impossible de mettre à jour fcomplmt");
             }
         } catch (SQLException MyException) {
-            System.out.println("Problem reading fcomplmt record "
+            System.out.println("Erreur lors de la mise à jour de fcomplmt "
                     + MyException.getMessage());
         }
     }
 
     /**
-     * Delete a record.
+     * Supprime définitivement un complément d'appel.
      *
-     * @param c6num call complement identifier
+     * @param c6num identiant du complément d'appel à supprimer.
      */
     @Override
     public void delete(int c6num) {
@@ -164,17 +165,18 @@ public class FcomplmtDAO extends PaternDAO {
             DeletePreparedStatement.setInt(1, c6num);
             setNbAffectedRow(DeletePreparedStatement.executeUpdate());
             if (getNbAffectedRow() == 0) {
-                System.out.println("Failed to delete data from fcomplmt");
+                System.out.println("Impossible de détruire un complément d'appel dans fcomplmt");
             }
-        } catch (SQLException e) {
-            System.out.println("Problem deleting fcomplmt record " + e.getMessage());
+        } catch (SQLException MyException) {
+            System.out.println("Erreur lors de la suppression d'un complément d'appel dans fcomplmt " 
+                    + MyException.getMessage());
         }
     }
 
     /**
-     * Insert a record.
+     * Ajoute un complément d'appel dans la table fcomplmt.
      *
-     * @param MyFcomplmt call complement to insert in database
+     * @param MyFcomplmt complément d'appel à ajouter à la table fcomplmt.
      */
     public void insert(Fcomplmt MyFcomplmt) {
         ResultSet MyKeyResultSet = null;
@@ -205,7 +207,7 @@ public class FcomplmtDAO extends PaternDAO {
             InsertPreparedStatement.setString(22, MyFcomplmt.getC6poscode());
             setNbAffectedRow(InsertPreparedStatement.executeUpdate());
             if (getNbAffectedRow() == 0) {
-                System.out.println("Failed to insert data into fcomplmt");
+                System.out.println("Impossible d'ajouter un complément d'appel dans fcomplmt");
             } else {
                 MyKeyResultSet = InsertPreparedStatement.getGeneratedKeys();
                 if (MyKeyResultSet.next()) {
@@ -214,7 +216,7 @@ public class FcomplmtDAO extends PaternDAO {
             }
             MyKeyResultSet.close();
         } catch (SQLException MyException) {
-            System.out.println("Problem inserting fcomplmt record " + MyException.getMessage());
+            System.out.println("Erreur lors de l'insertion d'un complément d'appel dans fcomplmt " + MyException.getMessage());
         }
     }
 
@@ -332,11 +334,11 @@ public class FcomplmtDAO extends PaternDAO {
 
     @Override
     public void update(Object MyObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Non supporté actuellement"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void insert(Object MyObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Non supporté actuellement"); //To change body of generated methods, choose Tools | Templates.
     }
 }

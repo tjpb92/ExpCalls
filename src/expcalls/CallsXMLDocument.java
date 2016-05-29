@@ -68,7 +68,7 @@ public class CallsXMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)));
             Ticket.appendChild(MyElement);
         }
-        
+
         // Agence
         MyString = MyTicket.getA6name();
         if (MyString != null) {
@@ -135,20 +135,27 @@ public class CallsXMLDocument extends XMLDocument {
         }
 
         // Raison d'appel
-        MyString = MyTicket.Fcalls_0000.getCsympt();
+        MyString = MyTicket.getM6name();
         if (MyString != null) {
             MyElement = MyDocument.createElement("RaisonAppel");
             MyElement.appendChild(MyDocument.createTextNode(MyString));
             Ticket.appendChild(MyElement);
         }
 
+        // Demande d'intervention
+        MyString = MyTicket.Fcalls_0000.getCsympt();
+        if (MyString != null) {
+            MyElement = MyDocument.createElement("DemandeIntervention");
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+            Ticket.appendChild(MyElement);
+        }
+
         // Cloture de l'appel
         myInt = MyTicket.Fcalls_0000.getCnote();
-        MyString = (myInt == 1)?"Appel clôturé":"Appel non clôturé";
-        MyElement = MyDocument.createElement("Cloture");
+        MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
+        MyElement = MyDocument.createElement("ResultatIntervention");
         MyElement.appendChild(MyDocument.createTextNode(MyString));
         Ticket.appendChild(MyElement);
-        
-        
+
     }
 }

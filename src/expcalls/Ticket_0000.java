@@ -26,6 +26,11 @@ public class Ticket_0000 {
     private String A6name = "#N/A";
 
     /**
+     * Item de menu sélectionné.
+     */
+    private String M6name = "#N/A";
+
+    /**
      * Contructeur de la classe Ticket complet.
      *
      * @param Fcalls_0000 appel,
@@ -104,5 +109,19 @@ public class Ticket_0000 {
      */
     public void setA6name(String A6name) {
         this.A6name = A6name;
+    }
+
+    /**
+     * @return M6name nom de l'item de menu sélectionné.
+     */
+    public String getM6name() {
+        return M6name;
+    }
+
+    /**
+     * @param M6name définit le nom de l'item de menu.
+     */
+    public void setM6name(String M6name) {
+        this.M6name = M6name;
     }
 }

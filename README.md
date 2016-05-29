@@ -1,6 +1,6 @@
 # Projet extraction d'appels en mode ligne
 
-Le but de ce projet est de crÃ©er un programme Java permettant d'exporter les appels d'un service d'urgence au format XML.
+Le but de ce projet est de crééer un programme Java permettant d'exporter les appels d'un service d'urgence au format XML.
 
 Il y a un appel par ligne.
 
@@ -8,33 +8,33 @@ Ce fichier est importable dans Microsoft Excel.
 
 ##Utilisation:
 ```
-java ExpCalls [-dbserver db] -u unum [-b dÃ©but] [-e fin] [-o fichier.xml] [-d] [-t] 
+java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-d] [-t] 
 
--dbserver db est la rÃ©fÃ©rence Ã  la base de donnÃ©es, par dÃ©faut dÃ©signe la base de donnÃ©es de 
-dÃ©veloppement. Voir fichier *myDatabases.prop* (optionnel).
--u unum est la rÃ©fÃ©rence du service d'urgence (obligatoire).
--b dÃ©but : date de dÃ©but de l'extraction Ã  0h au format JJ/MM/AAAA. AmorcÃ© Ã  hier par dÃ©faut (optionnel).
--e fin : date de fin de l'extraction Ã  0h au format JJ/MM/AAAA. AmorcÃ© Ã  aujourd'hui par dÃ©faut (optionnel).
+-dbserver db est la référence à la base de données, par défaut désigne la base de données de 
+développement. Voir fichier myDatabases.prop (optionnel).
+-u unum est la référence du service d'urgence (obligatoire).
+-b début : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (optionnel).
+-e fin : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (optionnel).
 -o fichier.xml est le nom du fichier qui recevra les agences au format XML. 
-AmorcÃ© Ã  *calls_0000.xml* par dÃ©faut (optionnel).
--d le programme s'exÃ©cute en mode dÃ©bug, il est beaucoup plus verbeux. DÃ©sactivÃ© par dÃ©faut (optionnel).
--t le programme s'exÃ©cute en mode test, les transcations en base de donnÃ©es ne sont pas faites. DÃ©sactivÃ© par dÃ©faut (optionnel).
+Amorcé à tickets_0000.xml par défaut (optionnel).
+-d le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (optionnel).
+-t le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (optionnel).
 ```
 
-##PrÃ©-requis :
-- Java 6 ou supÃ©rieur.
+##Pré-requis :
+- Java 6 ou supérieur.
 - JDBC Informix
 - JDBC MySql
 
 ##Formats XML reconnus :
 
-Il existe plusieurs types de formats XML reconnus pour dÃ©crire les appels. 
+Il existe plusieurs types de formats XML reconnus pour décrire les appels. 
 
-Ils dÃ©pendent du service d'urgence concernÃ©.
+Ils dépendent du service d'urgence concerné.
 
-Il y a un format par dÃ©faut : *calls_0000.xsd*.
+Il y a un format par défaut : *tickets_0000.xsd*.
 
-##RÃ©fÃ©rences:
+##Références:
 
 - Construire une application XML, J.C. Bernadac, F. Knab, Eyrolles.
 
@@ -46,13 +46,15 @@ Il y a un format par dÃ©faut : *calls_0000.xsd*.
 - [Convertisseur DTD/XSD](http://www.freeformatter.com/xsd-generator.html)
 - [Tuto XML/XSD](http://www.codeguru.com/java/article.php/c13529/XSD-Tutorial-XML-Schemas-For-Beginners.htm)
 
-##Fichier des paramÃ¨tres : 
+##Fichier des paramètres : 
 
-Ce fichier permet de spÃ©cifier les paramÃ¨tres d'accÃ¨s aux diffÃ©rentes bases de donnÃ©es.
+Ce fichier permet de spécifier les paramètres d'accès aux différentes bases de données.
 
-A adapter selon les implÃ©mentations locales.
+A adapter selon les implémentations locales.
 
-Ce fichier est nommÃ© : *MyDatabases.prop*
+Ce fichier est nommé : *MyDatabases.prop*.
+
+Le fichier ci-dessous *MyDatabases_Example.prop" est donné à titre d'exemple.
 ```
 # Properties for production environnement
 prod.dbserver.name=eole
