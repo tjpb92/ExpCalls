@@ -90,7 +90,7 @@ public class ExpCalls {
             while ((MyFcalls = MyFcallsDAO.select()) != null) {
                 i++;
                 MyTicket_0000 = new Ticket_0000(MyFcalls);
-                processTicket(MyConnection, MyTicket_0000);
+                processTicket(MyConnection, MyTicket_0000, MyEtatTicket);
                 System.out.println("Ticket(" + i + ")=" + MyTicket_0000);
                 MyXMLDocument.AddToXMLDocument(MyTicket_0000);
             }
@@ -101,7 +101,7 @@ public class ExpCalls {
         }
     }
 
-    private void processTicket(Connection MyConnection, Ticket_0000 MyTicket_0000) throws ClassNotFoundException, SQLException {
+    private void processTicket(Connection MyConnection, Ticket_0000 MyTicket_0000, EtatTicket MyEtatTicket) throws ClassNotFoundException, SQLException {
 
         int cc6num;
         Fcomplmt MyFcomplmt;
@@ -115,6 +115,9 @@ public class ExpCalls {
         FagencyDAO MyFagencyDAO;
         Fmenuit MyFmenuit;
         FmenuitDAO MyFmenuitDAO;
+        int enumabs;
+        Fessais MyFessais;
+        FessaisDAO MyFessaisDAO;
 
         // Récupération du complément d'appel
         cc6num = MyTicket_0000.Fcalls_0000.getCc6num();
@@ -152,6 +155,20 @@ public class ExpCalls {
         if (MyM6name != null) {
             MyTicket_0000.setM6name(MyM6name);
         }
+        
+        // Recherche la première transmission
+//        MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), MyEtatTicket);
+//        enumabs = MyFessaisDAO.getFirstTransmission();
+//        if (enumabs > 0) {
+//            MyFessaisDAO = new FessaisDAO(MyConnection, enumabs, 0, MyEtatTicket);
+//            MyFessais = MyFessaisDAO.select();
+//            MyTicket_0000.setEtatIntervention("Intervention");
+//        }
+//        MyTicket_0000.setEtatIntervention("Message");
+        
+        // Recherche la dernière transmission
+        // Recherche la clôture d'appel
+        
     }
 
     public static void main(String[] Args) {

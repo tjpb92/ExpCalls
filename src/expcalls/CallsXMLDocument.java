@@ -150,6 +150,24 @@ public class CallsXMLDocument extends XMLDocument {
             Ticket.appendChild(MyElement);
         }
 
+        // Etat de l'intervention
+        MyString = MyTicket.getEtatIntervention();
+        if (MyString != null) {
+            MyElement = MyDocument.createElement("EtatIntervention");
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+            Ticket.appendChild(MyElement);
+        }
+
+        // Prestataire1
+        // DateMissionnement1
+        // HeureMissionnement1
+        // NoTelephone1
+        
+        // Prestataire2
+        // DateMissionnement2
+        // HeureMissionnement2
+        // NoTelephone2
+        
         // Cloture de l'appel
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
@@ -157,5 +175,8 @@ public class CallsXMLDocument extends XMLDocument {
         MyElement.appendChild(MyDocument.createTextNode(MyString));
         Ticket.appendChild(MyElement);
 
+        // Rapport d'intervention
+        // Le technicien est-il encore sur site ?
+        
     }
 }

@@ -31,6 +31,11 @@ public class Ticket_0000 {
     private String M6name = "#N/A";
 
     /**
+     * Etat de l'intervention.
+     */
+    private String EtatIntervention = "#N/A";
+    
+    /**
      * Contructeur de la classe Ticket complet.
      *
      * @param Fcalls_0000 appel,
@@ -123,5 +128,19 @@ public class Ticket_0000 {
      */
     public void setM6name(String M6name) {
         this.M6name = M6name;
+    }
+
+    /**
+     * @return  EtatIntervention l'état de l'intevention
+     */
+    public String getEtatIntervention() {
+        return EtatIntervention;
+    }
+
+    /**
+     * @param EtatIntervention définit l'état de l'intervention.
+     */
+    public void setEtatIntervention(String EtatIntervention) {
+        this.EtatIntervention = EtatIntervention;
     }
 }

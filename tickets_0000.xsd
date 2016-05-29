@@ -21,7 +21,18 @@
             <xs:element type="xs:string" name="TelAppelant" minOccurs="0"/>
             <xs:element type="xs:string" name="RaisonAppel" minOccurs="0"/>
             <xs:element type="xs:string" name="DemandeIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="EtatIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="Prestataire1" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateMissionnement1" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureMissionnement1" minOccurs="0"/>
+            <xs:element type="xs:string" name="NoTelephone1" minOccurs="0"/>
+            <xs:element type="xs:string" name="Prestataire2" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateMissionnement2" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureMissionnement2" minOccurs="0"/>
+            <xs:element type="xs:string" name="NoTelephone2" minOccurs="0"/>
             <xs:element type="xs:string" name="ResultatIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="RapportIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="TechnicienSurSite" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>
