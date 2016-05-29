@@ -21,8 +21,8 @@ public class FcomplmtDAO extends PaternDAO {
      *
      * @param MyConnection an active connection to a database.
      * @param myC6num call complement's ID,
-     * @throws ClassNotFoundException, SQLException.
-     * @throws java.sql.SQLException
+     * @throws ClassNotFoundException classe non trouvée.
+     * @throws java.sql.SQLException erreur SQL.
      */
     public FcomplmtDAO(Connection MyConnection, int myC6num)
             throws ClassNotFoundException, SQLException {
@@ -34,7 +34,8 @@ public class FcomplmtDAO extends PaternDAO {
         Stmt = new StringBuffer("select c6num, c6int2, c6alpha1, c6alpha2, c6name, c6access,"
                 + " c6city, c6tel, c6alpha3, c6alpha4,"
                 + " c6alpha5, c6alpha6, c6alpha7,"
-                + " c6int1, c6date, c6date1, c6int3, c6int4, c6onum"
+                + " c6int1, c6date, c6date1, c6int3, c6int4, c6onum,"
+                + " c6corp, c6address, c6address2, c6poscode"
                 + " from fcomplmt"
                 + " where c6num > 0");
         if (myC6num > 0) {
@@ -49,7 +50,8 @@ public class FcomplmtDAO extends PaternDAO {
                 + " set c6int2=?, c6alpha1=?, c6alpha2=?, c6name=?, c6access=?,"
                 + " c6city=?, c6tel=?, c6alpha3=?, c6alpha4=?,"
                 + " c6alpha5=?, c6alpha6=?, c6alpha7=?,"
-                + " c6int1=?, c6date=?, c6date1=?, c6int3=?, c6int4=?, c6onum=?"
+                + " c6int1=?, c6date=?, c6date1=?, c6int3=?, c6int4=?, c6onum=?,"
+                + " c6corp=?, c6address=?, c6address2=?, c6poscode=?"
                 + " where c6num=?;");
         setUpdatePreparedStatement();
 
@@ -57,9 +59,10 @@ public class FcomplmtDAO extends PaternDAO {
                 + " (c6int2, c6alpha1, c6alpha2, c6name, c6access,"
                 + " c6city, c6tel, c6alpha3, c6alpha4,"
                 + " c6alpha5, c6alpha6, c6alpha7,"
-                + " c6int1, c6date, c6date1, c6int3, c6int4, c6onum)"
+                + " c6int1, c6date, c6date1, c6int3, c6int4, c6onum,"
+                + " c6corp, c6address, c6address2, c6poscode)"
                 + " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" 
-                + ",?, ?, ?);");
+                + ",?, ?, ?, ?, ?, ?, ?);");
         setInsertPreparedStatement();
 
         setDeleteStatement("delete from fcomplmt where c6num=?;");
@@ -97,6 +100,10 @@ public class FcomplmtDAO extends PaternDAO {
                 MyFcomplmt.setC6int3(ReadResultSet.getInt("c6int3"));
                 MyFcomplmt.setC6int4(ReadResultSet.getInt("c6int4"));
                 MyFcomplmt.setC6onum(ReadResultSet.getInt("c6onum"));
+                MyFcomplmt.setC6corp(ReadResultSet.getString("c6corp"));
+                MyFcomplmt.setC6address(ReadResultSet.getString("c6aaddress"));
+                MyFcomplmt.setC6address(ReadResultSet.getString("c6address2"));
+                MyFcomplmt.setC6poscode(ReadResultSet.getString("c6poscode"));
             } else {
                 System.out.println("No more record in fcomplmt");
             }
@@ -131,7 +138,11 @@ public class FcomplmtDAO extends PaternDAO {
             UpdatePreparedStatement.setInt(16, MyFcomplmt.getC6int3());
             UpdatePreparedStatement.setInt(17, MyFcomplmt.getC6int4());
             UpdatePreparedStatement.setInt(18, MyFcomplmt.getC6onum());
-            UpdatePreparedStatement.setInt(19, MyFcomplmt.getC6num());
+            UpdatePreparedStatement.setString(19, MyFcomplmt.getC6corp());
+            UpdatePreparedStatement.setString(20, MyFcomplmt.getC6address());
+            UpdatePreparedStatement.setString(21, MyFcomplmt.getC6address2());
+            UpdatePreparedStatement.setString(22, MyFcomplmt.getC6poscode());
+            UpdatePreparedStatement.setInt(23, MyFcomplmt.getC6num());
             setNbAffectedRow(UpdatePreparedStatement.executeUpdate());
             if (getNbAffectedRow() == 0) {
                 System.out.println("Failed to update data into fcomplmt");
@@ -188,6 +199,10 @@ public class FcomplmtDAO extends PaternDAO {
             InsertPreparedStatement.setInt(16, MyFcomplmt.getC6int3());
             InsertPreparedStatement.setInt(17, MyFcomplmt.getC6int4());
             InsertPreparedStatement.setInt(18, MyFcomplmt.getC6onum());
+            InsertPreparedStatement.setString(19, MyFcomplmt.getC6corp());
+            InsertPreparedStatement.setString(20, MyFcomplmt.getC6address());
+            InsertPreparedStatement.setString(21, MyFcomplmt.getC6address2());
+            InsertPreparedStatement.setString(22, MyFcomplmt.getC6poscode());
             setNbAffectedRow(InsertPreparedStatement.executeUpdate());
             if (getNbAffectedRow() == 0) {
                 System.out.println("Failed to insert data into fcomplmt");
@@ -238,7 +253,7 @@ public class FcomplmtDAO extends PaternDAO {
             MyFcomplmt1.setC6alpha1("terra incognita");
             MyFcomplmt1.setC6alpha2("utopia");
             MyFcomplmt1.setC6name("UTOPIA");
-            MyFcomplmt1.setC6access("utopia@gmail.com");
+            MyFcomplmt1.setC6access("porte B");
             MyFcomplmt1.setC6city("12, rue des rèves");
             MyFcomplmt1.setC6tel("bâtiment B");
             MyFcomplmt1.setC6alpha3("92400");
@@ -252,13 +267,17 @@ public class FcomplmtDAO extends PaternDAO {
             MyFcomplmt1.setC6int3(3);
             MyFcomplmt1.setC6int4(4);
             MyFcomplmt1.setC6onum(36);
+            MyFcomplmt1.setC6corp("UTOPIA DISTRIBUTION");
+            MyFcomplmt1.setC6address("14, rue de la réalité");
+            MyFcomplmt1.setC6address2("porte 1");
+            MyFcomplmt1.setC6poscode("92130");
             System.out.println("Fcomplmt(before insert)=" + MyFcomplmt1);
             MyFcomplmtDAO.insert(MyFcomplmt1);
             System.out.println("Fcomplmt(after insert)=" + MyFcomplmt1);
             System.out.println("Affected row(s)=" + MyFcomplmtDAO.getNbAffectedRow());
 
 // Essai mise à jour
-            MyFcomplmt1.setC6access(MyFcomplmt1.getC6access() + ",utopia@free.fr");
+            MyFcomplmt1.setC6access(MyFcomplmt1.getC6access() + ", escalier 9");
             MyFcomplmtDAO.update(MyFcomplmt1);
             System.out.println("Fcomplmt(after update)=" + MyFcomplmt1);
             System.out.println("Affected row(s)=" + MyFcomplmtDAO.getNbAffectedRow());
@@ -289,6 +308,10 @@ public class FcomplmtDAO extends PaternDAO {
                 System.out.println("  getC6int3()=" + MyFcomplmt.getC6int3());
                 System.out.println("  getC6int4()=" + MyFcomplmt.getC6int4());
                 System.out.println("  getC6onum()=" + MyFcomplmt.getC6onum());
+                System.out.println("  getC6corp()=" + MyFcomplmt.getC6corp());
+                System.out.println("  getC6address()=" + MyFcomplmt.getC6address());
+                System.out.println("  getC6address2()=" + MyFcomplmt.getC6address2());
+                System.out.println("  getC6poscode()=" + MyFcomplmt.getC6poscode());
             }
 
 // Essai suppression

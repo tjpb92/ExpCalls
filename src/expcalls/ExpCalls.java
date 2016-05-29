@@ -1,11 +1,7 @@
-/*
- * Ce programme exporte les appels d'un service d'urgence dans un fichier au
- * format XML.
- * @version Mai 2016.
- * @author Thierry Baribaud.
- */
 package expcalls;
 
+import agency.Fagency;
+import agency.FagencyDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,6 +11,12 @@ import liba2pi.DBManager;
 import liba2pi.DBServer;
 import liba2pi.DBServerException;
 
+/*
+ * Ce programme exporte les appels d'un service d'urgence dans un fichier au
+ * format XML.
+ * @version Mai 2016.
+ * @author Thierry Baribaud.
+ */
 public class ExpCalls {
 
     /**
@@ -22,23 +24,28 @@ public class ExpCalls {
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
      * @param Args arguments de la ligne de commande.
-     * @throws java.io.IOException
-     * @throws liba2pi.DBServerException
-     * @throws java.sql.SQLException
+     * @throws java.io.IOException en cas de fichier non lisible ou absent.
+     * @throws liba2pi.DBServerException en cas de propriété incorrecte.
+     * @throws java.sql.SQLException en cas d'une erreur SQL.
      */
     public ExpCalls(String[] Args) throws IOException, DBServerException, SQLException {
         Fcalls MyFcalls;
         FcallsDAO MyFcallsDAO;
 //        Fcalls_0000 MyFcalls_0000;
-//        CallsXMLDocument MyXMLDocument;
+        CallsXMLDocument MyXMLDocument;
         Fcomplmt MyFcomplmt;
         FcomplmtDAO MyFcomplmtDAO;
         Ticket_0000 MyTicket_0000;
+        Fagency MyFagency;
+        FagencyDAO MyFagencyDAO;
 
         GetArgs MyArgs;
         ApplicationProperties MyApplicationProperties;
         DBServer MyDBServer;
         DBManager MyDBManager;
+        int cc6num;
+        int a6num;
+        String MyA6name;
 
         int i;
 
@@ -55,7 +62,8 @@ public class ExpCalls {
             MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
             System.out.println("  " + MyDBServer);
 
-//            MyXMLDocument = new CallsXMLDocument("appels", "calls.xsd");
+            MyXMLDocument = new CallsXMLDocument("tickets", "tickets_0000.xsd");
+            
             MyDBManager = new DBManager(MyDBServer);
 
             MyFcallsDAO = new FcallsDAO(MyDBManager.getConnection(), 0, MyArgs.getUnum());
@@ -63,22 +71,28 @@ public class ExpCalls {
 //            System.out.println(Fcalls_0000.CSV_Title());
             while ((MyFcalls = MyFcallsDAO.select()) != null) {
                 i++;
-                if (MyFcalls.getCc6num() > 0 ) {
-                    MyFcomplmtDAO = new FcomplmtDAO(MyDBManager.getConnection(), MyFcalls.getCc6num());
+                cc6num = MyFcalls.getCc6num();
+                MyFcomplmt = null;
+                if (cc6num > 0) {
+                    MyFcomplmtDAO = new FcomplmtDAO(MyDBManager.getConnection(), cc6num);
                     MyFcomplmt = MyFcomplmtDAO.select();
-                    MyTicket_0000 = new Ticket_0000(MyFcalls, MyFcomplmt);
                 }
-                else {
-                    MyFcomplmt = null;
-                    MyTicket_0000 = new Ticket_0000(MyFcalls);
+                a6num = MyFcalls.getCzone();
+                MyFagency = null;
+                MyA6name = null;
+                if (a6num > 0) {
+                    MyFagencyDAO = new FagencyDAO(MyDBManager.getConnection(), a6num);
+                    MyFagency = MyFagencyDAO.select();
+                    MyA6name = MyFagency.getA6name();
                 }
-//                MyFcalls_0000 = new Fcalls_0000(MyFcalls);
-//                System.out.println(MyFcalls_0000.toCSV());
-//                System.out.println("Fcalls(" + i + ")=" + MyFcalls);
+                MyTicket_0000 = new Ticket_0000(MyFcalls, MyFcomplmt);
+                if (MyA6name != null) {
+                    MyTicket_0000.setA6name(MyA6name);
+                }
                 System.out.println("Ticket(" + i + ")=" + MyTicket_0000);
-//                MyXMLDocument.AddToXMLDocument(MyFcalls);
+                MyXMLDocument.AddToXMLDocument(MyTicket_0000);
             }
-//            MyXMLDocument.FinalizeXMLDocument(MyArgs.getFileOut());
+            MyXMLDocument.FinalizeXMLDocument(MyArgs.getFileOut());
         } catch (GetArgsException MyException) {
             Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, MyException);
             GetArgs.usage();

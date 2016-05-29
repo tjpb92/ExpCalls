@@ -1,9 +1,3 @@
-/*
- * Cette classe sert Ã  vÃ©rifier et Ã  rÃ©cupÃ©rer les arguments passÃ©s en ligne de
- * commande Ã  un programme.
- * @version Mai 2016.
- * @author Thierry Baribaud.
- */
 package expcalls;
 
 import java.sql.Timestamp;
@@ -11,47 +5,53 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/*
+ * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
+ * commande à  un programme.
+ * @version Mai 2016.
+ * @author Thierry Baribaud.
+ */
 public class GetArgs {
 
     private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * SourceServer : prod pour le serveur de production, dev pour le serveur de
-     * dÃ©veloppement. Valeur par dÃ©faut : dev.
+     * développement. Valeur par défaut : dev.
      */
     private String SourceServer = "dev";
 
     /**
-     * Unum : RÃ©fÃ©rence du client. Valeur par dÃ©faut : doit Ãªtre spÃ©cifiÃ© en
+     * Unum : Référence du client. Valeur par défaut : doit être spécifié en
      * ligne de commande.
      */
     private int unum = 0;
 
     /**
-     * FileOut : fichier qui recevra les rÃ©sultats du chargement. Valeur par
-     * dÃ©faut : calls_0000.xml.
+     * FileOut : fichier qui recevra les résultats du chargement. Valeur par
+     * défaut : tickets_0000.xml.
      */
-    private String FileOut = "calls_0000.xml";
+    private String FileOut = "tickets_0000.xml";
 
     /**
-     * BegDate : date de dÃ©but de l'export Ã  0h.
+     * BegDate : date de début de l'export à 0h.
      */
     private Timestamp BegDate = new Timestamp((new java.util.Date().getTime())-1000*60*60*24);
     
     /**
-     * EndDate : date de fin de l'export Ã  0h.
+     * EndDate : date de fin de l'export à 0h.
      */
     private Timestamp EndDate = new Timestamp(new java.util.Date().getTime());
     
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
-     * Valeur par dÃ©faut : false.
+     * Valeur par défaut : false.
      */
     private boolean debugMode = false;
 
     /**
      * testMode : fonctionnement du programme en mode test (true/false). Valeur
-     * par dÃ©faut : false.
+     * par défaut : false.
      */
     private boolean testMode = false;
 
@@ -63,28 +63,28 @@ public class GetArgs {
     }
 
     /**
-     * @return FileOut : retourne le nom du fichier oÃ¹ envoyer les rÃ©sultats.
+     * @return FileOut : retourne le nom du fichier où envoyer les résultats.
      */
     public String getFileOut() {
         return (FileOut);
     }
 
     /**
-     * @return Unum : retourne la rÃ©fÃ©rence du client.
+     * @return Unum : retourne la référence du client.
      */
     public int getUnum() {
         return (unum);
     }
 
     /**
-     * @return BegDate : date de dÃ©but de l'export Ã  0h.
+     * @return BegDate : date de début de l'export à 0h.
      */
     public Timestamp getBegDate() {
         return (BegDate);
     }
 
     /**
-     * @return EndDate : date de fin de l'export Ã  0h.
+     * @return EndDate : date de fin de l'export à 0h.
      */
     public Timestamp getEndDate() {
         return (EndDate);
@@ -105,35 +105,35 @@ public class GetArgs {
     }
 
     /**
-     * @param SourceServer : dÃ©finit le serveur source.
+     * @param SourceServer : définit le serveur source.
      */
     public void setSourceServer(String SourceServer) {
         this.SourceServer = SourceServer;
     }
 
     /**
-     * @param FileOut : dÃ©finit le fichier oÃ¹ envoyer les rÃ©sultats.
+     * @param FileOut : définit le fichier où envoyer les résultats.
      */
     public void setFileOut(String FileOut) {
         this.FileOut = FileOut;
     }
 
     /**
-     * @param unum : dÃ©finit la rÃ©fÃ©rence client.
+     * @param unum : définit la référence client.
      */
     public void setUnum(int unum) {
         this.unum = unum;
     }
 
     /**
-     *  @param BegDate : date de dÃ©but de l'export Ã  0h.
+     *  @param BegDate : date de début de l'export à 0h.
      */
     public void setBegDate(Timestamp BegDate) {
         this.BegDate = BegDate;
     }
 
     /**
-     * @param EndDate : date de fin de l'export Ã  0h.
+     * @param EndDate : date de fin de l'export à 0h.
      */
     public void setEndDate(Timestamp EndDate) {
         this.EndDate = EndDate;
@@ -156,23 +156,23 @@ public class GetArgs {
     /**
      * <p>Les arguments en ligne de commande permettent de changer le mode de 
      * fonctionnement.</p><ul>
-     * <li>-dbserver : rÃ©fÃ©rence Ã  la base de donnÃ©e, par dÃ©faut fait rÃ©fÃ©rence 
-     * Ã  la base de dÃ©veloppement,  cf. fichier de paramÃ¨tres 
+     * <li>-dbserver : référence à la base de donnée, par défaut fait référence 
+     * à la base de développement,  cf. fichier de paramÃ¨tres 
      * <i>myDatabases.prop</i> (optionnel)</li>
      * <li>-u unum : identifiant du service d'urgence (obligatoire).</li>
-     * <li>-b dÃ©but : date de dÃ©but de l'extraction Ã  0h, hier par dÃ©faut, 
+     * <li>-b début : date de début de l'extraction à 0h, hier par défaut, 
      * format DD/MM/AAAA (optionnel).</li>
-     * <li>-b fin : date de fin de l'extraction Ã  0h, aujourd'hui par dÃ©faut, 
+     * <li>-b fin : date de fin de l'extraction à 0h, aujourd'hui par défaut, 
      * format DD/MM/AAAA (optionnel).</li>
-     * <li>-o fichier : fichier vers lequel exporter les donnÃ©es des appels, 
-     * nom par dÃ©faut <i>calls_0000.xml</i>(optionnel).</li>
-     * <li>-d : le programme fonctionne en mode dÃ©bug le rendant plus verbeux, 
-     * dÃ©sactivÃ© par dÃ©faut (optionnel).</li>
+     * <li>-o fichier : fichier vers lequel exporter les données des appels, 
+     * nom par défaut <i>calls_0000.xml</i>(optionnel).</li>
+     * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux, 
+     * désactivé par défaut (optionnel).</li>
      * <li>-t : le programme fonctionne en mode de test, les transactions en base 
-     *      de donnÃ©es ne sont pas exÃ©cutÃ©es, dÃ©sactivÃ© par dÃ©faut (optionnel).</li>
+     *      de données ne sont pas exécutées, désactivé par défaut (optionnel).</li>
      * </ul>
      * @param Args arguments de la ligne de commande. 
-     * @throws expcalls.GetArgsException 
+     * @throws expcalls.GetArgsException erreur sur les paramètres.
      */
     public GetArgs(String Args[]) throws GetArgsException {
 
@@ -196,11 +196,11 @@ public class GetArgs {
                     if (Args[ip1].equals("dev") || Args[ip1].equals("prod") || Args[ip1].equals("mysql")) {
                         setSourceServer(Args[ip1]);
                     } else {
-                        throw new GetArgsException("Mauvaise source de donnÃ©es : " + Args[ip1]);
+                        throw new GetArgsException("Mauvaise source de données : " + Args[ip1]);
                     }
                     i = ip1;
                 } else {
-                    throw new GetArgsException("Base de donnÃ©es non dÃ©finie");
+                    throw new GetArgsException("Base de données non définie");
                 }
             } else if (Args[i].equals("-u")) {
                 if (ip1 < n) {
@@ -208,10 +208,10 @@ public class GetArgs {
                         setUnum(Integer.parseInt(Args[ip1]));
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La rÃ©fÃ©rence client doit Ãªtre numÃ©rique : " + Args[ip1]);
+                        throw new GetArgsException("La référence client doit Ãªtre numérique : " + Args[ip1]);
                     }
                 } else {
-                    throw new GetArgsException("RÃ©fÃ©rence client non dÃ©finie");
+                    throw new GetArgsException("Référence client non définie");
                 }
             } else if (Args[i].equals("-b")) {
                 if (ip1 < n) {
@@ -220,10 +220,10 @@ public class GetArgs {
                         setBegDate(new Timestamp(MyDate.getTime()));
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La date de dÃ©but doit Ãªtre valide jj/mm/aaaa : "  + Args[ip1]);
+                        throw new GetArgsException("La date de début doit Ãªtre valide jj/mm/aaaa : "  + Args[ip1]);
                     }
                 } else {
-                    throw new GetArgsException("Date de dÃ©but non dÃ©finie");
+                    throw new GetArgsException("Date de début non définie");
                 }
             } else if (Args[i].equals("-e")) {
                 if (ip1 < n) {
@@ -235,14 +235,14 @@ public class GetArgs {
                         throw new GetArgsException("La date de fin doit Ãªtre valide jj/mm/aaaa : " + Args[ip1]);
                     }
                 } else {
-                    throw new GetArgsException("Date de fin non dÃ©finie");
+                    throw new GetArgsException("Date de fin non définie");
                 }
             } else if (Args[i].equals("-o")) {
                 if (ip1 < n) {
                     setFileOut(Args[ip1]);
                     i = ip1;
                 } else {
-                    throw new GetArgsException("Nom de fichier non dÃ©fini");
+                    throw new GetArgsException("Nom de fichier non défini");
                 }
             } else if (Args[i].equals("-d")) {
                 setDebugMode(true);
@@ -254,8 +254,8 @@ public class GetArgs {
             i++;
         }
         if (getBegDate().after(getEndDate())) {
-            throw new GetArgsException("La date de dÃ©but "+ MyDateFormat.format(getBegDate())
-                    + " doit Ãªtre antÃ©rieure Ã  la date de fin " + MyDateFormat.format(getEndDate()));
+            throw new GetArgsException("La date de début "+ MyDateFormat.format(getBegDate())
+                    + " doit Ãªtre antérieure à la date de fin " + MyDateFormat.format(getEndDate()));
         }
     }
         
@@ -264,7 +264,7 @@ public class GetArgs {
      */
     public static void usage() {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum " +
-                           " [-b dÃ©but] [-f fin] [-o fichier.xml] [-d] [-t]");
+                           " [-b début] [-f fin] [-o fichier.xml] [-d] [-t]");
     }
     
     /**
@@ -276,7 +276,7 @@ public class GetArgs {
     return this.getClass().getName() +
            " : {dbServer=" + SourceServer + 
            ", unum=" + unum + 
-           ", dÃ©but=" + MyDateFormat.format(BegDate) +
+           ", début=" + MyDateFormat.format(BegDate) +
            ", fin=" + MyDateFormat.format(EndDate) +
            ", fichier=" + FileOut +
            ", debugMode=" + debugMode + 

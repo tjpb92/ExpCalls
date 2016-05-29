@@ -29,6 +29,10 @@ public class Fcomplmt {
     private int c6int3;
     private int c6int4;
     private int c6onum;
+    private String C6corp;
+    private String C6address;
+    private String C6address2;
+    private String C6poscode;
 
     public int getC6num() {
         return c6num;
@@ -204,6 +208,66 @@ public class Fcomplmt {
                 + ", c6int3=" + c6int3
                 + ", c6int4=" + c6int4
                 + ", c6onum=" + c6onum
+                + ", C6corp=" + C6corp
+                + ", C6address=" + C6address
+                + ", C6address2=" + C6address2
+                + ", C6poscode=" + C6poscode
                 + "}";
+    }
+
+    /**
+     * @return the C6corp
+     */
+    public String getC6corp() {
+        return C6corp;
+    }
+
+    /**
+     * @param C6corp the C6corp to set
+     */
+    public void setC6corp(String C6corp) {
+        this.C6corp = (C6corp != null) ? C6corp.trim() : null;
+    }
+
+    /**
+     * @return C6address retourne l'adresse secondaire.
+     */
+    public String getC6address() {
+        return C6address;
+    }
+
+    /**
+     * @param C6address définit l'adresse secondaire.
+     */
+    public void setC6address(String C6address) {
+        this.C6address = (C6address != null) ? C6address.trim() : null;
+    }
+
+    /**
+     * @return C6address2 retourne le complément d'adresse secondaire.
+     */
+    public String getC6address2() {
+        return C6address2;
+    }
+
+    /**
+     * @param C6address2 définit le complément d'adresse secondaire.
+     */
+    public void setC6address2(String C6address2) {
+        this.C6address2 = (C6address2 != null) ? C6address2.trim() : null;
+    }
+
+    /**
+     * @return C6poscode retourne le code postal de l'adresse secondaire.
+     */
+    public String getC6poscode() {
+        return C6poscode;
+    }
+
+    /**
+     * @param C6poscode définit le code postal de l'adresse secondaire.
+     */
+    public void setC6poscode(String C6poscode) {
+        this.C6poscode = (C6poscode != null) ? C6poscode.trim() : null;
     }
 }

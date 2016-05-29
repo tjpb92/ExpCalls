@@ -20,8 +20,8 @@ public class FcallsDAO extends PaternDAO {
    * @param MyConnection an active connection to a database.
    * @param cnum call's ID,
    * @param cunum customer's ID,
-   * @throws ClassNotFoundException, SQLException.
-   * @throws java.sql.SQLException
+   * @throws ClassNotFoundException construction impossible.
+   * @throws SQLException erreur SQL.
    */
   public FcallsDAO(Connection MyConnection, int cnum, int cunum)
     throws ClassNotFoundException, SQLException {
@@ -33,7 +33,8 @@ public class FcallsDAO extends PaternDAO {
     Stmt = new StringBuffer("select cnum, cunum, cname, ctel, caddress, caddress2," +
              " caccess, cposcode, city, csympt," +
              " cnumber4, cc6num, cdate, ctime, cdate2, ctime2," +
-             " corp, cnumber5" +
+             " corp, cnumber5, cseqno, cquery1, cquery2, czone, cage, ctype," +
+             " ctnum, cnote" +
              " from fcalls" +
              " where (cinternal = 0 or cinternal is null)" +
              " and (ctest = 0 or ctest is null)");
@@ -52,17 +53,19 @@ public class FcallsDAO extends PaternDAO {
                        " set cunum=?, cname=?, ctel=?, caddress=?, caddress2=?," +
                        " caccess=?, cposcode=?, city=?, csympt=?," +
                        " cnumber4=?, cc6num=?, cdate=?, ctime=?, cdate2=?, ctime2=?," +
-                       " corp=?, cnumber5=?" +
+                       " corp=?, cnumber5=?, cseqno=?, cquery1=?, cquery2=?," +
+                       " czone=?, cage=?, ctype=?, ctnum=?, cnote=?" +
                        " where cnum=?;");
     setUpdatePreparedStatement();
   
     setInsertStatement("insert into fcalls" +
                        " (cunum, cname, ctel, caddress, caddress2," +
                        " caccess, cposcode, city, csympt," +
-                       " cnumber4, cc6num, cdate, ctime, cdate2, ctime2)" +
-                       " corp, cnumber5" +
-                       " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
-                       " ?,?");
+                       " cnumber4, cc6num, cdate, ctime, cdate2, ctime2," +
+                       " corp, cnumber5, cseqno, cquery1, cquery2, czone," +
+                       " cage, ctype, ctnum, cnote)" +
+                       " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," +
+                       " ?,?,?,?,?,?,?,?,?,?);");
     setInsertPreparedStatement();
 
     setDeleteStatement("delete from fcalls where cnum=?;");
@@ -98,6 +101,14 @@ public class FcallsDAO extends PaternDAO {
         MyFcalls.setCtime2(ReadResultSet.getString("ctime2"));
         MyFcalls.setCorp(ReadResultSet.getString("corp"));
         MyFcalls.setCnumber5(ReadResultSet.getString("cnumber5"));
+        MyFcalls.setCseqno(ReadResultSet.getInt("cseqno"));
+        MyFcalls.setCquery1(ReadResultSet.getInt("cquery1"));
+        MyFcalls.setCquery2(ReadResultSet.getInt("cquery2"));
+        MyFcalls.setCzone(ReadResultSet.getInt("czone"));
+        MyFcalls.setCage(ReadResultSet.getInt("cage"));
+        MyFcalls.setCtype(ReadResultSet.getInt("ctype"));
+        MyFcalls.setCtnum(ReadResultSet.getInt("ctnum"));
+        MyFcalls.setCnote(ReadResultSet.getInt("cnote"));
         }
       else {
         System.out.println("No more record in fcalls");
@@ -134,7 +145,15 @@ public class FcallsDAO extends PaternDAO {
       UpdatePreparedStatement.setString(12, MyFcalls.getCtime2());
       UpdatePreparedStatement.setString(16, MyFcalls.getCorp());
       UpdatePreparedStatement.setString(17, MyFcalls.getCnumber5());
-      UpdatePreparedStatement.setInt(18, MyFcalls.getCc6num());
+      UpdatePreparedStatement.setInt(18, MyFcalls.getCseqno());
+      UpdatePreparedStatement.setInt(19, MyFcalls.getCquery1());
+      UpdatePreparedStatement.setInt(20, MyFcalls.getCquery2());
+      UpdatePreparedStatement.setInt(21, MyFcalls.getCzone());
+      UpdatePreparedStatement.setInt(22, MyFcalls.getCage());
+      UpdatePreparedStatement.setInt(23, MyFcalls.getCtype());
+      UpdatePreparedStatement.setInt(24, MyFcalls.getCtnum());
+      UpdatePreparedStatement.setInt(25, MyFcalls.getCnote());
+      UpdatePreparedStatement.setInt(26, MyFcalls.getCnum());
       setNbAffectedRow(UpdatePreparedStatement.executeUpdate());
       if (getNbAffectedRow() == 0) {
         System.out.println("Failed to update data into fcalls");
@@ -190,6 +209,14 @@ public class FcallsDAO extends PaternDAO {
       InsertPreparedStatement.setString(12, MyFcalls.getCtime2());
       InsertPreparedStatement.setString(16, MyFcalls.getCorp());
       InsertPreparedStatement.setString(17, MyFcalls.getCnumber5());
+      InsertPreparedStatement.setInt(18, MyFcalls.getCseqno());
+      InsertPreparedStatement.setInt(19, MyFcalls.getCquery1());
+      InsertPreparedStatement.setInt(20, MyFcalls.getCquery2());
+      InsertPreparedStatement.setInt(21, MyFcalls.getCzone());
+      InsertPreparedStatement.setInt(22, MyFcalls.getCage());
+      InsertPreparedStatement.setInt(23, MyFcalls.getCtype());
+      InsertPreparedStatement.setInt(24, MyFcalls.getCtnum());
+      InsertPreparedStatement.setInt(25, MyFcalls.getCnote());
       setNbAffectedRow(InsertPreparedStatement.executeUpdate());
       if (getNbAffectedRow() == 0) {
         System.out.println("Failed to insert data into fcalls");
@@ -256,6 +283,14 @@ public class FcallsDAO extends PaternDAO {
       MyFcalls1.setCtime2("15:00:00");
       MyFcalls1.setCorp("anstel");
       MyFcalls1.setCnumber5("5678");
+      MyFcalls1.setCseqno(9123);
+      MyFcalls1.setCquery1(1);
+      MyFcalls1.setCquery2(2);
+      MyFcalls1.setCzone(92);
+      MyFcalls1.setCage(12);
+      MyFcalls1.setCtype(1);
+      MyFcalls1.setCtnum(1234);
+      MyFcalls1.setCnote(0);
       System.out.println("Fcalls(before insert)=" + MyFcalls1);
       MyFcallsDAO.insert(MyFcalls1);
       System.out.println("Fcalls(after insert)=" + MyFcalls1);
@@ -292,6 +327,14 @@ public class FcallsDAO extends PaternDAO {
         System.out.println("  getCtime2()=" + MyFcalls.getCtime2());
         System.out.println("  getCorp()=" + MyFcalls.getCorp());
         System.out.println("  getCnumber5()=" + MyFcalls.getCnumber5());
+        System.out.println("  getCseqno()=" + MyFcalls.getCseqno());
+        System.out.println("  getCquery1()=" + MyFcalls.getCquery1());
+        System.out.println("  getCquery2()=" + MyFcalls.getCquery2());
+        System.out.println("  getCzone()=" + MyFcalls.getCzone());
+        System.out.println("  getCage()=" + MyFcalls.getCage());
+        System.out.println("  getCtype()=" + MyFcalls.getCtype());
+        System.out.println("  getCtnum()=" + MyFcalls.getCtnum());
+        System.out.println("  getCnote()=" + MyFcalls.getCnote());
         }
 
 // Essai suppression

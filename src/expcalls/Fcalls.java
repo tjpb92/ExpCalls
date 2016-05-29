@@ -27,6 +27,15 @@ public class Fcalls {
   private String Ctime2;
   private String Corp;
   private String Cnumber5;
+  private int cseqno;
+
+  private int cquery1;
+  private int cquery2;
+  private int czone;
+  private int cage;
+  private int ctype;
+  private int ctnum;
+  private int cnote;
 
   public int getCnum() {
     return cnum;
@@ -193,6 +202,126 @@ public class Fcalls {
            ", Ctime2=" + Ctime2 + 
            ", Corp=" + Corp + 
            ", Cnumber5=" + Cnumber5 + 
+           ", cseqno=" + cseqno +
+           ", cquery1=" + cseqno +
+           ", cquery2=" + cseqno +
+           ", czone=" + cseqno +
+           ", cage=" + cseqno +
+           ", ctype=" + cseqno +
+           ", ctnum=" + cseqno +
+           ", cnote=" + cseqno +
            "}";
   }
+
+    /**
+     * @return cseqno numéro de ticket Anstel.
+     */
+    public int getCseqno() {
+        return cseqno;
+    }
+
+    /**
+     * @param cseqno définit le numéro de ticket Anstel
+     */
+    public void setCseqno(int cseqno) {
+        this.cseqno = cseqno;
+    }
+
+    /**
+     * @return cquery1 retourne le résultat de la première question paramétrable.
+     */
+    public int getCquery1() {
+        return cquery1;
+    }
+
+    /**
+     * @param cquery1 définit le résultat de la première question paramétrable.
+     */
+    public void setCquery1(int cquery1) {
+        this.cquery1 = cquery1;
+    }
+
+    /**
+     * @return cquery2 retourne le résultat de la seconde question paramétrable.
+     */
+    public int getCquery2() {
+        return cquery2;
+    }
+
+    /**
+     * @param cquery2 définit le résultat de la seconde question paramétrable.
+     */
+    public void setCquery2(int cquery2) {
+        this.cquery2 = cquery2;
+    }
+
+    /**
+     * @return czone retourne la zone ou la référence à l'agence.
+     */
+    public int getCzone() {
+        return czone;
+    }
+
+    /**
+     * @param czone définit la zone ou la référence à l'agence.
+     */
+    public void setCzone(int czone) {
+        this.czone = czone;
+    }
+
+    /**
+     * @return cage retourne l'age du patient.
+     */
+    public int getCage() {
+        return cage;
+    }
+
+    /**
+     * @param cage définit l'age du patient.
+     */
+    public void setCage(int cage) {
+        this.cage = cage;
+    }
+
+    /**
+     * @return ctype retourne la raison d'appel.
+     */
+    public int getCtype() {
+        return ctype;
+    }
+
+    /**
+     * @param ctype définit  la raison d'appel.
+     */
+    public void setCtype(int ctype) {
+        this.ctype = ctype;
+    }
+
+    /**
+     * @return ctnum retourne la référence à l'intervenant courant.
+     */
+    public int getCtnum() {
+        return ctnum;
+    }
+
+    /**
+     * @param ctnum définit  la référence à l'intervenant courant.
+     */
+    public void setCtnum(int ctnum) {
+        this.ctnum = ctnum;
+    }
+
+    /**
+     * @return cnote retourne l'état de clôture de l'appel (0=Non, 1=Oui).
+     */
+    public int getCnote() {
+        return cnote;
+    }
+
+    /**
+     * @param cnote définit l'état de clôture de l'appel (0=Non, 1=Oui).
+     */
+    public void setCnote(int cnote) {
+        this.cnote = cnote;
+    }
 }
