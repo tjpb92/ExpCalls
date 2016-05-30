@@ -11,6 +11,154 @@ package expcalls;
 public class Ticket_0000 {
 
     /**
+     * @return the Prestataire1
+     */
+    public String getPrestataire1() {
+        return Prestataire1;
+    }
+
+    /**
+     * @param Prestataire1 the Prestataire1 to set
+     */
+    public void setPrestataire1(String Prestataire1) {
+        this.Prestataire1 = Prestataire1;
+    }
+
+    /**
+     * @return the DateMissionnement1
+     */
+    public String getDateMissionnement1() {
+        return DateMissionnement1;
+    }
+
+    /**
+     * @param DateMissionnement1 the DateMissionnement1 to set
+     */
+    public void setDateMissionnement1(String DateMissionnement1) {
+        this.DateMissionnement1 = DateMissionnement1;
+    }
+
+    /**
+     * @return the HeureMissionnement1
+     */
+    public String getHeureMissionnement1() {
+        return HeureMissionnement1;
+    }
+
+    /**
+     * @param HeureMissionnement1 the HeureMissionnement1 to set
+     */
+    public void setHeureMissionnement1(String HeureMissionnement1) {
+        this.HeureMissionnement1 = HeureMissionnement1;
+    }
+
+    /**
+     * @return the NoTelephone1
+     */
+    public String getNoTelephone1() {
+        return NoTelephone1;
+    }
+
+    /**
+     * @param NoTelephone1 the NoTelephone1 to set
+     */
+    public void setNoTelephone1(String NoTelephone1) {
+        this.NoTelephone1 = NoTelephone1;
+    }
+
+    /**
+     * @return the Prestataire2
+     */
+    public String getPrestataire2() {
+        return Prestataire2;
+    }
+
+    /**
+     * @param Prestataire2 the Prestataire2 to set
+     */
+    public void setPrestataire2(String Prestataire2) {
+        this.Prestataire2 = Prestataire2;
+    }
+
+    /**
+     * @return the DateMissionnement2
+     */
+    public String getDateMissionnement2() {
+        return DateMissionnement2;
+    }
+
+    /**
+     * @param DateMissionnement2 the DateMissionnement2 to set
+     */
+    public void setDateMissionnement2(String DateMissionnement2) {
+        this.DateMissionnement2 = DateMissionnement2;
+    }
+
+    /**
+     * @return the HeureMissionnement2
+     */
+    public String getHeureMissionnement2() {
+        return HeureMissionnement2;
+    }
+
+    /**
+     * @param HeureMissionnement2 the HeureMissionnement2 to set
+     */
+    public void setHeureMissionnement2(String HeureMissionnement2) {
+        this.HeureMissionnement2 = HeureMissionnement2;
+    }
+
+    /**
+     * @return the NoTelephone2
+     */
+    public String getNoTelephone2() {
+        return NoTelephone2;
+    }
+
+    /**
+     * @param NoTelephone2 the NoTelephone2 to set
+     */
+    public void setNoTelephone2(String NoTelephone2) {
+        this.NoTelephone2 = NoTelephone2;
+    }
+
+    /**
+     * @return the RapportIntervention
+     */
+    public String getRapportIntervention() {
+        return RapportIntervention;
+    }
+
+    /**
+     * @param RapportIntervention the RapportIntervention to set
+     */
+    public void setRapportIntervention(String RapportIntervention) {
+        this.RapportIntervention = RapportIntervention;
+    }
+
+    /**
+     * @return the TechnicienSurSite
+     */
+    public String getTechnicienSurSite() {
+        return TechnicienSurSite;
+    }
+
+    /**
+     * @param TechnicienSurSite the TechnicienSurSite to set
+     */
+    public void setTechnicienSurSite(String TechnicienSurSite) {
+        this.TechnicienSurSite = TechnicienSurSite;
+    }
+
+    /**
+     * Etat d'un ticket, en-cours dans fcalls et archivé dans f99calls.
+     */
+    public enum EtatTicket {
+
+        EN_COURS, ARCHIVE
+    };
+
+    /**
      * Partie composée de l'appel.
      */
     public Fcalls Fcalls_0000;
@@ -19,7 +167,7 @@ public class Ticket_0000 {
      * Partie composée du complément d'appel.
      */
     public Fcomplmt Fcomplmt_0000;
-    
+
     /**
      * Nom de l'agence.
      */
@@ -34,7 +182,48 @@ public class Ticket_0000 {
      * Etat de l'intervention.
      */
     private String EtatIntervention = "#N/A";
-    
+
+    /**
+     * Prestataire1 : prestataire sur la première transmission.
+     */
+    private String Prestataire1;
+    /**
+     * DateMissionnement1 : date de la première transmission.
+     */
+    private String DateMissionnement1;
+    /**
+     * HeureMissionnement1 : heure de la première transmission.
+     */
+    private String HeureMissionnement1;
+    /**
+     * NoTelephone1 : Numéro de téléphone du prestataire.
+     */
+    private String NoTelephone1;
+    /**
+     * Prestataire1 : prestataire sur la dernière transmission.
+     */
+    private String Prestataire2;
+    /**
+     * DateMissionnement1 : date de la dernière transmission.
+     */
+    private String DateMissionnement2;
+    /**
+     * HeureMissionnement1 : heure de la dernière transmission.
+     */
+    private String HeureMissionnement2;
+    /**
+     * NoTelephone1 : Numéro de téléphone du prestataire.
+     */
+    private String NoTelephone2;
+    /**
+     * Rapport d'intervention
+     */
+    private String RapportIntervention;
+    /**
+     * Le technicien est-il encore sur site ?
+     */
+    private String TechnicienSurSite;
+
     /**
      * Contructeur de la classe Ticket complet.
      *
@@ -131,7 +320,7 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return  EtatIntervention l'état de l'intevention
+     * @return EtatIntervention l'état de l'intevention
      */
     public String getEtatIntervention() {
         return EtatIntervention;

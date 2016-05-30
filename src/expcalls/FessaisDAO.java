@@ -7,8 +7,7 @@ import liba2pi.DBManager;
 import liba2pi.DBServer;
 import liba2pi.DBServerException;
 import agency.PaternDAO;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import expcalls.Ticket_0000.EtatTicket;
 
 /**
  * Classe qui décrit les méthodes pour accéder aux tables fessais ou f99essais au
@@ -19,34 +18,8 @@ import java.util.logging.Logger;
  */
 public class FessaisDAO extends PaternDAO {
 
-    public enum EtatTicket {
 
-        /**
-         * Les tickets en cours sont stockés dans la table fessais.
-         */
-        EN_COURS("fessais"),
-        /**
-         * Les tickets archivés sont stockés dans la table f99essais.
-         */
-        ARCHIVE("f99essais");
-
-        private String MyTable = "";
-
-        //Constructeur
-        EtatTicket(String MyTable) {
-            this.MyTable = MyTable;
-        }
-
-        /**
-         * @return le nom de la table.
-         */
-        @Override
-        public String toString() {
-            return MyTable;
-        }
-    }
-
-    private String MyTable = EtatTicket.EN_COURS.name();
+    private String MyTable = "fessais";
 
     /**
      * Requête SQL pour récupérer la première transmission.
@@ -80,7 +53,7 @@ public class FessaisDAO extends PaternDAO {
 
         StringBuffer Stmt;
 
-        MyTable = MyEtatTicket.toString();
+        MyTable = Ticket_0000.EtatTicket.EN_COURS.equals(MyEtatTicket)?"fessais":"f99essais";
 
         this.MyConnection = MyConnection;
 
@@ -109,18 +82,20 @@ public class FessaisDAO extends PaternDAO {
         setUpdatePreparedStatement();
 
         setInsertStatement("insert into " + MyTable
-                + " (ecnum, eptr, eunum, edate, etime, cdate2, ctime2,"
+                + " (ecnum, eptr, eunum, edate, etime,"
                 + " emessage, etnum, eonum, eresult, eduration,"
                 + " etest, einternal, em3num, egid)"
-                + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
         setInsertPreparedStatement();
 
         setDeleteStatement("delete from " + MyTable + " where enumabs=?;");
         setDeletePreparedStatement();
         
         if (ecnum > 0) {
-            setFirstTransmissionStatement("select min(enumabs) enumabs from " + MyTable
-                + " where ecnum = " + ecnum + ";");
+            setFirstTransmissionStatement("select a.* from " + MyTable + " a"
+                + " where a.enumabs = (select min(b.enumabs) from " 
+                + MyTable + " b where b.ecnum = " + ecnum 
+                + " and eresult = 1);");
             setFirstTransmissionPreparedStatement();
             setFirstTransmissionResultSet();
         }
@@ -299,21 +274,36 @@ public class FessaisDAO extends PaternDAO {
     }
 
     /**
-     * Récupère l'essai correspondant à la première transmission
+     * Récupère l'essai correspondant à la première transmission, s'il existe.
+     * @return l'essai correspondant à la première transmission, s'il existe.
      */
-    public int getFirstTransmission() {
-        int enumabs = 0;
+    public Fessais getFirstTransmission() {
+        Fessais MyFessais = null;
         
         try {
             if (FirstTransmissionResultSet.next()) {
-                enumabs = FirstTransmissionResultSet.getInt("enumabs");
+                MyFessais = new Fessais();
+                MyFessais.setEnumabs(FirstTransmissionResultSet.getInt("enumabs"));
+                MyFessais.setEcnum(FirstTransmissionResultSet.getInt("ecnum"));
+                MyFessais.setEptr(FirstTransmissionResultSet.getInt("eptr"));
+                MyFessais.setEunum(FirstTransmissionResultSet.getInt("eunum"));
+                MyFessais.setEdate(FirstTransmissionResultSet.getTimestamp("edate"));
+                MyFessais.setEtime(FirstTransmissionResultSet.getString("etime"));
+                MyFessais.setEmessage(FirstTransmissionResultSet.getString("emessage"));
+                MyFessais.setEtnum(FirstTransmissionResultSet.getInt("etnum"));
+                MyFessais.setEonum(FirstTransmissionResultSet.getInt("eonum"));
+                MyFessais.setEresult(FirstTransmissionResultSet.getInt("eresult"));
+                MyFessais.setEduration(FirstTransmissionResultSet.getInt("eduration"));
+                MyFessais.setEtest(FirstTransmissionResultSet.getInt("etest"));
+                MyFessais.setEinternal(FirstTransmissionResultSet.getInt("einternal"));
+                MyFessais.setEm3num(FirstTransmissionResultSet.getInt("em3num"));
+                MyFessais.setEgid(FirstTransmissionResultSet.getInt("egid"));
             }
         } catch (SQLException MyException) {
             System.out.println("Erreur en lecture de " + MyTable + " "
                     + MyException.getMessage());
         }
-
-        return (enumabs);
+        return (MyFessais);
     }
 
     /**

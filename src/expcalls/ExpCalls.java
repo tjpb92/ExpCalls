@@ -2,10 +2,12 @@ package expcalls;
 
 import agency.Fagency;
 import agency.FagencyDAO;
-import expcalls.FcallsDAO.EtatTicket;
+import expcalls.Ticket_0000.EtatTicket;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import liba2pi.ApplicationProperties;
@@ -21,6 +23,8 @@ import liba2pi.DBServerException;
  */
 public class ExpCalls {
 
+    private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
     /**
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
@@ -115,7 +119,7 @@ public class ExpCalls {
         FagencyDAO MyFagencyDAO;
         Fmenuit MyFmenuit;
         FmenuitDAO MyFmenuitDAO;
-        int enumabs;
+        int enumabs1 = 0;
         Fessais MyFessais;
         FessaisDAO MyFessaisDAO;
 
@@ -157,16 +161,31 @@ public class ExpCalls {
         }
         
         // Recherche la première transmission
-//        MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), MyEtatTicket);
-//        enumabs = MyFessaisDAO.getFirstTransmission();
-//        if (enumabs > 0) {
-//            MyFessaisDAO = new FessaisDAO(MyConnection, enumabs, 0, MyEtatTicket);
-//            MyFessais = MyFessaisDAO.select();
-//            MyTicket_0000.setEtatIntervention("Intervention");
-//        }
-//        MyTicket_0000.setEtatIntervention("Message");
+        MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), MyEtatTicket);
+        MyFessais = MyFessaisDAO.getFirstTransmission();
+        if (MyFessais != null) {
+            enumabs1 = MyFessais.getEnumabs();
+            MyTicket_0000.setEtatIntervention("Intervention");
+            MyTicket_0000.setDateMissionnement1(MyDateFormat.format(MyFessais.getEdate()));
+            MyTicket_0000.setHeureMissionnement1(MyFessais.getEtime());
+            MyTicket_0000.setPrestataire1(String.valueOf(MyFessais.getEtnum()));
+            MyTicket_0000.setNoTelephone1("tel1");
+        }
+        else {
+            MyTicket_0000.setEtatIntervention("Message");
+        }
         
         // Recherche la dernière transmission
+//        MyFessais = MyFessaisDAO.getLastTransmission();
+        if (MyFessais != null) {
+            if (enumabs1 != MyFessais.getEnumabs()) {
+                MyTicket_0000.setDateMissionnement2(MyDateFormat.format(MyFessais.getEdate()));
+                MyTicket_0000.setHeureMissionnement2(MyFessais.getEtime());
+                MyTicket_0000.setPrestataire2(String.valueOf(MyFessais.getEtnum()));
+                MyTicket_0000.setNoTelephone2("tel2");
+            }
+        }
+        
         // Recherche la clôture d'appel
         
     }

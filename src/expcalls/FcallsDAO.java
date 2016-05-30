@@ -7,44 +7,18 @@ import liba2pi.DBManager;
 import liba2pi.DBServer;
 import liba2pi.DBServerException;
 import agency.PaternDAO;
+import expcalls.Ticket_0000.EtatTicket;
 
 /**
  * Classe qui décrit les méthodes pour accéder aux tables fcalls ou f99calls au
  * travers de JDBC.
  *
  * @author Thierry Baribaud.
- * @version October 2015.
+ * @version Mai 2016.
  */
 public class FcallsDAO extends PaternDAO {
 
-    public enum EtatTicket {
-
-        /**
-         * Les tickets en cours sont stockés dans la table fcalls.
-         */
-        EN_COURS("fcalls"),
-        /**
-         * Les tickets archivés sont stockés dans la table f99calls.
-         */
-        ARCHIVE("f99calls");
-
-        private String MyTable = "";
-
-        //Constructeur
-        EtatTicket(String MyTable) {
-            this.MyTable = MyTable;
-        }
-
-        /**
-         * @return le nom de la table.
-         */
-        @Override
-        public String toString() {
-            return MyTable;
-        }
-    }
-
-    private String MyTable = EtatTicket.EN_COURS.name();
+    private String MyTable = "fcalls";
 
     /**
      * Constructeur de la classe FcallsDAO.
@@ -62,7 +36,8 @@ public class FcallsDAO extends PaternDAO {
 
         StringBuffer Stmt;
 
-        MyTable = MyEtatTicket.toString();
+        MyTable = EtatTicket.EN_COURS.equals(MyEtatTicket)?"fcalls":"f99calls";
+        
         int cunum = MyArgs.getUnum();
         Timestamp BegDate = MyArgs.getBegDate();
         int idxBegDate = 0;
