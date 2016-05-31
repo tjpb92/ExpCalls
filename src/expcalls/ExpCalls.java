@@ -24,7 +24,7 @@ import liba2pi.DBServerException;
 public class ExpCalls {
 
     private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    
+
     /**
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
@@ -111,6 +111,7 @@ public class ExpCalls {
         Fcomplmt MyFcomplmt;
         FcomplmtDAO MyFcomplmtDAO;
         int a6num;
+        String MyA6extname;
         String MyA6name;
         int m6num;
         String MyM6name;
@@ -122,6 +123,9 @@ public class ExpCalls {
         int enumabs1 = 0;
         Fessais MyFessais;
         FessaisDAO MyFessaisDAO;
+        int tnum = 0;
+        Ftoubib MyFtoubib;
+        FtoubibDAO MyFtoubibDAO;
 
         // Récupération du complément d'appel
         cc6num = MyTicket_0000.Fcalls_0000.getCc6num();
@@ -139,7 +143,10 @@ public class ExpCalls {
         if (a6num > 0) {
             MyFagencyDAO = new FagencyDAO(MyConnection, a6num);
             MyFagency = MyFagencyDAO.select();
-            MyA6name = MyFagency.getA6name();
+            if (MyFagency != null) {
+                MyA6extname = MyFagency.getA6extname();
+                MyA6name = (MyA6extname != null) ? MyA6extname : MyFagency.getA6name();
+            }
         }
         if (MyA6name != null) {
             MyTicket_0000.setA6name(MyA6name);
@@ -159,7 +166,7 @@ public class ExpCalls {
         if (MyM6name != null) {
             MyTicket_0000.setM6name(MyM6name);
         }
-        
+
         // Recherche la première transmission
         MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), MyEtatTicket);
         MyFessais = MyFessaisDAO.getFirstTransmission();
@@ -168,26 +175,39 @@ public class ExpCalls {
             MyTicket_0000.setEtatIntervention("Intervention");
             MyTicket_0000.setDateMissionnement1(MyDateFormat.format(MyFessais.getEdate()));
             MyTicket_0000.setHeureMissionnement1(MyFessais.getEtime());
-            MyTicket_0000.setPrestataire1(String.valueOf(MyFessais.getEtnum()));
-            MyTicket_0000.setNoTelephone1("tel1");
-        }
-        else {
+            tnum = MyFessais.getEtnum();
+            if (tnum > 0) {
+                MyFtoubibDAO = new FtoubibDAO(MyConnection, tnum, 0);
+                MyFtoubib = MyFtoubibDAO.select();
+                if (MyFtoubib != null) {
+                    MyTicket_0000.setPrestataire1(MyFtoubib.getTlname() + " " + MyFtoubib.getTfname());
+                    MyTicket_0000.setNoTelephone1(MyFtoubib.getTel());
+                }
+            }
+        } else {
             MyTicket_0000.setEtatIntervention("Message");
         }
-        
+
         // Recherche la dernière transmission
-//        MyFessais = MyFessaisDAO.getLastTransmission();
+        MyFessais = MyFessaisDAO.getLastTransmission();
         if (MyFessais != null) {
             if (enumabs1 != MyFessais.getEnumabs()) {
+                MyTicket_0000.setEtatIntervention("Intervention");
                 MyTicket_0000.setDateMissionnement2(MyDateFormat.format(MyFessais.getEdate()));
                 MyTicket_0000.setHeureMissionnement2(MyFessais.getEtime());
-                MyTicket_0000.setPrestataire2(String.valueOf(MyFessais.getEtnum()));
-                MyTicket_0000.setNoTelephone2("tel2");
+                tnum = MyFessais.getEtnum();
+                if (tnum > 0) {
+                    MyFtoubibDAO = new FtoubibDAO(MyConnection, tnum, 0);
+                    MyFtoubib = MyFtoubibDAO.select();
+                    if (MyFtoubib != null) {
+                        MyTicket_0000.setPrestataire2(MyFtoubib.getTlname() + " " + MyFtoubib.getTfname());
+                        MyTicket_0000.setNoTelephone2(MyFtoubib.getTel());
+                    }
+                }
             }
         }
-        
+
         // Recherche la clôture d'appel
-        
     }
 
     public static void main(String[] Args) {

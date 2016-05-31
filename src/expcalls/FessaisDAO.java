@@ -10,14 +10,13 @@ import agency.PaternDAO;
 import expcalls.Ticket_0000.EtatTicket;
 
 /**
- * Classe qui décrit les méthodes pour accéder aux tables fessais ou f99essais au
- * travers de JDBC.
+ * Classe qui décrit les méthodes pour accéder aux tables fessais ou f99essais
+ * au travers de JDBC.
  *
  * @author Thierry Baribaud.
  * @version Mai 2015.
  */
 public class FessaisDAO extends PaternDAO {
-
 
     private String MyTable = "fessais";
 
@@ -36,7 +35,21 @@ public class FessaisDAO extends PaternDAO {
      */
     private ResultSet FirstTransmissionResultSet;
 
-    
+    /**
+     * Requête SQL pour récupérer la dernière transmission.
+     */
+    private String LastTransmissionStatement;
+
+    /**
+     * Requête SQL préparée pour récupérer la dernière transmission.
+     */
+    private PreparedStatement LastTransmissionPreparedStatement;
+
+    /**
+     * ResultSet pour récupérer la dernière transmission.
+     */
+    private ResultSet LastTransmissionResultSet;
+
     /**
      * Constructeur de la classe FessaisDAO.
      *
@@ -53,7 +66,7 @@ public class FessaisDAO extends PaternDAO {
 
         StringBuffer Stmt;
 
-        MyTable = Ticket_0000.EtatTicket.EN_COURS.equals(MyEtatTicket)?"fessais":"f99essais";
+        MyTable = Ticket_0000.EtatTicket.EN_COURS.equals(MyEtatTicket) ? "fessais" : "f99essais";
 
         this.MyConnection = MyConnection;
 
@@ -90,14 +103,25 @@ public class FessaisDAO extends PaternDAO {
 
         setDeleteStatement("delete from " + MyTable + " where enumabs=?;");
         setDeletePreparedStatement();
-        
+
+        // Récupère la première transmission
         if (ecnum > 0) {
             setFirstTransmissionStatement("select a.* from " + MyTable + " a"
-                + " where a.enumabs = (select min(b.enumabs) from " 
-                + MyTable + " b where b.ecnum = " + ecnum 
-                + " and eresult = 1);");
+                    + " where a.enumabs = (select min(b.enumabs) from "
+                    + MyTable + " b where b.ecnum = " + ecnum
+                    + " and eresult = 1);");
             setFirstTransmissionPreparedStatement();
             setFirstTransmissionResultSet();
+        }
+
+        // Récupère la dernière transmission
+        if (ecnum > 0) {
+            setLastTransmissionStatement("select a.* from " + MyTable + " a"
+                    + " where a.enumabs = (select max(b.enumabs) from "
+                    + MyTable + " b where b.ecnum = " + ecnum
+                    + " and eresult = 1);");
+            setLastTransmissionPreparedStatement();
+            setLastTransmissionResultSet();
         }
     }
 
@@ -252,6 +276,7 @@ public class FessaisDAO extends PaternDAO {
 
     /**
      * Prépare la requête SQL pour rechercher la première transmission.
+     *
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
     public void setFirstTransmissionPreparedStatement() throws SQLException {
@@ -267,6 +292,7 @@ public class FessaisDAO extends PaternDAO {
 
     /**
      * Exécute la requête SQL pour rechercher la première transmission.
+     *
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
     public void setFirstTransmissionResultSet() throws SQLException {
@@ -275,11 +301,12 @@ public class FessaisDAO extends PaternDAO {
 
     /**
      * Récupère l'essai correspondant à la première transmission, s'il existe.
+     *
      * @return l'essai correspondant à la première transmission, s'il existe.
      */
     public Fessais getFirstTransmission() {
         Fessais MyFessais = null;
-        
+
         try {
             if (FirstTransmissionResultSet.next()) {
                 MyFessais = new Fessais();
@@ -307,6 +334,86 @@ public class FessaisDAO extends PaternDAO {
     }
 
     /**
+     * @return the LastTransmissionStatement
+     */
+    public String getLastTransmissionStatement() {
+        return LastTransmissionStatement;
+    }
+
+    /**
+     * @param LastTransmissionStatement the LastTransmissionStatement to set
+     */
+    public void setLastTransmissionStatement(String LastTransmissionStatement) {
+        this.LastTransmissionStatement = LastTransmissionStatement;
+    }
+
+    /**
+     * @return the LastTransmissionPreparedStatement
+     */
+    public PreparedStatement getLastTransmissionPreparedStatement() {
+        return LastTransmissionPreparedStatement;
+    }
+
+    /**
+     * Prépare la requête SQL pour rechercher la première transmission.
+     *
+     * @throws java.sql.SQLException en cas d'erreur SQL.
+     */
+    public void setLastTransmissionPreparedStatement() throws SQLException {
+        LastTransmissionPreparedStatement = MyConnection.prepareStatement(getLastTransmissionStatement());
+    }
+
+    /**
+     * @return the LastTransmissionResultSet
+     */
+    public ResultSet getLastTransmissionResultSet() {
+        return LastTransmissionResultSet;
+    }
+
+    /**
+     * Exécute la requête SQL pour rechercher la dernière transmission.
+     *
+     * @throws java.sql.SQLException en cas d'erreur SQL.
+     */
+    public void setLastTransmissionResultSet() throws SQLException {
+        LastTransmissionResultSet = LastTransmissionPreparedStatement.executeQuery();
+    }
+
+    /**
+     * Récupère l'essai correspondant à la dernière transmission, s'il existe.
+     *
+     * @return l'essai correspondant à la dernière transmission, s'il existe.
+     */
+    public Fessais getLastTransmission() {
+        Fessais MyFessais = null;
+
+        try {
+            if (LastTransmissionResultSet.next()) {
+                MyFessais = new Fessais();
+                MyFessais.setEnumabs(LastTransmissionResultSet.getInt("enumabs"));
+                MyFessais.setEcnum(LastTransmissionResultSet.getInt("ecnum"));
+                MyFessais.setEptr(LastTransmissionResultSet.getInt("eptr"));
+                MyFessais.setEunum(LastTransmissionResultSet.getInt("eunum"));
+                MyFessais.setEdate(LastTransmissionResultSet.getTimestamp("edate"));
+                MyFessais.setEtime(LastTransmissionResultSet.getString("etime"));
+                MyFessais.setEmessage(LastTransmissionResultSet.getString("emessage"));
+                MyFessais.setEtnum(LastTransmissionResultSet.getInt("etnum"));
+                MyFessais.setEonum(LastTransmissionResultSet.getInt("eonum"));
+                MyFessais.setEresult(LastTransmissionResultSet.getInt("eresult"));
+                MyFessais.setEduration(LastTransmissionResultSet.getInt("eduration"));
+                MyFessais.setEtest(LastTransmissionResultSet.getInt("etest"));
+                MyFessais.setEinternal(LastTransmissionResultSet.getInt("einternal"));
+                MyFessais.setEm3num(LastTransmissionResultSet.getInt("em3num"));
+                MyFessais.setEgid(LastTransmissionResultSet.getInt("egid"));
+            }
+        } catch (SQLException MyException) {
+            System.out.println("Erreur en lecture de " + MyTable + " "
+                    + MyException.getMessage());
+        }
+        return (MyFessais);
+    }
+
+    /**
      * Méthode qui ferme toutes les ressources de bases de données.
      *
      * @throws java.sql.SQLException en cas d'erreur SQL.
@@ -316,6 +423,7 @@ public class FessaisDAO extends PaternDAO {
 
         super.close();
         FirstTransmissionPreparedStatement.close();
+        LastTransmissionPreparedStatement.close();
     }
 
     /**

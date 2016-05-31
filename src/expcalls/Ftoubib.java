@@ -78,7 +78,7 @@ public class Ftoubib {
      * @param Tlname the Tlname to set
      */
     public void setTlname(String Tlname) {
-        this.Tlname = Tlname;
+        this.Tlname = (Tlname != null)?Tlname.trim():null;
     }
 
     /**
@@ -92,7 +92,7 @@ public class Ftoubib {
      * @param Tfname the Tfname to set
      */
     public void setTfname(String Tfname) {
-        this.Tfname = Tfname;
+        this.Tfname = (Tfname != null)?Tfname.trim():null;
     }
 
     /**
@@ -106,7 +106,7 @@ public class Ftoubib {
      * @param Tabbname the Tabbname to set
      */
     public void setTabbname(String Tabbname) {
-        this.Tabbname = Tabbname;
+        this.Tabbname = (Tabbname != null)?Tabbname.trim():null;
     }
 
     /**
@@ -120,7 +120,7 @@ public class Ftoubib {
      * @param Tel the Tel to set
      */
     public void setTel(String Tel) {
-        this.Tel = Tel;
+        this.Tel = (Tel != null)?Tel.trim():null;
     }
 
     /**
@@ -134,7 +134,7 @@ public class Ftoubib {
      * @param Tel2 the Tel2 to set
      */
     public void setTel2(String Tel2) {
-        this.Tel2 = Tel2;
+        this.Tel2 = (Tel2 != null)?Tel2.trim():null;
     }
 
     /**
@@ -148,7 +148,7 @@ public class Ftoubib {
      * @param Telper the Telper to set
      */
     public void setTelper(String Telper) {
-        this.Telper = Telper;
+        this.Telper = (Telper != null)?Telper.trim():null;
     }
 
     /**
@@ -162,7 +162,7 @@ public class Ftoubib {
      * @param tel4 the tel4 to set
      */
     public void setTel4(String tel4) {
-        this.tel4 = tel4;
+        this.tel4 = (tel4 != null)?tel4.trim():null;
     }
 
     /**
@@ -176,7 +176,7 @@ public class Ftoubib {
      * @param Tel5 the Tel5 to set
      */
     public void setTel5(String Tel5) {
-        this.Tel5 = Tel5;
+        this.Tel5 = (Tel5 != null)?Tel5.trim():null;
     }
 
     /**
@@ -190,7 +190,7 @@ public class Ftoubib {
      * @param Tel6 the Tel6 to set
      */
     public void setTel6(String Tel6) {
-        this.Tel6 = Tel6;
+        this.Tel6 = (Tel6 != null)?Tel6.trim():null;
     }
 
     /**
@@ -204,7 +204,7 @@ public class Ftoubib {
      * @param Telfax the Telfax to set
      */
     public void setTelfax(String Telfax) {
-        this.Telfax = Telfax;
+        this.Telfax = (Telfax != null)?Telfax.trim():null;
     }
 
     /**
@@ -218,7 +218,7 @@ public class Ftoubib {
      * @param Temail the Temail to set
      */
     public void setTemail(String Temail) {
-        this.Temail = Temail;
+        this.Temail = (Temail != null)?Temail.trim():null;
     }
 
     /**
@@ -232,7 +232,7 @@ public class Ftoubib {
      * @param Taddress the Taddress to set
      */
     public void setTaddress(String Taddress) {
-        this.Taddress = Taddress;
+        this.Taddress = (Taddress != null)?Taddress.trim():null;
     }
 
     /**
@@ -246,7 +246,7 @@ public class Ftoubib {
      * @param Taddress2 the Taddress2 to set
      */
     public void setTaddress2(String Taddress2) {
-        this.Taddress2 = Taddress2;
+        this.Taddress2 = (Taddress2 != null)?Taddress2.trim():null;
     }
 
     /**
@@ -260,7 +260,7 @@ public class Ftoubib {
      * @param Tcomment the Tcomment to set
      */
     public void setTcomment(String Tcomment) {
-        this.Tcomment = Tcomment;
+        this.Tcomment = (Tcomment != null)?Tcomment.trim():null;
     }
            
             
