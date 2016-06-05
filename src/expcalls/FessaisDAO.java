@@ -21,6 +21,11 @@ public class FessaisDAO extends PaternDAO {
     private String MyTable = "fessais";
 
     /**
+     * Requête SQL pour récupérer un élement de clôture d'appel.
+     */
+    private String PartOfEOMStatement;
+    
+    /**
      * Requête SQL pour récupérer la première transmission.
      */
     private String FirstTransmissionStatement;
@@ -51,17 +56,28 @@ public class FessaisDAO extends PaternDAO {
     private ResultSet LastTransmissionResultSet;
 
     /**
+     * ResultSet pour récupérer un élément de clôture d'appel.
+     */
+    private ResultSet PartOfEOMResultSet;
+
+    /**
+     * Requête SQL préparée pour récupérer un élément de clôture d'appel.
+     */
+    private PreparedStatement PartOfEOMPreparedStatement;
+
+    /**
      * Constructeur de la classe FessaisDAO.
      *
      * @param MyConnection connexion à la base de données courante.
      * @param enumabs identifiant de l'essai,
      * @param ecnum identifiant de l'appel,
+     * @param egid identifiant d'un groupe d'essais,
      * @param MyEtatTicket indique si l'on travaille sur les tickets en cours ou
      * archivés.
      * @throws ClassNotFoundException en cas de classse non trouvée.
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
-    public FessaisDAO(Connection MyConnection, int enumabs, int ecnum, EtatTicket MyEtatTicket)
+    public FessaisDAO(Connection MyConnection, int enumabs, int ecnum, int egid, EtatTicket MyEtatTicket)
             throws ClassNotFoundException, SQLException {
 
         StringBuffer Stmt;
@@ -80,6 +96,9 @@ public class FessaisDAO extends PaternDAO {
         }
         if (ecnum > 0) {
             Stmt.append(" and ecnum = ").append(ecnum);
+        }
+        if (egid > 0) {
+            Stmt.append(" and egid = ").append(egid);
         }
         Stmt.append(" order by enumabs;");
 //        System.out.println(Stmt);
@@ -109,7 +128,7 @@ public class FessaisDAO extends PaternDAO {
             setFirstTransmissionStatement("select a.* from " + MyTable + " a"
                     + " where a.enumabs = (select min(b.enumabs) from "
                     + MyTable + " b where b.ecnum = " + ecnum
-                    + " and eresult = 1);");
+                    + " and b.eresult = 1);");
             setFirstTransmissionPreparedStatement();
             setFirstTransmissionResultSet();
         }
@@ -119,9 +138,20 @@ public class FessaisDAO extends PaternDAO {
             setLastTransmissionStatement("select a.* from " + MyTable + " a"
                     + " where a.enumabs = (select max(b.enumabs) from "
                     + MyTable + " b where b.ecnum = " + ecnum
-                    + " and eresult = 1);");
+                    + " and b.eresult = 1);");
             setLastTransmissionPreparedStatement();
             setLastTransmissionResultSet();
+        }
+        
+        // Récupère un élément de clôture d'appel
+        if (ecnum > 0) {
+            setPartOfEOMStatement("select a.* from " + MyTable + " a"
+                    + " where a.enumabs = (select max(b.enumabs) from "
+                    + MyTable + " b where b.ecnum = " + ecnum
+                    + " and b.eresult in (69,70,71,72,73,93));");
+//            System.out.println("  PartOfEOMStatement=" + getPartOfEOMStatement());
+            setPartOfEOMPreparedStatement();
+            setPartOfEOMResultSet();
         }
     }
 
@@ -364,12 +394,27 @@ public class FessaisDAO extends PaternDAO {
     }
 
     /**
-     * @return the LastTransmissionResultSet
+     * Prépare la requête SQL pour rechercher la première transmission.
+     *
+     * @throws java.sql.SQLException en cas d'erreur SQL.
+     */
+    public void setPartOfEOMPreparedStatement() throws SQLException {
+        PartOfEOMPreparedStatement = MyConnection.prepareStatement(getPartOfEOMStatement());
+    }
+
+    /**
+     * @return LastTransmissionResultSet 
      */
     public ResultSet getLastTransmissionResultSet() {
         return LastTransmissionResultSet;
     }
 
+    /**
+     * @return PartOfEOMResultSet 
+     */
+    public ResultSet getPartOfEOMResultSet() {
+        return PartOfEOMResultSet;
+    }
     /**
      * Exécute la requête SQL pour rechercher la dernière transmission.
      *
@@ -414,6 +459,49 @@ public class FessaisDAO extends PaternDAO {
     }
 
     /**
+     * Récupère l'essai correspondant à un élément de clôture d'appel, s'il existe.
+     *
+     * @return l'essai correspondant à un élément de clôture d'appel, s'il existe.
+     */
+    public Fessais getPartOfEOM() {
+        Fessais MyFessais = null;
+
+        try {
+            if (PartOfEOMResultSet.next()) {
+                MyFessais = new Fessais();
+                MyFessais.setEnumabs(PartOfEOMResultSet.getInt("enumabs"));
+                MyFessais.setEcnum(PartOfEOMResultSet.getInt("ecnum"));
+                MyFessais.setEptr(PartOfEOMResultSet.getInt("eptr"));
+                MyFessais.setEunum(PartOfEOMResultSet.getInt("eunum"));
+                MyFessais.setEdate(PartOfEOMResultSet.getTimestamp("edate"));
+                MyFessais.setEtime(PartOfEOMResultSet.getString("etime"));
+                MyFessais.setEmessage(PartOfEOMResultSet.getString("emessage"));
+                MyFessais.setEtnum(PartOfEOMResultSet.getInt("etnum"));
+                MyFessais.setEonum(PartOfEOMResultSet.getInt("eonum"));
+                MyFessais.setEresult(PartOfEOMResultSet.getInt("eresult"));
+                MyFessais.setEduration(PartOfEOMResultSet.getInt("eduration"));
+                MyFessais.setEtest(PartOfEOMResultSet.getInt("etest"));
+                MyFessais.setEinternal(PartOfEOMResultSet.getInt("einternal"));
+                MyFessais.setEm3num(PartOfEOMResultSet.getInt("em3num"));
+                MyFessais.setEgid(PartOfEOMResultSet.getInt("egid"));
+            }
+        } catch (SQLException MyException) {
+            System.out.println("Erreur en lecture de " + MyTable + " "
+                    + MyException.getMessage());
+        }
+        return (MyFessais);
+    }
+
+    /**
+     * Exécute la requête SQL pour rechercher un élément de clôture d'appel.
+     *
+     * @throws java.sql.SQLException en cas d'erreur SQL.
+     */
+    public void setPartOfEOMResultSet() throws SQLException {
+        PartOfEOMResultSet = PartOfEOMPreparedStatement.executeQuery();
+    }
+
+    /**
      * Méthode qui ferme toutes les ressources de bases de données.
      *
      * @throws java.sql.SQLException en cas d'erreur SQL.
@@ -424,6 +512,7 @@ public class FessaisDAO extends PaternDAO {
         super.close();
         FirstTransmissionPreparedStatement.close();
         LastTransmissionPreparedStatement.close();
+        PartOfEOMPreparedStatement.close();
     }
 
     /**
@@ -458,7 +547,7 @@ public class FessaisDAO extends PaternDAO {
             MyDBManager = new DBManager(MyDBServer);
 
 // Essai insertion
-            MyFessaisDAO = new FessaisDAO(MyDBManager.getConnection(), 0, 0, EtatTicket.EN_COURS);
+            MyFessaisDAO = new FessaisDAO(MyDBManager.getConnection(), 0, 0, 0, EtatTicket.EN_COURS);
             MyFessais1 = new Fessais();
             MyFessais1.setEcnum(6192014);
             MyFessais1.setEptr(0);
@@ -487,7 +576,7 @@ public class FessaisDAO extends PaternDAO {
             MyFessaisDAO.close();
 
 // Essai lecture
-            MyFessaisDAO = new FessaisDAO(MyDBManager.getConnection(), 0, MyFessais1.getEcnum(), EtatTicket.EN_COURS);
+            MyFessaisDAO = new FessaisDAO(MyDBManager.getConnection(), 0, MyFessais1.getEcnum(), 0, EtatTicket.EN_COURS);
             i = 0;
             while ((MyFessais = MyFessaisDAO.select()) != null) {
                 i++;
@@ -532,5 +621,19 @@ public class FessaisDAO extends PaternDAO {
     @Override
     public void insert(Object MyObject) {
         throw new UnsupportedOperationException("Non supporté actuellement"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return PartOfEOMStatement requête SQL qui retourne un élément de clôture d'appel.
+     */
+    public String getPartOfEOMStatement() {
+        return PartOfEOMStatement;
+    }
+
+    /**
+     * @param PartOfEOMStatement définit la requête SQL qui retourne un élément de clôture d'appel.
+     */
+    public void setPartOfEOMStatement(String PartOfEOMStatement) {
+        this.PartOfEOMStatement = PartOfEOMStatement;
     }
 }

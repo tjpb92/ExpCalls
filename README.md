@@ -12,12 +12,12 @@ java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-d] [
 ```
 où :
 * ```-dbserver db``` est la référence à la base de données, par défaut désigne la base de données de développement. Voir fichier *myDatabases.prop* (optionnel).
-* ```-u unum``` est la référence du service d'urgence (obligatoire).
-* ```-b début``` : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (optionnel).
-* ```-e fin``` : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (optionnel).
-* ```-o fichier.xml``` est le nom du fichier qui recevra les agences au format XML. Amorcé à *tickets_0000.xml* par défaut (optionnel).
-* ```-d``` le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (optionnel).
-* ```-t``` le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (optionnel).
+* ```-u unum``` est la référence du service d'urgence (paramètre obligatoire).
+* ```-b début``` : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (paramètre optionnel).
+* ```-e fin``` : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (paramètre optionnel).
+* ```-o fichier.xml``` est le nom du fichier qui recevra les agences au format XML. Amorcé à *tickets_0000.xml* par défaut (paramètre optionnel).
+* ```-d``` le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (paramètre optionnel).
+* ```-t``` le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (paramètre optionnel).
 
 ##Pré-requis :
 - Java 6 ou supérieur.
@@ -32,6 +32,16 @@ Ils dépendent du service d'urgence concerné.
 
 Il y a un format par défaut : *tickets_0000.xsd*.
 
+##Fichier des paramètres : 
+
+Ce fichier permet de spécifier les paramètres d'accès aux différentes bases de données.
+
+A adapter selon les implémentations locales.
+
+Ce fichier est nommé : *MyDatabases.prop*.
+
+Le fichier *MyDatabases_Example.prop* est fourni à titre d'exemple.
+
 ##Références:
 
 - Construire une application XML, J.C. Bernadac, F. Knab, Eyrolles.
@@ -44,12 +54,3 @@ Il y a un format par défaut : *tickets_0000.xsd*.
 - [Convertisseur DTD/XSD](http://www.freeformatter.com/xsd-generator.html)
 - [Tuto XML/XSD](http://www.codeguru.com/java/article.php/c13529/XSD-Tutorial-XML-Schemas-For-Beginners.htm)
 
-##Fichier des paramètres : 
-
-Ce fichier permet de spécifier les paramètres d'accès aux différentes bases de données.
-
-A adapter selon les implémentations locales.
-
-Ce fichier est nommé : *MyDatabases.prop*.
-
-Le fichier *MyDatabases_Example.prop" est fourni à titre d'exemple.

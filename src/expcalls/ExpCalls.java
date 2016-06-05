@@ -126,8 +126,14 @@ public class ExpCalls {
         int tnum = 0;
         Ftoubib MyFtoubib;
         FtoubibDAO MyFtoubibDAO;
+        int egid = 0;
+        ClotureAppel MyClotureAppel;
+        int eresult = 0;
+        StringBuffer RapportIntervention = null;
+        String Emessage = null;
 
         // Récupération du complément d'appel
+//        System.out.println("  Récupération du complément d'appel");
         cc6num = MyTicket_0000.Fcalls_0000.getCc6num();
         MyFcomplmt = null;
         if (cc6num > 0) {
@@ -137,6 +143,7 @@ public class ExpCalls {
         }
 
         // Récupération de l'agence
+//        System.out.println("  Récupération de l'agence");
         a6num = MyTicket_0000.Fcalls_0000.getCzone();
         MyFagency = null;
         MyA6name = null;
@@ -153,6 +160,7 @@ public class ExpCalls {
         }
 
         // Récupération de l'item du menu sélectionné
+//        System.out.println("  Récupération de l'item du menu sélectionné");
         m6num = MyTicket_0000.Fcalls_0000.getCquery1();
         MyM6name = null;
         MyM6extname = null;
@@ -168,7 +176,8 @@ public class ExpCalls {
         }
 
         // Recherche la première transmission
-        MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), MyEtatTicket);
+//        System.out.println("  Récupération de la première transmission");
+        MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), 0, MyEtatTicket);
         MyFessais = MyFessaisDAO.getFirstTransmission();
         if (MyFessais != null) {
             enumabs1 = MyFessais.getEnumabs();
@@ -189,6 +198,7 @@ public class ExpCalls {
         }
 
         // Recherche la dernière transmission
+//        System.out.println("  Récupération de la dernière transmission");
         MyFessais = MyFessaisDAO.getLastTransmission();
         if (MyFessais != null) {
             if (enumabs1 != MyFessais.getEnumabs()) {
@@ -208,6 +218,52 @@ public class ExpCalls {
         }
 
         // Recherche la clôture d'appel
+//        System.out.println("  Récupération de la clôture d'appel");
+        MyFessais = MyFessaisDAO.getPartOfEOM();
+        if (MyFessais != null) {
+            egid = MyFessais.getEgid();
+//            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
+            MyClotureAppel = new ClotureAppel();
+            RapportIntervention = new StringBuffer();
+            MyFessaisDAO = new FessaisDAO(MyConnection, 0, MyTicket_0000.Fcalls_0000.getCnum(), egid, MyEtatTicket);
+            while ((MyFessais = MyFessaisDAO.select()) != null) {
+                eresult = MyFessais.getEresult();
+//                System.out.println("      eresult=" + eresult + ", emessage=" + MyFessais.getEmessage());
+                switch (eresult) {
+                    case 69:    // Heure de début d'intervention.
+                        break;
+                    case 70:    // Heure de fin d'intervention.
+                        break;
+                    case 71:    // Résultat de l'intervention.
+                        MyClotureAppel.setResultat(MyFessais.getEmessage());
+                        break;
+                    case 72:    // Rapport d'intervention.
+                        Emessage = MyFessais.getEmessage();
+                        if (Emessage.length() > 0) {
+                            if (RapportIntervention.length()>0) {
+                                RapportIntervention.append(" " + Emessage);
+                            }
+                            else {
+                                RapportIntervention.append(Emessage);
+                            }
+                        }
+                        break;
+                    case 73:    // Le technicien est-il encore sur site ?
+                        MyClotureAppel.setOnSite(MyFessais.getEmessage());
+                        break;
+                    case 93:    // Nature de la panne.
+                        MyClotureAppel.setNature(MyFessais.getEmessage());
+                        break;
+                }
+            }
+
+            if (RapportIntervention.length() > 0 ) {
+                MyClotureAppel.setRapport(RapportIntervention.toString());
+            }
+            
+            MyTicket_0000.setRapportIntervention(MyClotureAppel.getRapport());
+            MyTicket_0000.setTechnicienSurSite(MyClotureAppel.getOnSite());
+        }
     }
 
     public static void main(String[] Args) {

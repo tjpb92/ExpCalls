@@ -78,7 +78,7 @@ public class Fessais {
      * @param Etime the Etime to set
      */
     public void setEtime(String Etime) {
-        this.Etime = Etime;
+        this.Etime = (Etime != null)?Etime.trim():null;
     }
 
     /**
@@ -218,7 +218,7 @@ public class Fessais {
      * @param Emessage the Emessage to set
      */
     public void setEmessage(String Emessage) {
-        this.Emessage = Emessage;
+        this.Emessage = (Emessage != null)?Emessage.trim():null;
     }
 
     /**
