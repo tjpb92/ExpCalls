@@ -1,8 +1,19 @@
 package expcalls;
 
-import agency.Fagency;
-import agency.FagencyDAO;
-import expcalls.Ticket_0000.EtatTicket;
+import bdd.Ftoubib;
+import bdd.Fmenuit;
+import bdd.FcallsDAO;
+import bdd.Fcalls;
+import bdd.Fessais;
+import bdd.ClotureAppel;
+import bdd.FcomplmtDAO;
+import bdd.FmenuitDAO;
+import bdd.FtoubibDAO;
+import bdd.Fcomplmt;
+import bdd.FessaisDAO;
+import bdd.Fagency;
+import bdd.FagencyDAO;
+import bdd.EtatTicket;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,16 +21,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import liba2pi.ApplicationProperties;
-import liba2pi.DBManager;
-import liba2pi.DBServer;
-import liba2pi.DBServerException;
+import utils.ApplicationProperties;
+import utils.DBManager;
+import utils.DBServer;
+import utils.DBServerException;
 
 /*
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
- * @version Mai 2016.
- * @author Thierry Baribaud.
+ * @version Juin 2016
+ * @author Thierry Baribaud
  */
 public class ExpCalls {
 
@@ -31,7 +42,7 @@ public class ExpCalls {
      *
      * @param Args arguments de la ligne de commande.
      * @throws java.io.IOException en cas de fichier non lisible ou absent.
-     * @throws liba2pi.DBServerException en cas de propriété incorrecte.
+     * @throws utils.DBServerException en cas de propriété incorrecte.
      * @throws java.sql.SQLException en cas d'une erreur SQL.
      */
     public ExpCalls(String[] Args) throws IOException, DBServerException, SQLException {
@@ -88,7 +99,8 @@ public class ExpCalls {
         Ticket_0000 MyTicket_0000;
 
         try {
-            MyFcallsDAO = new FcallsDAO(MyConnection, 0, MyArgs, MyEtatTicket);
+            MyFcallsDAO = new FcallsDAO(MyConnection, 0, MyArgs.getUnum(),
+                    MyArgs.getBegDate(), MyArgs.getEndDate(), MyEtatTicket);
 
             i = 0;
             while ((MyFcalls = MyFcallsDAO.select()) != null) {
@@ -240,10 +252,9 @@ public class ExpCalls {
                     case 72:    // Rapport d'intervention.
                         Emessage = MyFessais.getEmessage();
                         if (Emessage.length() > 0) {
-                            if (RapportIntervention.length()>0) {
+                            if (RapportIntervention.length() > 0) {
                                 RapportIntervention.append(" " + Emessage);
-                            }
-                            else {
+                            } else {
                                 RapportIntervention.append(Emessage);
                             }
                         }
@@ -257,10 +268,10 @@ public class ExpCalls {
                 }
             }
 
-            if (RapportIntervention.length() > 0 ) {
+            if (RapportIntervention.length() > 0) {
                 MyClotureAppel.setRapport(RapportIntervention.toString());
             }
-            
+
             MyTicket_0000.setRapportIntervention(MyClotureAppel.getRapport());
             MyTicket_0000.setTechnicienSurSite(MyClotureAppel.getOnSite());
         }

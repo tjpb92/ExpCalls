@@ -1,5 +1,8 @@
 package expcalls;
 
+import bdd.Fcalls;
+import bdd.Fcomplmt;
+
 /**
  * Classe représentant un ticket. Cela correspond à l'association d'un appel
  * Fcalls et d'un complément d'appel Fcomplmt. Il s'agit du ticket basique. Les
@@ -9,14 +12,6 @@ package expcalls;
  * @author Thierry Baribaud.
  */
 public class Ticket_0000 {
-
-    /**
-     * Etat d'un ticket, en-cours dans fcalls et archivé dans f99calls.
-     */
-    public enum EtatTicket {
-
-        EN_COURS, ARCHIVE
-    };
 
     /**
      * Partie composée de l'appel.
