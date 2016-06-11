@@ -66,7 +66,8 @@ public class CallsXMLDocument extends XMLDocument {
         Ticket.appendChild(MyElement);
         myInt = MyTicket.Fcalls_0000.getCseqno();
         if (myInt > 0) {
-            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)));
+            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt) 
+                    + "/" + String.valueOf(MyTicket.Fcalls_0000.getCnum())));
         }
 
         // Agence

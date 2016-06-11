@@ -53,4 +53,5 @@ Le fichier *MyDatabases_Example.prop* est fourni à titre d'exemple.
 - [Validation fichier XML](http://www.xmlvalidation.com/)
 - [Convertisseur DTD/XSD](http://www.freeformatter.com/xsd-generator.html)
 - [Tuto XML/XSD](http://www.codeguru.com/java/article.php/c13529/XSD-Tutorial-XML-Schemas-For-Beginners.htm)
-
+- [Java et Excel avec POI](http://poi.apache.org/)
+- [Java et Excel tuto](http://www.jmdoudoux.fr/java/dej/chap-generation-documents.htm)
