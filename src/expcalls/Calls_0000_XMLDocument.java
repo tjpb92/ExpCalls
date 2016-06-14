@@ -12,9 +12,9 @@ import org.w3c.dom.Element;
  * @version Mai 2016.
  * @author Thierry Baribaud.
  */
-public class CallsXMLDocument extends XMLDocument {
+public class Calls_0000_XMLDocument extends XMLDocument {
 
-    public CallsXMLDocument(String RootName, String XsdFile) {
+    public Calls_0000_XMLDocument(String RootName, String XsdFile) {
         super(RootName, XsdFile);
     }
 

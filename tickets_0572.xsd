@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+<xs:element name="ticket">
+    <xs:annotation>
+        <xs:documentation>Commentaire</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:sequence>
+            <!-- Page 1 -->
+            <xs:element type="xs:string" name="DateDAppel" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureDAppel" minOccurs="0"/>
+            <xs:element type="xs:string" name="NumeroDeDossier" minOccurs="0"/>
+            <xs:element type="xs:string" name="DegreDUrgence" minOccurs="0"/>
+            <xs:element type="xs:string" name="Patrimoine" minOccurs="0"/>
+            <xs:element type="xs:string" name="NatureDuSite" minOccurs="0"/>
+            <xs:element type="xs:string" name="SiteEnBase" minOccurs="0"/>
+            <xs:element type="xs:string" name="CodeImmeuble" minOccurs="0"/>
+            
+            <!-- Page 2 -->
+            <xs:element type="xs:string" name="Adresse" minOccurs="0"/>
+            <xs:element type="xs:string" name="ComplementAdresse" minOccurs="0"/>
+            <xs:element type="xs:string" name="CP" minOccurs="0"/>
+            <xs:element type="xs:string" name="Ville" minOccurs="0"/>
+            <xs:element type="xs:string" name="Batiment" minOccurs="0"/>
+            
+            <!-- Page 3 -->
+            <xs:element type="xs:string" name="Escalier" minOccurs="0"/>
+            <xs:element type="xs:string" name="NatureAppelant" minOccurs="0"/>
+            <xs:element type="xs:string" name="NomGardienLocataire1" minOccurs="0"/>
+            <xs:element type="xs:string" name="TelAppelant1" minOccurs="0"/>
+            <xs:element type="xs:string" name="NomGardienLocataire2" minOccurs="0"/>
+            <xs:element type="xs:string" name="TelAppelant2" minOccurs="0"/>
+            
+            <!-- Page 4 -->
+            <xs:element type="xs:string" name="RaisonDeLAppel" minOccurs="0"/>
+            <xs:element type="xs:string" name="TypeIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="DemandeIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="DegatsDesEaux" minOccurs="0"/>
+
+            <!-- Page 5 -->
+            <xs:element type="xs:string" name="TypeDeDemande" minOccurs="0"/>
+            <xs:element type="xs:string" name="NumeroOS" minOccurs="0"/>
+            <xs:element type="xs:string" name="SuiviDonneALaDemande" minOccurs="0"/>
+            <xs:element type="xs:string" name="Contact1" minOccurs="0"/>
+            <xs:element type="xs:string" name="TypeDeContact1" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateDeMissionnement1" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureDeMissionnement1" minOccurs="0"/>
+            
+            <!-- Page 6 -->
+            <xs:element type="xs:string" name="NoTelephone1" minOccurs="0"/>
+            <xs:element type="xs:string" name="AdresseEmail1" minOccurs="0"/>
+            <xs:element type="xs:string" name="Contact2" minOccurs="0"/>
+            <xs:element type="xs:string" name="TypeDeContact2" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateDeMissionnement2" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureDeMissionnement2" minOccurs="0"/>
+
+            <!-- Page 7 -->
+            <xs:element type="xs:string" name="NoTelephone2" minOccurs="0"/>
+            <xs:element type="xs:string" name="AdresseEmail2" minOccurs="0"/>
+            <xs:element type="xs:string" name="InterventionCloturee" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="ResultatIntervention" minOccurs="0"/>
+            
+            <!-- Page 8 -->
+            <xs:element type="xs:string" name="RapportIntervention" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="tickets">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="ticket" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+</xs:schema>
