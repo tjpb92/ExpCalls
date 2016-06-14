@@ -10,9 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.DBServerException;
 
-/*
+/**
  * Ce programme exporte les appels des services d'urgence de la famille du client
  * 572 dans un fichier au format XML.
+ * 
  * @version Juin 2016
  * @author Thierry Baribaud
  */
@@ -29,9 +30,15 @@ public class ExpCalls_0572  implements ExpCallsInterface {
     public ExpCalls_0572(ExpCallsParams MyExpcallsParams) throws IOException, DBServerException, SQLException {
 
         Calls_0572_XMLDocument MyXMLDocument;
+        String MyString;
+
+        // Indique les références du client en commentaires
+        MyString = "Client " + MyExpcallsParams.getUname() + " (" + 
+                MyExpcallsParams.getUabbname() + "), id=" + MyExpcallsParams.getUnum();
 
         // Amorçage du fichier XML contenant les résultats.
-        MyXMLDocument = new Calls_0572_XMLDocument("tickets", MyExpcallsParams.getXSDFilename());
+        MyXMLDocument = new Calls_0572_XMLDocument("tickets", 
+                MyExpcallsParams.getXSDFilename(), MyString);
 
         // Traitement des appels en cours.
         processTickets(MyExpcallsParams, MyXMLDocument, EtatTicket.EN_COURS);
@@ -47,9 +54,9 @@ public class ExpCalls_0572  implements ExpCallsInterface {
 
     /**
      * Méthode qui traite les tickets.
-     * @param MyExpcallsParams
-     * @param MyXMLDocument
-     * @param MyEtatTicket
+     * @param MyExpcallsParams paramètres d'extraction des appels.
+     * @param MyXMLDocument document XML contenant les appels.
+     * @param MyEtatTicket état du ticket.
      */
     public void processTickets(ExpCallsParams MyExpcallsParams,
             Calls_0572_XMLDocument MyXMLDocument, EtatTicket MyEtatTicket) {

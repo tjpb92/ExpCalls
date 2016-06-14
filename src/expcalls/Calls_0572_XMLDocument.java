@@ -16,8 +16,25 @@ import utils.XMLDocument;
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
+    /**
+     * Initialise le document XML - constructeur principal.
+     *
+     * @param RootName nom de la racine du document XML.
+     * @param XsdFile nom du fichier contenant le schéma XML.
+     * @param MyComment commentaire sur le contenu du fichier.
+     */
+    public Calls_0572_XMLDocument(String RootName, String XsdFile, String MyComment) {
+        super(RootName, XsdFile, MyComment);
+    }
+
+    /**
+     * Initialise le document XML - constructeur secondaire.
+     *
+     * @param RootName nom de la racine du document XML.
+     * @param XsdFile nom du fichier contenant le schéma XML.
+     */
     public Calls_0572_XMLDocument(String RootName, String XsdFile) {
-        super(RootName, XsdFile);
+        this(RootName, XsdFile, null);
     }
 
     /**
@@ -99,10 +116,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Site en base ?
         MyElement = MyDocument.createElement("SiteEnBase");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.Fcomplmt_0000.getC6alpha2();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getSiteEnBase();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
         
         // Code immeuble
         MyElement = MyDocument.createElement("CodeImmeuble");
@@ -226,6 +243,13 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // Type de demande
+        MyElement = MyDocument.createElement("TypeDeDemande");
+        Ticket.appendChild(MyElement);
+        MyString = MyTicket.getTypeDeDemande();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
+
         // Numéro d'OS
         MyElement = MyDocument.createElement("NumeroOS");
         Ticket.appendChild(MyElement);
@@ -234,21 +258,29 @@ public class Calls_0572_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
         
-        // Etat de l'intervention
-        MyElement = MyDocument.createElement("EtatIntervention");
+        // Suivi donné à la demande
+        MyElement = MyDocument.createElement("SuiviDonneALaDemande");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getEtatIntervention();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
-        }
+//        MyString = MyTicket.getEtatIntervention();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
 
-        // Prestataire1
-        MyElement = MyDocument.createElement("Prestataire1");
+        // Contact n°1
+        MyElement = MyDocument.createElement("Contact1");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getPrestataire1();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
+
+        // Type de contact n°1
+        MyElement = MyDocument.createElement("TypeDeContact1");
+        Ticket.appendChild(MyElement);
+//        MyString = MyTicket.getPrestataire1();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
 
         // DateMissionnement1
         MyElement = MyDocument.createElement("DateMissionnement1");
@@ -274,13 +306,29 @@ public class Calls_0572_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Prestataire2
-        MyElement = MyDocument.createElement("Prestataire2");
+        // AdresseEmail1
+        MyElement = MyDocument.createElement("AdresseEmail1");
+        Ticket.appendChild(MyElement);
+//        MyString = MyTicket.getNoTelephone1();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
+
+        // Contact n°1
+        MyElement = MyDocument.createElement("Contact2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getPrestataire2();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
+
+        // Type de contact n°2
+        MyElement = MyDocument.createElement("TypeDeContact2");
+        Ticket.appendChild(MyElement);
+//        MyString = MyTicket.getPrestataire1();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
 
         // DateMissionnement2
         MyElement = MyDocument.createElement("DateMissionnement2");
@@ -306,25 +354,49 @@ public class Calls_0572_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
+        // AdresseEmail2
+        MyElement = MyDocument.createElement("AdresseEmail2");
+        Ticket.appendChild(MyElement);
+//        MyString = MyTicket.getNoTelephone1();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
+
         // Cloture de l'appel
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
-        MyElement = MyDocument.createElement("ResultatIntervention");
+        MyElement = MyDocument.createElement("InterventionCloturee");
         Ticket.appendChild(MyElement);
         MyElement.appendChild(MyDocument.createTextNode(MyString));
 
-        // Rapport d'intervention
-        MyElement = MyDocument.createElement("RapportIntervention");
+        // Date d'intervention
+        MyElement = MyDocument.createElement("DateIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getRapportIntervention();
+//        MyTimestamp = MyTicket.Fcalls_0000.getCdate();
+//        if (MyTimestamp != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyDateFormat.format(MyTimestamp)));
+//        }
+
+        // Heure d'intervention
+        MyElement = MyDocument.createElement("HeureIntervention");
+        Ticket.appendChild(MyElement);
+//        MyString = MyTicket.Fcalls_0000.getCtime();
+//        if (MyString != null) {
+//            MyElement.appendChild(MyDocument.createTextNode(MyString));
+//        }
+
+        // Résultat de l'intervention
+        MyElement = MyDocument.createElement("ResultatIntervention");
+        Ticket.appendChild(MyElement);
+        MyString = MyTicket.getResultat();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Le technicien est-il encore sur site ?
-        MyElement = MyDocument.createElement("TechnicienSurSite");
+        // Rapport de clôture d'intervention
+        MyElement = MyDocument.createElement("RapportIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getTechnicienSurSite();
+        MyString = MyTicket.getRapportIntervention();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }

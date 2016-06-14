@@ -19,9 +19,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Classe représentant un ticket. Cela correspond à l'association d'un appel
- * Fcalls et d'un complément d'appel Fcomplmt s'il existe. Il s'agit du ticket 
- * basique. Les tickets spécifiques à un client dériveront de celui-ci.
+ * Classe représentant un ticket d'un client basique. 
+ * Cela correspond à l'association d'un appel Fcalls et d'un complément d'appel 
+ * Fcomplmt s'il existe. 
+ * Les tickets spécifiques à un client dériveront de celui-ci.
  *
  * @version Juin 2016
  * @author Thierry Baribaud
@@ -59,6 +60,11 @@ public class Ticket_0000 {
     private String A6name = "#N/A";
 
     /**
+     * Nom abrégé de l'agence.
+     */
+    private String A6abbname = "#N/A";
+
+    /**
      * Item de menu sélectionné.
      */
     private String M6name = "#N/A";
@@ -72,43 +78,62 @@ public class Ticket_0000 {
      * Prestataire1 : prestataire sur la première transmission.
      */
     private String Prestataire1;
+    
     /**
      * DateMissionnement1 : date de la première transmission.
      */
     private String DateMissionnement1;
+    
     /**
      * HeureMissionnement1 : heure de la première transmission.
      */
     private String HeureMissionnement1;
+    
     /**
      * NoTelephone1 : Numéro de téléphone du prestataire.
      */
     private String NoTelephone1;
+    
     /**
      * Prestataire1 : prestataire sur la dernière transmission.
      */
     private String Prestataire2;
+    
     /**
      * DateMissionnement1 : date de la dernière transmission.
      */
     private String DateMissionnement2;
+    
     /**
      * HeureMissionnement1 : heure de la dernière transmission.
      */
     private String HeureMissionnement2;
+    
     /**
      * NoTelephone1 : Numéro de téléphone du prestataire.
      */
     private String NoTelephone2;
+    
     /**
      * Rapport d'intervention
      */
     private String RapportIntervention;
+    
     /**
      * Le technicien est-il encore sur site ?
      */
     private String TechnicienSurSite;
 
+    /**
+     * Nature de l'intervention
+     */
+    private String Nature;
+    
+    /**
+     * Résultat de l'intervention
+     */
+    private String Resultat;
+    
     /**
      * Contructeur principal de la classe Ticket.
      *
@@ -248,7 +273,7 @@ public class Ticket_0000 {
             egid = MyFessais.getEgid();
 //            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
             MyClotureAppel = new ClotureAppel();
-            RapportIntervention = new StringBuffer();
+            RapportIntervention = new StringBuffer("egid=" + egid);
             MyFessaisDAO = new FessaisDAO(MyConnection, 0, this.Fcalls_0000.getCnum(), egid, MyEtatTicket);
             while ((MyFessais = MyFessaisDAO.select()) != null) {
                 eresult = MyFessais.getEresult();
@@ -283,9 +308,12 @@ public class Ticket_0000 {
             if (RapportIntervention.length() > 0) {
                 MyClotureAppel.setRapport(RapportIntervention.toString());
             }
+//            System.out.println("  " + MyClotureAppel);
 
             this.setRapportIntervention(MyClotureAppel.getRapport());
             this.setTechnicienSurSite(MyClotureAppel.getOnSite());
+            this.setNature(MyClotureAppel.getNature());
+            this.setResultat(MyClotureAppel.getResultat());
         }
         MyFessaisDAO.close();    }
 
@@ -352,8 +380,6 @@ public class Ticket_0000 {
         return (Fcalls_0000 + " " + Fcomplmt_0000);
     }
 
-
-
     /**
      * @return A6name nom de l'agence.
      */
@@ -366,6 +392,20 @@ public class Ticket_0000 {
      */
     public void setA6name(String A6name) {
         this.A6name = A6name;
+    }
+
+    /**
+     * @return A6abbname nom abrégé de l'agence.
+     */
+    public String getA6abbname() {
+        return A6abbname;
+    }
+
+    /**
+     * @param A6abbname définit le nom abrégé de l'agence.
+     */
+    public void setA6abbname(String A6abbname) {
+        this.A6abbname = A6abbname;
     }
 
     /**
@@ -548,6 +588,34 @@ public class Ticket_0000 {
      */
     public void setMyEtatTicket(EtatTicket MyEtatTicket) {
         this.MyEtatTicket = MyEtatTicket;
+    }
+
+    /**
+     * @return Nature la nature de l'intervention.
+     */
+    public String getNature() {
+        return Nature;
+    }
+
+    /**
+     * @param Nature définit la nature de l'intervention.
+     */
+    public void setNature(String Nature) {
+        this.Nature = Nature;
+    }
+
+    /**
+     * @return Resultat le résultat de l'intervention.
+     */
+    public String getResultat() {
+        return Resultat;
+    }
+
+    /**
+     * @param Resultat définit le résultat de l'intervention.
+     */
+    public void setResultat(String Resultat) {
+        this.Resultat = Resultat;
     }
 
 }

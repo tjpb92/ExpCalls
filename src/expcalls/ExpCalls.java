@@ -10,9 +10,10 @@ import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
 
-/*
+/**
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
+ * 
  * @version Juin 2016
  * @author Thierry Baribaud
  */

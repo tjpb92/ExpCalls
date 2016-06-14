@@ -1,6 +1,9 @@
 package expcalls;
 
+import bdd.Furgent;
+import bdd.FurgentDAO;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
@@ -12,22 +15,32 @@ import java.sql.Timestamp;
 public class ExpCallsParams {
 
     /**
-     * MyConnection : Connection à la base de données locale.
+     * Connexion à la base de données courante.
      */
     private Connection MyConnection;
 
     /**
-     * Unum : Référence du client.
+     * Identifiant du client.
      */
     private int unum;
 
     /**
-     * BegDate : date de début de l'export à 0h.
+     * Nom du client.
+     */
+    private String Uname;
+
+    /**
+     * Nom abrégé du client.
+     */
+    private String Uabbname;
+
+    /**
+     * Date de début de l'export à 0h.
      */
     private Timestamp BegDate;
 
     /**
-     * EndDate : date de fin de l'export à 0h.
+     * Date de fin de l'export à 0h.
      */
     private Timestamp EndDate;
 
@@ -46,9 +59,24 @@ public class ExpCallsParams {
      */
     private String ExcelFilename = DetermineExcelFilename(0);
 
-    public ExpCallsParams(Connection MyConnection, GetArgs MyArgs) {
+    public ExpCallsParams(Connection MyConnection, GetArgs MyArgs) throws ClassNotFoundException, SQLException {
+        FurgentDAO MyFurgentDAO;
+        Furgent MyFurgent;
+
         setMyConnection(MyConnection);
+
         setUnum(MyArgs.getUnum());
+        MyFurgentDAO = new FurgentDAO(MyConnection, getUnum());
+        MyFurgent = MyFurgentDAO.select();
+        if (MyFurgent != null) {
+            setUname(MyFurgent.getUname());
+            setUabbname(MyFurgent.getUabbname());
+        } else {
+            setUname("Inconnu");
+            setUabbname("INCONNU");
+        }
+        MyFurgentDAO.close();
+
         setBegDate(MyArgs.getBegDate());
         setEndDate(MyArgs.getEndDate());
         setXMLFilename(DetermineXMLFilename(unum));
@@ -64,42 +92,42 @@ public class ExpCallsParams {
     }
 
     /**
-     * @param unum : définit la référence client.
+     * @param unum définit la référence client.
      */
     public void setUnum(int unum) {
         this.unum = unum;
     }
 
     /**
-     * @param BegDate : date de début de l'export à 0h.
+     * @param BegDate définit la date de début de l'export à 0h.
      */
     public void setBegDate(Timestamp BegDate) {
         this.BegDate = BegDate;
     }
 
     /**
-     * @param EndDate : date de fin de l'export à 0h.
+     * @param EndDate définit la date de fin de l'export à 0h.
      */
     public void setEndDate(Timestamp EndDate) {
         this.EndDate = EndDate;
     }
 
     /**
-     * @return Unum : la référence du client.
+     * @return Unum l'identifiant du client.
      */
     public int getUnum() {
         return (unum);
     }
 
     /**
-     * @return BegDate : date de début de l'export à 0h.
+     * @return BegDate la date de début de l'export à 0h.
      */
     public Timestamp getBegDate() {
         return (BegDate);
     }
 
     /**
-     * @return EndDate : date de fin de l'export à 0h.
+     * @return EndDate la date de fin de l'export à 0h.
      */
     public Timestamp getEndDate() {
         return (EndDate);
@@ -200,6 +228,34 @@ public class ExpCallsParams {
      */
     public void setMyConnection(Connection MyConnection) {
         this.MyConnection = MyConnection;
+    }
+
+    /**
+     * @return Uname le nom du client.
+     */
+    public String getUname() {
+        return Uname;
+    }
+
+    /**
+     * @param Uname définit le nom du client.
+     */
+    public void setUname(String Uname) {
+        this.Uname = Uname;
+    }
+
+    /**
+     * @return Uabbname le nom abrégé du client.
+     */
+    public String getUabbname() {
+        return Uabbname;
+    }
+
+    /**
+     * @param Uabbname définit le nom abrégé du client.
+     */
+    public void setUabbname(String Uabbname) {
+        this.Uabbname = Uabbname;
     }
 
 }

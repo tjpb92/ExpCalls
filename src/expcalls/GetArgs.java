@@ -5,9 +5,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/*
+/**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
+ * 
  * @version Mai 2016.
  * @author Thierry Baribaud.
  */

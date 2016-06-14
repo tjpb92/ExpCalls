@@ -12,8 +12,9 @@ import utils.DBServer;
 import utils.DBServerException;
 
 /**
- *
+ * Programme pour tester la classe FessaisDAO.
  * @author Thierry Baribaud
+ * @version Juin 2016
  */
 public class tstFessaisDAO {
 

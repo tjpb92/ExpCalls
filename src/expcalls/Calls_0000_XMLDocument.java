@@ -7,15 +7,34 @@ import utils.XMLDocument;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 
-/*
- * Classe pour générer un fichier au format XML décrivant des tickets.
- * @version Mai 2016.
- * @author Thierry Baribaud.
+/**
+ * Classe pour générer un fichier au format XML décrivant des tickets des
+ * clients basiques.
+ *
+ * @version Juin 2016
+ * @author Thierry Baribaud
  */
 public class Calls_0000_XMLDocument extends XMLDocument {
 
+    /**
+     * Initialise le document XML - constructeur principal.
+     *
+     * @param RootName nom de la racine du document XML.
+     * @param XsdFile nom du fichier contenant le schéma XML.
+     * @param MyComment commentaire sur le contenu du fichier.
+     */
+    public Calls_0000_XMLDocument(String RootName, String XsdFile, String MyComment) {
+        super(RootName, XsdFile, MyComment);
+    }
+
+    /**
+     * Initialise le document XML - constructeur secondaire.
+     *
+     * @param RootName nom de la racine du document XML.
+     * @param XsdFile nom du fichier contenant le schéma XML.
+     */
     public Calls_0000_XMLDocument(String RootName, String XsdFile) {
-        super(RootName, XsdFile);
+        this(RootName, XsdFile, null);
     }
 
     /**
@@ -66,7 +85,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         Ticket.appendChild(MyElement);
         myInt = MyTicket.Fcalls_0000.getCseqno();
         if (myInt > 0) {
-            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt) 
+            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)
                     + "/" + String.valueOf(MyTicket.Fcalls_0000.getCnum())));
         }
 

@@ -25,6 +25,16 @@ public class Ticket_0572 extends Ticket_0000 {
     private String DegatsDesEaux;
 
     /**
+     * Indication de site trouvé en base de données.
+     */
+    private String SiteEnBase;
+    
+    /**
+     * Type de demande.
+     */
+    private String TypeDeDemande;
+    
+    /**
      * Contructeur principal de la classe Ticket.
      *
      * @param MyConnection connexion à la base de données courante.
@@ -40,7 +50,7 @@ public class Ticket_0572 extends Ticket_0000 {
 
         // Degré d'urgence cf. tra_nat_urg_0572() dans libspc0572.4gl.
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
-        switch (Fcalls_0000.getCdelay1()) {
+        switch (this.Fcalls_0000.getCdelay1()) {
             case 1:
                 setDegreDUrgence("Immediate");
                 break;
@@ -53,13 +63,55 @@ public class Ticket_0572 extends Ticket_0000 {
         }
 
         // Indication de dégâts des eaux cf. tra_degat_eau_0572() dans libspc0572.4gl.
-        if ("1".equals(Fcalls_0000.getCsector1())) {
+        if ("1".equals(this.Fcalls_0000.getCsector1())) {
             setDegatsDesEaux("OUI");
         }
         else {
             setDegatsDesEaux("NON");
         }
 
+        // Indication de site trouvé en base de données cf. librep0572.4gl en dur.
+        if ("SIEGE".equals(getA6abbname())) {
+            setSiteEnBase("NON");
+        }
+        else {
+            setSiteEnBase("OUI");
+        }
+
+        // Indication du type de demande cf. tra_typinter_0572() dans libspc0572.4gl.
+        switch (this.Fcomplmt_0000.getC6int2()) {
+            case 1: 
+                setTypeDeDemande("DIC");
+                break;
+            case 2: 
+                setTypeDeDemande("DI");
+                break;
+            default:
+                setTypeDeDemande("AUTRE");
+                break;
+        }
+
+        // tra_type_interv_0572
+//        switch (this.Fcomplmt_0000.getC6int2()) {
+//            case 0: 
+//                setTypeDeDemande("Message");
+//                break;
+//            case 1: 
+//                setTypeDeDemande("Immédiate");
+//                break;
+//            case 2: 
+//                setTypeDeDemande("Courante");
+//                break;
+//            case 3: 
+//                setTypeDeDemande("Demande de renseignement");
+//                break;
+//            case 4: 
+//                setTypeDeDemande("Site non couvert en HO");
+//                break;
+//            default:
+//                setTypeDeDemande("Inconnu");
+//                break;
+//        }
     }
 
     /**
@@ -102,6 +154,34 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public void setDegatsDesEaux(String DegatsDesEaux) {
         this.DegatsDesEaux = DegatsDesEaux;
+    }
+
+    /**
+     * @return SiteEnBase Indication de site trouvé en base de données. 
+     */
+    public String getSiteEnBase() {
+        return SiteEnBase;
+    }
+
+    /**
+     * @param SiteEnBase définit l'indication de site trouvé en base de données.
+     */
+    public void setSiteEnBase(String SiteEnBase) {
+        this.SiteEnBase = SiteEnBase;
+    }
+
+    /**
+     * @return TypeDeDemande le type de demande.
+     */
+    public String getTypeDeDemande() {
+        return TypeDeDemande;
+    }
+
+    /**
+     * @param TypeDeDemande définit le type de demande.
+     */
+    public void setTypeDeDemande(String TypeDeDemande) {
+        this.TypeDeDemande = TypeDeDemande;
     }
 
 }
