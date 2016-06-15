@@ -277,10 +277,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Type de contact n°1
         MyElement = MyDocument.createElement("TypeDeContact1");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getPrestataire1();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getA4name1();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // DateMissionnement1
         MyElement = MyDocument.createElement("DateMissionnement1");
@@ -309,10 +309,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // AdresseEmail1
         MyElement = MyDocument.createElement("AdresseEmail1");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getNoTelephone1();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getEmail1();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Contact n°1
         MyElement = MyDocument.createElement("Contact2");
@@ -325,10 +325,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Type de contact n°2
         MyElement = MyDocument.createElement("TypeDeContact2");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getPrestataire1();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getA4name2();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // DateMissionnement2
         MyElement = MyDocument.createElement("DateMissionnement2");
@@ -357,10 +357,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // AdresseEmail2
         MyElement = MyDocument.createElement("AdresseEmail2");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getNoTelephone1();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getEmail2();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Cloture de l'appel
         myInt = MyTicket.Fcalls_0000.getCnote();

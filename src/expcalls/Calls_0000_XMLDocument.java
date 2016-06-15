@@ -92,7 +92,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         // Agence
         MyElement = MyDocument.createElement("ProgrammeAgence");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getA6name();
+        if ((MyString = MyTicket.getA6extname()) == null) MyString = MyTicket.getA6name();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
@@ -157,7 +157,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         // Raison d'appel
         MyElement = MyDocument.createElement("RaisonAppel");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getM6name();
+        if ((MyString = MyTicket.getM6extname()) == null) MyString = MyTicket.getM6name();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
