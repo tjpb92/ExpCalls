@@ -231,13 +231,15 @@ public class Ticket_0000 {
         MyA6name = null;
         MyA6extname = null;
         if (a6num > 0) {
-            MyFagencyDAO = new FagencyDAO(MyConnection, a6num);
+            MyFagencyDAO = new FagencyDAO(MyConnection);
+            MyFagencyDAO.filterById(a6num);
+            MyFagencyDAO.setSelectPreparedStatement();
             MyFagency = MyFagencyDAO.select();
             if (MyFagency != null) {
                 MyA6name = MyFagency.getA6name();
                 MyA6extname = MyFagency.getA6extname();
             }
-            MyFagencyDAO.close();
+            MyFagencyDAO.closeSelectPreparedStatement();
         }
         if (MyA6name != null) {
             this.setA6name(MyA6name);
