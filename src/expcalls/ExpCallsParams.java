@@ -66,7 +66,9 @@ public class ExpCallsParams {
         setMyConnection(MyConnection);
 
         setUnum(MyArgs.getUnum());
-        MyFurgentDAO = new FurgentDAO(MyConnection, getUnum());
+        MyFurgentDAO = new FurgentDAO(MyConnection);
+        MyFurgentDAO.filterById(unum);
+        MyFurgentDAO.setSelectPreparedStatement();
         MyFurgent = MyFurgentDAO.select();
         if (MyFurgent != null) {
             setUname(MyFurgent.getUname());
@@ -75,7 +77,7 @@ public class ExpCallsParams {
             setUname("Inconnu");
             setUabbname("INCONNU");
         }
-        MyFurgentDAO.close();
+        MyFurgentDAO.closeSelectPreparedStatement();
 
         setBegDate(MyArgs.getBegDate());
         setEndDate(MyArgs.getEndDate());

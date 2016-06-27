@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.w3c.dom.Comment;
 import utils.DBServerException;
 
 /**
@@ -18,7 +17,7 @@ import utils.DBServerException;
  * @version Juin 2016
  * @author Thierry Baribaud
  */
-public class ExpCalls_0000 implements ExpCallsInterface{
+public class ExpCalls_0000 extends AbstractExpCalls{
 
     /**
      * Les arguments en ligne de commande permettent de changer le mode de

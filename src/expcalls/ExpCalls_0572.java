@@ -17,7 +17,7 @@ import utils.DBServerException;
  * @version Juin 2016
  * @author Thierry Baribaud
  */
-public class ExpCalls_0572  implements ExpCallsInterface {
+public class ExpCalls_0572  extends AbstractExpCalls {
     /**
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
