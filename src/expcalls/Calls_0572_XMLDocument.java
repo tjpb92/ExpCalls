@@ -314,7 +314,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Contact n°1
+        // Contact n°2
         MyElement = MyDocument.createElement("Contact2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getPrestataire2();

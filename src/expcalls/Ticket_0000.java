@@ -218,10 +218,12 @@ public class Ticket_0000 {
         cc6num = this.Fcalls_0000.getCc6num();
         MyFcomplmt = null;
         if (cc6num > 0) {
-            MyFcomplmtDAO = new FcomplmtDAO(MyConnection, cc6num);
+            MyFcomplmtDAO = new FcomplmtDAO(MyConnection);
+            MyFcomplmtDAO.filterById(cc6num);
+            MyFcomplmtDAO.setSelectPreparedStatement();
             MyFcomplmt = MyFcomplmtDAO.select();
-            this.setFcomplmt_0000(MyFcomplmt);
-            MyFcomplmtDAO.close();
+            if (MyFcomplmt != null) this.setFcomplmt_0000(MyFcomplmt);
+            MyFcomplmtDAO.closeSelectPreparedStatement();
         }
 
         // Récupération de l'agence
@@ -255,11 +257,13 @@ public class Ticket_0000 {
         MyM6extname = null;
         MyFmenuit = null;
         if (m6num > 0) {
-            MyFmenuitDAO = new FmenuitDAO(MyConnection, m6num);
+            MyFmenuitDAO = new FmenuitDAO(MyConnection);
+            MyFmenuitDAO.filterById(m6num);
+            MyFmenuitDAO.setSelectPreparedStatement();
             MyFmenuit = MyFmenuitDAO.select();
             MyM6name = MyFmenuit.getM6name();
             MyM6extname = MyFmenuit.getM6extname();
-            MyFmenuitDAO.close();
+            MyFmenuitDAO.closeSelectPreparedStatement();
         }
         if (MyM6name != null) {
             this.setM6name(MyM6name);
@@ -270,8 +274,10 @@ public class Ticket_0000 {
 
         // Recherche la première transmission
 //        System.out.println("  Récupération de la première transmission");
-        MyFessaisDAO = new FessaisDAO(MyConnection, 0, this.Fcalls_0000.getCnum(), 0, MyEtatTicket);
+        MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
+        MyFessaisDAO.setFirstTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
         MyFessais = MyFessaisDAO.getFirstTransmission();
+        MyFessaisDAO.closeFirstTransmissionPreparedStatement();
         if (MyFessais != null) {
             enumabs1 = MyFessais.getEnumabs();
             this.setEtatIntervention("Intervention");
@@ -279,7 +285,9 @@ public class Ticket_0000 {
             this.setHeureMissionnement1(MyFessais.getEtime());
             tnum = MyFessais.getEtnum();
             if (tnum > 0) {
-                MyFtoubibDAO = new FtoubibDAO(MyConnection, tnum, 0);
+                MyFtoubibDAO = new FtoubibDAO(MyConnection);
+                MyFtoubibDAO.filterById(tnum);
+                MyFtoubibDAO.setSelectPreparedStatement();
                 MyFtoubib = MyFtoubibDAO.select();
                 if (MyFtoubib != null) {
                     this.setPrestataire1(MyFtoubib.getTlname(), MyFtoubib.getTfname());
@@ -287,7 +295,9 @@ public class Ticket_0000 {
                     this.setEmail1(MyFtoubib.getTemail());
                     a4num = MyFtoubib.getTa4num();
                     if (a4num > 0) {
-                        MyFactivityDAO = new FactivityDAO(MyConnection, a4num);
+                        MyFactivityDAO = new FactivityDAO(MyConnection);
+                        MyFactivityDAO.filterById(a4num);
+                        MyFactivityDAO.setSelectPreparedStatement();
                         MyFactivity = MyFactivityDAO.select();
                         if (MyFactivity != null) {
                             A4name = MyFactivity.getA4name();
@@ -295,10 +305,10 @@ public class Ticket_0000 {
                                 this.setA4name1(A4name);
                             }
                         }
-                        MyFactivityDAO.close();
+                        MyFactivityDAO.closeSelectPreparedStatement();
                     }
                 }
-                MyFtoubibDAO.close();
+                MyFtoubibDAO.closeSelectPreparedStatement();
             }
         } else {
             this.setEtatIntervention("Message");
@@ -306,7 +316,9 @@ public class Ticket_0000 {
 
         // Recherche la dernière transmission
 //        System.out.println("  Récupération de la dernière transmission");
+        MyFessaisDAO.setLastTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
         MyFessais = MyFessaisDAO.getLastTransmission();
+        MyFessaisDAO.closeLastTransmissionPreparedStatement();
         if (MyFessais != null) {
             if (enumabs1 != MyFessais.getEnumabs()) {
                 this.setEtatIntervention("Intervention");
@@ -314,7 +326,9 @@ public class Ticket_0000 {
                 this.setHeureMissionnement2(MyFessais.getEtime());
                 tnum = MyFessais.getEtnum();
                 if (tnum > 0) {
-                    MyFtoubibDAO = new FtoubibDAO(MyConnection, tnum, 0);
+                    MyFtoubibDAO = new FtoubibDAO(MyConnection);
+                    MyFtoubibDAO.filterById(tnum);
+                    MyFtoubibDAO.setSelectPreparedStatement();
                     MyFtoubib = MyFtoubibDAO.select();
                     if (MyFtoubib != null) {
                         this.setPrestataire2(MyFtoubib.getTlname(), MyFtoubib.getTfname());
@@ -322,7 +336,9 @@ public class Ticket_0000 {
                         this.setEmail2(MyFtoubib.getTemail());
                         a4num = MyFtoubib.getTa4num();
                         if (a4num > 0) {
-                            MyFactivityDAO = new FactivityDAO(MyConnection, a4num);
+                            MyFactivityDAO = new FactivityDAO(MyConnection);
+                            MyFactivityDAO.filterById(a4num);
+                            MyFactivityDAO.setSelectPreparedStatement();
                             MyFactivity = MyFactivityDAO.select();
                             if (MyFactivity != null) {
                                 A4name = MyFactivity.getA4name();
@@ -330,23 +346,27 @@ public class Ticket_0000 {
                                     this.setA4name2(A4name);
                                 }
                             }
-                            MyFactivityDAO.close();
+                            MyFactivityDAO.closeSelectPreparedStatement();
                         }
                     }
-                    MyFtoubibDAO.close();
+                    MyFtoubibDAO.closeSelectPreparedStatement();
                 }
             }
         }
 
         // Recherche la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
+        MyFessaisDAO.setPartOfEOMPreparedStatement(this.Fcalls_0000.getCnum());
         MyFessais = MyFessaisDAO.getPartOfEOM();
+        MyFessaisDAO.closePartOfEOMPreparedStatement();
         if (MyFessais != null) {
             egid = MyFessais.getEgid();
 //            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
             MyClotureAppel = new ClotureAppel();
             RapportIntervention = new StringBuffer("egid=" + egid);
-            MyFessaisDAO = new FessaisDAO(MyConnection, 0, this.Fcalls_0000.getCnum(), egid, MyEtatTicket);
+            MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
+            MyFessaisDAO.filterByGid(this.Fcalls_0000.getCnum(), egid);
+            MyFessaisDAO.setSelectPreparedStatement();
             while ((MyFessais = MyFessaisDAO.select()) != null) {
                 eresult = MyFessais.getEresult();
 //                System.out.println("      eresult=" + eresult + ", emessage=" + MyFessais.getEmessage());
@@ -376,6 +396,7 @@ public class Ticket_0000 {
                         break;
                 }
             }
+            MyFessaisDAO.closeSelectPreparedStatement();
 
             if (RapportIntervention.length() > 0) {
                 MyClotureAppel.setRapport(RapportIntervention.toString());
@@ -387,7 +408,6 @@ public class Ticket_0000 {
             this.setNature(MyClotureAppel.getNature());
             this.setResultat(MyClotureAppel.getResultat());
         }
-        MyFessaisDAO.close();
     }
 
     /**
@@ -666,7 +686,7 @@ public class Ticket_0000 {
             else
                 MyName = new StringBuffer(Firstname);
         }
-        if (MyName != null) this.setPrestataire1(MyName.toString());
+        if (MyName != null) this.setPrestataire2(MyName.toString());
     }
     
     /**

@@ -90,7 +90,7 @@ public class ExpCalls {
         try {
             MyExpCalls = new ExpCalls(Args);
         } catch (Exception MyException) {
-            System.out.println("Problème lors du lancement de ExpCalls" + MyException);
+            System.out.println("Problème lors du lancement de ExpCalls " + MyException);
         }
 
         System.out.println("Traitement terminé.");

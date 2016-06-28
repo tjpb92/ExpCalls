@@ -69,9 +69,11 @@ public class ExpCalls_0572  extends AbstractExpCalls {
 
         try {
             MyConnection = MyExpcallsParams.getMyConnection();
-            MyFcallsDAO = new FcallsDAO(MyConnection, 0, MyExpcallsParams.getUnum(),
-                    MyExpcallsParams.getBegDate(), MyExpcallsParams.getEndDate(),
-                    MyEtatTicket);
+            
+            MyFcallsDAO = new FcallsDAO(MyConnection, MyEtatTicket);
+            MyFcallsDAO.filterByDate(MyExpcallsParams.getUnum(), 
+                    MyExpcallsParams.getBegDate(), MyExpcallsParams.getEndDate());
+            MyFcallsDAO.setSelectPreparedStatement();
 
             i = 0;
             while ((MyFcalls = MyFcallsDAO.select()) != null) {
@@ -80,7 +82,7 @@ public class ExpCalls_0572  extends AbstractExpCalls {
                 System.out.println("Ticket(" + i + ")=" + MyTicket_0572);
                 MyXMLDocument.AddToXMLDocument(MyTicket_0572);
             }
-            MyFcallsDAO.close();
+            MyFcallsDAO.closeSelectPreparedStatement();
         } catch (ClassNotFoundException MyException) {
             Logger.getLogger(ExpCalls_0000.class.getName()).log(Level.SEVERE, null, MyException);
         } catch (SQLException MyException) {
