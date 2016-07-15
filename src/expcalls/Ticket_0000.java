@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
  * l'association d'un appel Fcalls et d'un complément d'appel Fcomplmt s'il
  * existe. Les tickets spécifiques à un client dériveront de celui-ci.
  *
- * @version Juin 2016
+ * @version Juillet 2016
  * @author Thierry Baribaud
  */
 public class Ticket_0000 {
@@ -52,7 +52,7 @@ public class Ticket_0000 {
     public Fcomplmt Fcomplmt_0000;
 
     /**
-     * Format de date n°1 "dd/mm/aaaa".
+     * Format de date "dd/mm/aaaa".
      */
     private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -208,7 +208,10 @@ public class Ticket_0000 {
         String A4name;
         Factivity MyFactivity;
         FactivityDAO MyFactivityDAO;
-        Timestamp MyDate;
+        Timestamp MyBegDate;
+        Timestamp MyEndDate;
+        long myLongBegDate = 0;
+        long myLongEndDate = 0;
 
         this.MyConnection = MyConnection;
         this.Fcalls_0000 = Fcalls_0000;
@@ -224,7 +227,9 @@ public class Ticket_0000 {
             MyFcomplmtDAO.filterById(cc6num);
             MyFcomplmtDAO.setSelectPreparedStatement();
             MyFcomplmt = MyFcomplmtDAO.select();
-            if (MyFcomplmt != null) this.setFcomplmt_0000(MyFcomplmt);
+            if (MyFcomplmt != null) {
+                this.setFcomplmt_0000(MyFcomplmt);
+            }
             MyFcomplmtDAO.closeSelectPreparedStatement();
         }
 
@@ -365,11 +370,11 @@ public class Ticket_0000 {
             egid = MyFessais.getEgid();
 //            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
             MyClotureAppel = new ClotureAppel();
-            
+
             // For debug purpose only (begin)
             RapportIntervention = new StringBuffer("egid=" + egid);
             // For debug purpose only (end)
-            
+
             MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
             MyFessaisDAO.filterByGid(this.Fcalls_0000.getCnum(), egid);
             MyFessaisDAO.setSelectPreparedStatement();
@@ -405,15 +410,29 @@ public class Ticket_0000 {
                 }
             }
             MyFessaisDAO.closeSelectPreparedStatement();
-            
+
             // For debug purpose only (begin)
-            MyDate = MyClotureAppel.getBegDate();
-            if (MyDate != null) {
-                RapportIntervention.append(" début=").append(MyDate);
+            if ((MyBegDate = MyClotureAppel.getBegDate()) != null) {
+                myLongBegDate = MyBegDate.getTime();
             }
-            MyDate = MyClotureAppel.getEndDate();
-            if (MyDate != null) {
-                RapportIntervention.append(" fin=").append(MyDate);
+            if ((MyEndDate = MyClotureAppel.getEndDate()) != null) {
+                myLongEndDate = MyEndDate.getTime();
+            }
+            // Si l'écart entre les dates de début/fin d'intervention est 
+            // inférieur à 1mn = 60000ms alors les dates de début/fin par défaut 
+            // n'ont pas été mise à jour lors de la saisie de la clôture.
+            if (myLongBegDate > 0 && myLongEndDate > 0) {
+                if (Math.abs(myLongEndDate - myLongBegDate) < 60000) {
+                    MyBegDate = null;
+                    MyEndDate = null;
+                }
+            }
+
+            if (MyBegDate != null) {
+                RapportIntervention.append(" début=").append(MyBegDate);
+            }
+            if (MyEndDate != null) {
+                RapportIntervention.append(" fin=").append(MyEndDate);
             }
             // For debug purpose only (end)
 
@@ -596,15 +615,20 @@ public class Ticket_0000 {
      */
     public void setPrestataire1(String Lastname, String Firstname) {
         StringBuffer MyName = null;
-        
-        if (Lastname != null) MyName = new StringBuffer(Lastname);
-        if (Firstname != null) {
-            if (MyName != null)
-                MyName.append(" ").append(Firstname);
-            else
-                MyName = new StringBuffer(Firstname);
+
+        if (Lastname != null) {
+            MyName = new StringBuffer(Lastname);
         }
-        if (MyName != null) this.setPrestataire1(MyName.toString());
+        if (Firstname != null) {
+            if (MyName != null) {
+                MyName.append(" ").append(Firstname);
+            } else {
+                MyName = new StringBuffer(Firstname);
+            }
+        }
+        if (MyName != null) {
+            this.setPrestataire1(MyName.toString());
+        }
     }
 
     /**
@@ -697,17 +721,22 @@ public class Ticket_0000 {
      */
     public void setPrestataire2(String Lastname, String Firstname) {
         StringBuffer MyName = null;
-        
-        if (Lastname != null) MyName = new StringBuffer(Lastname);
-        if (Firstname != null) {
-            if (MyName != null)
-                MyName.append(" ").append(Firstname);
-            else
-                MyName = new StringBuffer(Firstname);
+
+        if (Lastname != null) {
+            MyName = new StringBuffer(Lastname);
         }
-        if (MyName != null) this.setPrestataire2(MyName.toString());
+        if (Firstname != null) {
+            if (MyName != null) {
+                MyName.append(" ").append(Firstname);
+            } else {
+                MyName = new StringBuffer(Firstname);
+            }
+        }
+        if (MyName != null) {
+            this.setPrestataire2(MyName.toString());
+        }
     }
-    
+
     /**
      * @return DateMissionnement2 la dernière date de missionnement.
      */
@@ -849,4 +878,57 @@ public class Ticket_0000 {
         this.Resultat = Resultat;
     }
 
+    /**
+     * Traduit un code d'origine de l'appel en libellé. Repris de tra_origine()
+     * dans libutil.4gl.)
+     *
+     * @param codeOrigine code de l'origine de l'appel.
+     * @return LibelleOrigine libellé associé.
+     */
+    public String traOrigine(int codeOrigine) {
+        String LibelleOrigine;
+
+        switch (codeOrigine) {
+            case 1:
+                LibelleOrigine = "Téléphone";
+                break;
+            case 2:
+                LibelleOrigine = "Mail";
+                break;
+            case 3:
+                LibelleOrigine = "fax";
+                break;
+            default:
+                LibelleOrigine = null;
+                break;
+        }
+        return (LibelleOrigine);
+    }
+
+    /**
+     * Traduit un code d'urgence de l'appel en libellé. Repris de tra_urgence()
+     * dans libutil.4gl.)
+     *
+     * @param codeUrgence code de l'urgence de l'appel.
+     * @return LibelleUrgence libellé associé.
+     */
+    public String traUrgence(int codeUrgence) {
+        String LibelleUrgence;
+
+        switch (codeUrgence) {
+            case 0:
+                LibelleUrgence = "NON";
+                break;
+            case 1:
+                LibelleUrgence = "OUI";
+                break;
+            case 2:
+                LibelleUrgence = "NON";
+                break;
+            default:
+                LibelleUrgence = "Indéterminé";
+                break;
+        }
+        return (LibelleUrgence);
+    }
 }

@@ -13,8 +13,8 @@ import utils.DBServerException;
 /**
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
- * 
- * @version Juin 2016
+ *
+ * @version Juillet 2016
  * @author Thierry Baribaud
  */
 public class ExpCalls {
@@ -37,6 +37,7 @@ public class ExpCalls {
         Connection MyConnection;
         ExpCallsParams MyExpCallsParams;
         ExpCalls_0000 MyExpCalls_0000;
+        ExpCalls_0513 MyExpCalls_0513;
         ExpCalls_0572 MyExpCalls_0572;
 
         // On récupère les arguments de la ligne de commande.
@@ -58,6 +59,9 @@ public class ExpCalls {
             MyExpCallsParams = new ExpCallsParams(MyConnection, MyArgs);
 
             switch (MyArgs.getUnum()) {
+                case 513:
+                    MyExpCalls_0513 = new ExpCalls_0513(MyExpCallsParams);
+                    break;
                 case 572:
                     MyExpCalls_0572 = new ExpCalls_0572(MyExpCallsParams);
                     break;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+<xs:element name="ticket">
+    <xs:annotation>
+        <xs:documentation>Commentaire</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element type="xs:string" name="NoOT" minOccurs="0"/>
+            <xs:element type="xs:string" name="OrigineDemande" minOccurs="0"/>
+            <xs:element type="xs:string" name="OTUrgente" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateAppel" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureOuvertureDossier" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureMail" minOccurs="0"/>
+            <xs:element type="xs:string" name="TempsTraitement" minOccurs="0"/>
+            <xs:element type="xs:string" name="DO" minOccurs="0"/>
+            <xs:element type="xs:string" name="CodeMagasin" minOccurs="0"/>
+            <xs:element type="xs:string" name="NomMagasin" minOccurs="0"/>
+            <xs:element type="xs:string" name="TelAppelant" minOccurs="0"/>
+            <xs:element type="xs:string" name="Adresse" minOccurs="0"/>
+            <xs:element type="xs:string" name="CP" minOccurs="0"/>
+            <xs:element type="xs:string" name="Ville" minOccurs="0"/>
+            <xs:element type="xs:string" name="Qualification" minOccurs="0"/>
+            <xs:element type="xs:string" name="CodePanne" minOccurs="0"/>
+            <xs:element type="xs:string" name="LibelleCodePanne" minOccurs="0"/>
+            <xs:element type="xs:string" name="DemandeIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="Prestataire1" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateMissionnement1" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureMissionnement1" minOccurs="0"/>
+            <xs:element type="xs:string" name="Prestataire2" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateMissionnement2" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureMissionnement2" minOccurs="0"/>
+            <xs:element type="xs:string" name="LogOperateur" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="tickets">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="ticket" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+</xs:schema>

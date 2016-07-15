@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 /**
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
- * @version Juin 2016
+ * @version Juillet 2016
  * @author Thierry Baribaud
  */
 public class ExpCallsParams {
@@ -146,6 +146,9 @@ public class ExpCallsParams {
         String Filename = "tickets_0000";
 
         switch (unum) {
+            case 513:
+                Filename = "tickets_0513";
+                break;
             case 572:
                 Filename = "tickets_0572";
                 break;
