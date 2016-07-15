@@ -17,6 +17,7 @@ import bdd.Ftoubib;
 import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -51,7 +52,7 @@ public class Ticket_0000 {
     public Fcomplmt Fcomplmt_0000;
 
     /**
-     * Format de date "dd/mm/aaaa".
+     * Format de date n°1 "dd/mm/aaaa".
      */
     private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -207,6 +208,7 @@ public class Ticket_0000 {
         String A4name;
         Factivity MyFactivity;
         FactivityDAO MyFactivityDAO;
+        Timestamp MyDate;
 
         this.MyConnection = MyConnection;
         this.Fcalls_0000 = Fcalls_0000;
@@ -363,23 +365,29 @@ public class Ticket_0000 {
             egid = MyFessais.getEgid();
 //            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
             MyClotureAppel = new ClotureAppel();
+            
+            // For debug purpose only (begin)
             RapportIntervention = new StringBuffer("egid=" + egid);
+            // For debug purpose only (end)
+            
             MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
             MyFessaisDAO.filterByGid(this.Fcalls_0000.getCnum(), egid);
             MyFessaisDAO.setSelectPreparedStatement();
             while ((MyFessais = MyFessaisDAO.select()) != null) {
                 eresult = MyFessais.getEresult();
-//                System.out.println("      eresult=" + eresult + ", emessage=" + MyFessais.getEmessage());
+                Emessage = MyFessais.getEmessage();
+//                System.out.println("      eresult=" + eresult + ", emessage=" + Emessage);
                 switch (eresult) {
                     case 69:    // Heure de début d'intervention.
+                        MyClotureAppel.setBegDate(MyFessais);
                         break;
                     case 70:    // Heure de fin d'intervention.
+                        MyClotureAppel.setEndDate(MyFessais);
                         break;
                     case 71:    // Résultat de l'intervention.
-                        MyClotureAppel.setResultat(MyFessais.getEmessage());
+                        MyClotureAppel.setResultat(Emessage);
                         break;
                     case 72:    // Rapport d'intervention.
-                        Emessage = MyFessais.getEmessage();
                         if (Emessage.length() > 0) {
                             if (RapportIntervention.length() > 0) {
                                 RapportIntervention.append(" ").append(Emessage);
@@ -389,14 +397,25 @@ public class Ticket_0000 {
                         }
                         break;
                     case 73:    // Le technicien est-il encore sur site ?
-                        MyClotureAppel.setOnSite(MyFessais.getEmessage());
+                        MyClotureAppel.setOnSite(Emessage);
                         break;
                     case 93:    // Nature de la panne.
-                        MyClotureAppel.setNature(MyFessais.getEmessage());
+                        MyClotureAppel.setNature(Emessage);
                         break;
                 }
             }
             MyFessaisDAO.closeSelectPreparedStatement();
+            
+            // For debug purpose only (begin)
+            MyDate = MyClotureAppel.getBegDate();
+            if (MyDate != null) {
+                RapportIntervention.append(" début=").append(MyDate);
+            }
+            MyDate = MyClotureAppel.getEndDate();
+            if (MyDate != null) {
+                RapportIntervention.append(" fin=").append(MyDate);
+            }
+            // For debug purpose only (end)
 
             if (RapportIntervention.length() > 0) {
                 MyClotureAppel.setRapport(RapportIntervention.toString());
