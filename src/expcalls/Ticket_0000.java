@@ -192,6 +192,11 @@ public class Ticket_0000 {
     private String DelaiIntervention = null;
 
     /**
+     * Clôture d'appel associée au ticket.
+     */
+    private ClotureAppel MyClotureAppel;
+    
+    /**
      * Contructeur principal de la classe Ticket.
      *
      * @param MyConnection connexion à la base de données courante.
@@ -225,7 +230,6 @@ public class Ticket_0000 {
         Ftoubib MyFtoubib;
         FtoubibDAO MyFtoubibDAO;
         int egid = 0;
-        ClotureAppel MyClotureAppel;
         int eresult = 0;
         StringBuffer RapportIntervention = null;
         String Emessage = null;
@@ -392,13 +396,14 @@ public class Ticket_0000 {
 
         // Recherche la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
+        this.MyClotureAppel = new ClotureAppel(this.Fcalls_0000.getCdate());
+//        System.out.println("    Une clôture d'appel trouvée : =" + this.MyClotureAppel);
         MyFessaisDAO.setPartOfEOMPreparedStatement(this.Fcalls_0000.getCnum());
         MyFessais = MyFessaisDAO.getPartOfEOM();
         MyFessaisDAO.closePartOfEOMPreparedStatement();
         if (MyFessais != null) {
             egid = MyFessais.getEgid();
 //            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
-            MyClotureAppel = new ClotureAppel();
 
             // For debug purpose only (begin)
             RapportIntervention = new StringBuffer("egid=" + egid);
@@ -413,13 +418,13 @@ public class Ticket_0000 {
 //                System.out.println("      eresult=" + eresult + ", emessage=" + Emessage);
                 switch (eresult) {
                     case 69:    // Heure de début d'intervention.
-                        MyClotureAppel.setBegDate(MyFessais);
+                        this.MyClotureAppel.setBegDate(MyFessais);
                         break;
                     case 70:    // Heure de fin d'intervention.
-                        MyClotureAppel.setEndDate(MyFessais);
+                        this.MyClotureAppel.setEndDate(MyFessais);
                         break;
                     case 71:    // Résultat de l'intervention.
-                        MyClotureAppel.setResultat(Emessage);
+                        this.MyClotureAppel.setResultat(Emessage);
                         break;
                     case 72:    // Rapport d'intervention.
                         if (Emessage.length() > 0) {
@@ -431,50 +436,36 @@ public class Ticket_0000 {
                         }
                         break;
                     case 73:    // Le technicien est-il encore sur site ?
-                        MyClotureAppel.setOnSite(Emessage);
+                        this.MyClotureAppel.setOnSite(Emessage);
                         break;
                     case 93:    // Nature de la panne.
-                        MyClotureAppel.setNature(Emessage);
+                        this.MyClotureAppel.setNature(Emessage);
                         break;
                 }
             }
             MyFessaisDAO.closeSelectPreparedStatement();
 
             // For debug purpose only (begin)
-            if ((MyBegDate = MyClotureAppel.getBegDate()) != null) {
-                myLongBegDate = MyBegDate.getTime();
-            }
-            if ((MyEndDate = MyClotureAppel.getEndDate()) != null) {
-                myLongEndDate = MyEndDate.getTime();
-            }
-            // Si l'écart entre les dates de début/fin d'intervention est 
-            // inférieur à 1mn = 60000ms alors les dates de début/fin par défaut 
-            // n'ont pas été mise à jour lors de la saisie de la clôture.
-            if (myLongBegDate > 0 && myLongEndDate > 0) {
-                if (Math.abs(myLongEndDate - myLongBegDate) < 60000) {
-                    MyBegDate = null;
-                    MyEndDate = null;
-                }
-            }
-
-            if (MyBegDate != null) {
+            if ((MyBegDate = this.MyClotureAppel.getBegDate()) != null) {
                 RapportIntervention.append(" début=").append(MyBegDate);
             }
-            if (MyEndDate != null) {
+            if ((MyEndDate = this.MyClotureAppel.getEndDate()) != null) {
                 RapportIntervention.append(" fin=").append(MyEndDate);
             }
             // For debug purpose only (end)
 
             if (RapportIntervention.length() > 0) {
-                MyClotureAppel.setRapport(RapportIntervention.toString());
+                this.MyClotureAppel.setRapport(RapportIntervention.toString());
             }
-//            System.out.println("  " + MyClotureAppel);
+//            System.out.println("  " + this.MyClotureAppel);
 
-            this.setRapportIntervention(MyClotureAppel.getRapport());
-            this.setTechnicienSurSite(MyClotureAppel.getOnSite());
-            this.setNature(MyClotureAppel.getNature());
-            this.setResultat(MyClotureAppel.getResultat());
+
+            this.setRapportIntervention(this.MyClotureAppel.getRapport());
+            this.setTechnicienSurSite(this.MyClotureAppel.getOnSite());
+            this.setNature(this.MyClotureAppel.getNature());
+            this.setResultat(this.MyClotureAppel.getResultat());
         }
+        this.MyClotureAppel.ValideLaCloture();
     }
 
     /**
@@ -1064,14 +1055,32 @@ public class Ticket_0000 {
         DureeAuFormat = null;
 
         heure = duree / 3600;
-        if (heure > 0) DureeAuFormat.append(heure).append("h");
+        if (heure > 0) DureeAuFormat = new StringBuffer(heure + "h");
         
         minute = duree / 60 - heure * 60;
-        if (minute > 0) DureeAuFormat.append(minute).append("m");
+        if (minute > 0) 
+            if (DureeAuFormat == null ) DureeAuFormat = new StringBuffer(minute + "m");
+            else DureeAuFormat.append(minute).append("m");
         
         seconde = duree - 60 * (minute + 60 * heure);
-        if (seconde > 0) DureeAuFormat.append(seconde).append("s");
+        if (seconde > 0) 
+            if (DureeAuFormat == null ) DureeAuFormat = new StringBuffer(seconde + "s");
+            else DureeAuFormat.append(seconde).append("s");
                 
         return(DureeAuFormat.toString());
+    }
+
+    /**
+     * @return MyClotureAppel la clôture d'appel associée au ticket.
+     */
+    public ClotureAppel getMyClotureAppel() {
+        return MyClotureAppel;
+    }
+
+    /**
+     * @param MyClotureAppel définit la clôture d'appel associée au ticket.
+     */
+    public void setMyClotureAppel(ClotureAppel MyClotureAppel) {
+        this.MyClotureAppel = MyClotureAppel;
     }
 }

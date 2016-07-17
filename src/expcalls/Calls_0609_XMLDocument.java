@@ -1,5 +1,6 @@
 package expcalls;
 
+import bdd.ClotureAppel;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,6 +51,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         String MyString;
         int myInt;
         Timestamp MyTimestamp;
+        ClotureAppel MyClotureAppel;
 
         Element Ticket;
 
@@ -67,12 +69,10 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         // Numéro de semaine
         MyElement = MyDocument.createElement("Semaine");
         Ticket.appendChild(MyElement);
-        // ATTENTION : à implémenter plus tard : java ou procédure stockée ?
-//        myInt = MyTicket.Fcalls_0000.getCseqno();
-//        if (myInt > 0) {
-//            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)
-//                    + "/" + String.valueOf(MyTicket.Fcalls_0000.getCnum())));
-//        }
+        MyString = MyTicket.Fcalls_0000.getCWeekNum();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString.substring(5, 8)));
+        }
         
         // Date de saisie
         MyElement = MyDocument.createElement("DateAppel");
@@ -298,6 +298,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         }
 
         // Cloture de l'appel
+        MyClotureAppel = MyTicket.getMyClotureAppel();
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
         MyElement = MyDocument.createElement("InterventionCloturee");
@@ -305,36 +306,33 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         MyElement.appendChild(MyDocument.createTextNode(MyString));
 
         // Heure de début d'intervention
-        // ATTENTION : A implémenter
         MyElement = MyDocument.createElement("HeureDebutIntervention");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getRapportIntervention();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyClotureAppel.getHeureDebutRelevee();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Heure de fin d'intervention
-        // ATTENTION : A implémenter
         MyElement = MyDocument.createElement("HeureFinIntervention");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getRapportIntervention();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyClotureAppel.getHeureFinRelevee();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Durée d'intervention
-        // ATTENTION : A implémenter
         MyElement = MyDocument.createElement("DureeIntervention");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getRapportIntervention();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        myInt = MyClotureAppel.getDureeIntervention();
+        if (myInt > 0) {
+            MyElement.appendChild(MyDocument.createTextNode(MyTicket.CharDur(myInt)));
+        }
 
         // Résultat de l'intervention
         MyElement = MyDocument.createElement("ResultatIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getResultat();
+        MyString = MyClotureAppel.getResultat();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
@@ -342,7 +340,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         // Rapport d'intervention
         MyElement = MyDocument.createElement("Commentaires");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getRapportIntervention();
+        MyString = MyClotureAppel.getRapport();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
@@ -350,7 +348,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         // Le technicien est-il encore sur site ?
         MyElement = MyDocument.createElement("TechnicienSurSite");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getTechnicienSurSite();
+        MyString = MyClotureAppel.getOnSite();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }

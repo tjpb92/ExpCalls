@@ -46,6 +46,11 @@ public class ExpCallsParams {
     private Timestamp EndDate;
 
     /**
+     * Modèle de rapport XML.
+     */
+    private ModeleDeRapport MyModeleDeRapport;
+    
+    /**
      * Nom du fichier de sortie au format XML.
      */
     private String XMLFilename = DetermineXMLFilename(0);
@@ -170,121 +175,127 @@ public class ExpCallsParams {
 
         switch (unum) {
             case 105:
-                Filename = "tickets_0105";
+//                setMyModeleDeRapport(ModeleDeRapport.VES);
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 125:
-                Filename = "tickets_0105";
+//                setMyModeleDeRapport(ModeleDeRapport.VES);
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 341:
-                Filename = "tickets_0341";
+                setMyModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 513:
-                Filename = "tickets_0513";
+                setMyModeleDeRapport(ModeleDeRapport.CAR);
                 break;
             case 515:
-                Filename = "tickets_0341";
+                setMyModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 552:
-                Filename = "tickets_0552";
+                setMyModeleDeRapport(ModeleDeRapport.SOL);
                 break;
             case 555:
-                Filename = "tickets_0555";
+                setMyModeleDeRapport(ModeleDeRapport.GEO);
                 break;
             case 557:
-                Filename = "tickets_0541";
+                setMyModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 567:
-                Filename = "tickets_0567";
+                setMyModeleDeRapport(ModeleDeRapport.CEG);
                 break;
             case 572:
-                Filename = "tickets_0572";
+                setMyModeleDeRapport(ModeleDeRapport.NEX);
                 break;
             case 573:
-                Filename = "tickets_0573";
+                setMyModeleDeRapport(ModeleDeRapport.PHI);
                 break;
             case 582:
-                Filename = "tickets_0582";
+                setMyModeleDeRapport(ModeleDeRapport.ENE);
                 break;
             case 592:
-                Filename = "tickets_0105";
+//                setMyModeleDeRapport(ModeleDeRapport.VES);
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 600:
-                Filename = "tickets_0600";
+                setMyModeleDeRapport(ModeleDeRapport.PRI);
                 break;
             case 602:
-                Filename = "tickets_0541";
+                setMyModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 603:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 604:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 605:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 606:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 607:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 608:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 609:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 610:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 611:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 612:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 613:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 614:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 615:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 616:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 617:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 620:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 626:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 627:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 629:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 630:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 632:
-                Filename = "tickets_0609";
+                setMyModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 634:
-                Filename = "tickets_0572";
+                setMyModeleDeRapport(ModeleDeRapport.NEX);
                 break;
             case 635:
-                Filename = "tickets_0635";
+                setMyModeleDeRapport(ModeleDeRapport.BOU);
+                break;
+            default:
+                setMyModeleDeRapport(ModeleDeRapport.STD);
                 break;
         }
-        return (Filename + ".xsd");
+        return ("tickets_" + MyModeleDeRapport + ".xsd");
     }
 
     /**
@@ -372,6 +383,20 @@ public class ExpCallsParams {
      */
     public void setUabbname(String Uabbname) {
         this.Uabbname = Uabbname;
+    }
+
+    /**
+     * @return MyModeleDeRapport le modèle de rappport XML.
+     */
+    public ModeleDeRapport getMyModeleDeRapport() {
+        return MyModeleDeRapport;
+    }
+
+    /**
+     * @param MyModeleDeRapport définit le modèle de rappport XML.
+     */
+    public void setMyModeleDeRapport(ModeleDeRapport MyModeleDeRapport) {
+        this.MyModeleDeRapport = MyModeleDeRapport;
     }
 
 }

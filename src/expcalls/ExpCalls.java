@@ -59,14 +59,14 @@ public class ExpCalls {
             MyConnection = MyDBManager.getConnection();
             MyExpCallsParams = new ExpCallsParams(MyConnection, MyArgs);
 
-            switch (MyArgs.getUnum()) {
-                case 513:
+            switch (MyExpCallsParams.getMyModeleDeRapport()) {
+                case CAR:
                     MyExpCalls_0513 = new ExpCalls_0513(MyExpCallsParams);
                     break;
-                case 572:
+                case NEX:
                     MyExpCalls_0572 = new ExpCalls_0572(MyExpCallsParams);
                     break;
-                case 609:
+                case VF:
                     MyExpCalls_0609 = new ExpCalls_0609(MyExpCallsParams);
                     break;
                 default:
@@ -99,6 +99,7 @@ public class ExpCalls {
             MyExpCalls = new ExpCalls(Args);
         } catch (Exception MyException) {
             System.out.println("Problème lors du lancement de ExpCalls " + MyException);
+            MyException.printStackTrace();
         }
 
         System.out.println("Traitement terminé.");
