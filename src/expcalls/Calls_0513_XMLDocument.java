@@ -108,7 +108,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         // Heure de réception du mail
         MyElement = MyDocument.createElement("HeureMail");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber4();
+        MyString = MyTicket.getHeureMail();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString.substring(0, 5)));
         }
@@ -175,7 +175,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Qualification
+        // Qualification de la demande
         MyElement = MyDocument.createElement("Qualification");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getQualification();
@@ -191,7 +191,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Libelle associé au CodePanne
+        // Libelle associé au code panne
         MyElement = MyDocument.createElement("LibelleCodePanne");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.Fcomplmt_0000.getC6alpha7();
@@ -207,15 +207,15 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // Prestataire1
+        // Le nom du premier prestataire contacté.
         MyElement = MyDocument.createElement("Prestataire1");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getPrestataire1();
+        MyString = MyTicket.getNomPrestataire1();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // DateMissionnement1
+        // Date de missionnement
         MyElement = MyDocument.createElement("DateMissionnement1");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getDateMissionnement1();
@@ -223,7 +223,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // HeureMissionnement1
+        // Heure de missionnement
         MyElement = MyDocument.createElement("HeureMissionnement1");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getHeureMissionnement1();
@@ -231,15 +231,15 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString.substring(0, 5)));
         }
 
-        // Prestataire2
+        // Le nom du second/dernier prestataire contacté.
         MyElement = MyDocument.createElement("Prestataire2");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getPrestataire2();
+        MyString = MyTicket.getNomPrestataire2();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // DateMissionnement2
+        // Date de missionnement
         MyElement = MyDocument.createElement("DateMissionnement2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getDateMissionnement2();
@@ -247,7 +247,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
-        // HeureMissionnement2
+        // Heure de missionnement
         MyElement = MyDocument.createElement("HeureMissionnement2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getHeureMissionnement2();
@@ -255,11 +255,11 @@ public class Calls_0513_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString.substring(0, 5)));
         }
 
-        // Le log de l'opérateur
+        // Le numéro de log de l'opérateur
         MyElement = MyDocument.createElement("LogOperateur");
         Ticket.appendChild(MyElement);
         myInt = MyTicket.getLogOperateur();
-        if (myInt > 0) {
+        if (myInt > 2000) {
             MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)));
         }
     }

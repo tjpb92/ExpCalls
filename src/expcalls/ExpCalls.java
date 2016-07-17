@@ -39,6 +39,7 @@ public class ExpCalls {
         ExpCalls_0000 MyExpCalls_0000;
         ExpCalls_0513 MyExpCalls_0513;
         ExpCalls_0572 MyExpCalls_0572;
+        ExpCalls_0609 MyExpCalls_0609;
 
         // On récupère les arguments de la ligne de commande.
         System.out.println("Récupération des arguments en ligne de commande ...");
@@ -64,6 +65,9 @@ public class ExpCalls {
                     break;
                 case 572:
                     MyExpCalls_0572 = new ExpCalls_0572(MyExpCallsParams);
+                    break;
+                case 609:
+                    MyExpCalls_0609 = new ExpCalls_0609(MyExpCallsParams);
                     break;
                 default:
                     MyExpCalls_0000 = new ExpCalls_0000(MyExpCallsParams);

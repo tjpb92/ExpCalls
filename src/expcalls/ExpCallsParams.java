@@ -5,6 +5,7 @@ import bdd.FurgentDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 
 /**
  * Classe servant à stocker les paramètres pour exporter les appels.
@@ -143,17 +144,9 @@ public class ExpCallsParams {
      * @return Filename la racine du nom du fichier.
      */
     private String DefaultFilename(int unum) {
-        String Filename = "tickets_0000";
+        DecimalFormat MyFormatter = new DecimalFormat("0000");
 
-        switch (unum) {
-            case 513:
-                Filename = "tickets_0513";
-                break;
-            case 572:
-                Filename = "tickets_0572";
-                break;
-        }
-        return (Filename);
+        return ("tickets_" + MyFormatter.format(unum));
     }
 
     /**
@@ -173,7 +166,125 @@ public class ExpCallsParams {
      * @return Filename la racine du nom du fichier.
      */
     private String DetermineXSDFilename(int unum) {
-        return (DefaultFilename(unum) + ".xsd");
+        String Filename = "tickets_0000";
+
+        switch (unum) {
+            case 105:
+                Filename = "tickets_0105";
+                break;
+            case 125:
+                Filename = "tickets_0105";
+                break;
+            case 341:
+                Filename = "tickets_0341";
+                break;
+            case 513:
+                Filename = "tickets_0513";
+                break;
+            case 515:
+                Filename = "tickets_0341";
+                break;
+            case 552:
+                Filename = "tickets_0552";
+                break;
+            case 555:
+                Filename = "tickets_0555";
+                break;
+            case 557:
+                Filename = "tickets_0541";
+                break;
+            case 567:
+                Filename = "tickets_0567";
+                break;
+            case 572:
+                Filename = "tickets_0572";
+                break;
+            case 573:
+                Filename = "tickets_0573";
+                break;
+            case 582:
+                Filename = "tickets_0582";
+                break;
+            case 592:
+                Filename = "tickets_0105";
+                break;
+            case 600:
+                Filename = "tickets_0600";
+                break;
+            case 602:
+                Filename = "tickets_0541";
+                break;
+            case 603:
+                Filename = "tickets_0609";
+                break;
+            case 604:
+                Filename = "tickets_0609";
+                break;
+            case 605:
+                Filename = "tickets_0609";
+                break;
+            case 606:
+                Filename = "tickets_0609";
+                break;
+            case 607:
+                Filename = "tickets_0609";
+                break;
+            case 608:
+                Filename = "tickets_0609";
+                break;
+            case 609:
+                Filename = "tickets_0609";
+                break;
+            case 610:
+                Filename = "tickets_0609";
+                break;
+            case 611:
+                Filename = "tickets_0609";
+                break;
+            case 612:
+                Filename = "tickets_0609";
+                break;
+            case 613:
+                Filename = "tickets_0609";
+                break;
+            case 614:
+                Filename = "tickets_0609";
+                break;
+            case 615:
+                Filename = "tickets_0609";
+                break;
+            case 616:
+                Filename = "tickets_0609";
+                break;
+            case 617:
+                Filename = "tickets_0609";
+                break;
+            case 620:
+                Filename = "tickets_0609";
+                break;
+            case 626:
+                Filename = "tickets_0609";
+                break;
+            case 627:
+                Filename = "tickets_0609";
+                break;
+            case 629:
+                Filename = "tickets_0609";
+                break;
+            case 630:
+                Filename = "tickets_0609";
+                break;
+            case 632:
+                Filename = "tickets_0609";
+                break;
+            case 634:
+                Filename = "tickets_0572";
+                break;
+            case 635:
+                Filename = "tickets_0635";
+                break;
+        }
+        return (Filename + ".xsd");
     }
 
     /**

@@ -30,6 +30,11 @@ public class Ticket_0513 extends Ticket_0000 {
     private String OrigineDemande;
 
     /**
+     * Heure réception du mail.
+     */
+    private String HeureMail;
+
+    /**
      * Numéro de poste de l'opérateur.
      */
     private int logOperateur;
@@ -58,10 +63,7 @@ public class Ticket_0513 extends Ticket_0000 {
 
         super(MyConnection, Fcalls_0000, Fcomplmt_0000, MyEtatTicket);
 
-        FoperatDAO MyFoperatDAO;
-        Foperat MyFoperat;
-        FtypeDAO MyFtypeDAO;
-        Ftype MyFtype;
+        int codeOrigine;
 
         // Degré d'urgence cf. tra_urgence() dans libutil.4gl.
 //        System.out.println("  cquery2="+Fcalls_0000.getCquery2());
@@ -69,30 +71,23 @@ public class Ticket_0513 extends Ticket_0000 {
 
         // Origine de l'appel cf. tra_origine() dans libutil.4gl.
 //        System.out.println("  cage="+Fcalls_0000.getCage());
-        setOrigineDemande(Fcalls_0000.getCage());
+        codeOrigine = Fcalls_0000.getCage();
+        setOrigineDemande(codeOrigine);
 
-        // Temps de traitement du mail.
-        setTempsTraitement(Fcalls_0000.getCnumber4(), Fcalls_0000.getCtime());
+        // Cas particulier pour une demande d'intervention par mail.
+        if (codeOrigine == 2) {
+            // Heure de réception du mail
+            setHeureMail(Fcalls_0000.getCnumber4());
+
+            // Temps de traitement du mail lorsque pertinent.
+            setTempsTraitement(Fcalls_0000.getCnumber4(), Fcalls_0000.getCtime());
+        }
 
         // Qualification de la demande.
-        MyFtypeDAO = new FtypeDAO(MyConnection);
-        MyFtypeDAO.filterByCode(Fcalls_0000.getCunum(), Fcalls_0000.getCtype());
-        MyFtypeDAO.setSelectPreparedStatement();
-        MyFtype = MyFtypeDAO.select();
-        if (MyFtype != null) {
-            setQualification(MyFtype.getTtypename());
-        }
-        MyFtypeDAO.closeSelectPreparedStatement();
-        
+        setQualification(Fcalls_0000.getCunum(), Fcalls_0000.getCtype());
+
         // Numéro de poste de l'opérateur.
-        MyFoperatDAO = new FoperatDAO(MyConnection);
-        MyFoperatDAO.filterById(Fcalls_0000.getConum());
-        MyFoperatDAO.setSelectPreparedStatement();
-        MyFoperat = MyFoperatDAO.select();
-        if (MyFoperat != null) {
-            setLogOperateur(MyFoperat.getOnumpabx() + 2000);
-        }
-        MyFoperatDAO.closeSelectPreparedStatement();
+        setLogOperateur(Fcalls_0000.getConum(), 0);
     }
 
     /**
@@ -152,6 +147,20 @@ public class Ticket_0513 extends Ticket_0000 {
     }
 
     /**
+     * @return HeureMail l'heure de réception du mail.
+     */
+    public String getHeureMail() {
+        return HeureMail;
+    }
+
+    /**
+     * @param HeureMail définit l'heure de réception du mail.
+     */
+    public void setHeureMail(String HeureMail) {
+        this.HeureMail = HeureMail;
+    }
+
+    /**
      * @return logOperateur le numéro de poste de l'opéateur.
      */
     public int getLogOperateur() {
@@ -163,6 +172,29 @@ public class Ticket_0513 extends Ticket_0000 {
      */
     public void setLogOperateur(int logOperateur) {
         this.logOperateur = logOperateur;
+    }
+
+    /**
+     * Définit le numéro de poste de l'opéateur à partir de l'identifiant unique
+     * de l'opérateur.
+     *
+     * @param onum identifiant unique de l'opérateur.
+     * @param inutile pour avoir une signature différente.
+     * @throws java.sql.SQLException en ca d'erreur SQL.
+     * @throws java.lang.ClassNotFoundException en cas de classe non trouvée.
+     */
+    public void setLogOperateur(int onum, int inutile) throws ClassNotFoundException, SQLException {
+        FoperatDAO MyFoperatDAO;
+        Foperat MyFoperat;
+
+        MyFoperatDAO = new FoperatDAO(getConnection());
+        MyFoperatDAO.filterById(onum);
+        MyFoperatDAO.setSelectPreparedStatement();
+        MyFoperat = MyFoperatDAO.select();
+        if (MyFoperat != null) {
+            setLogOperateur(MyFoperat.getOnumpabx() + 2000);
+        }
+        MyFoperatDAO.closeSelectPreparedStatement();
     }
 
     /**
@@ -211,6 +243,28 @@ public class Ticket_0513 extends Ticket_0000 {
      */
     public void setQualification(String Qualification) {
         this.Qualification = Qualification;
+    }
+
+    /**
+     * Définit la qualification de la demande à partir de x et y.
+     *
+     * @param unum identifiant unique du client via furgent.
+     * @param ttype indice de la raison d'appel via ftype.
+     * @throws java.sql.SQLException en ca d'erreur SQL.
+     * @throws java.lang.ClassNotFoundException en cas de classe non trouvée.
+     */
+    public void setQualification(int unum, int ttype) throws SQLException, ClassNotFoundException {
+        FtypeDAO MyFtypeDAO;
+        Ftype MyFtype;
+
+        MyFtypeDAO = new FtypeDAO(getConnection());
+        MyFtypeDAO.filterByCode(Fcalls_0000.getCunum(), Fcalls_0000.getCtype());
+        MyFtypeDAO.setSelectPreparedStatement();
+        MyFtype = MyFtypeDAO.select();
+        if (MyFtype != null) {
+            setQualification(MyFtype.getTtypename());
+        }
+        MyFtypeDAO.closeSelectPreparedStatement();
     }
 
 }

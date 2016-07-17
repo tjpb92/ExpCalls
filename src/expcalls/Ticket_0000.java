@@ -92,6 +92,16 @@ public class Ticket_0000 {
     private String Prestataire1 = null;
 
     /**
+     * Nom du prestataire sur la première transmission.
+     */
+    private String NomPrestataire1 = null;
+
+    /**
+     * Prénom du prestataire sur la première transmission.
+     */
+    private String PrenomPrestataire1 = null;
+
+    /**
      * Date de la première transmission.
      */
     private String DateMissionnement1 = null;
@@ -120,6 +130,16 @@ public class Ticket_0000 {
      * Prestataire sur la dernière transmission.
      */
     private String Prestataire2 = null;
+
+    /**
+     * Nom du prestataire sur la dernière transmission.
+     */
+    private String NomPrestataire2 = null;
+
+    /**
+     * Prénom du prestataire sur la dernière transmission.
+     */
+    private String PrenomPrestataire2 = null;
 
     /**
      * Date de la dernière transmission.
@@ -165,6 +185,11 @@ public class Ticket_0000 {
      * Résultat de l'intervention
      */
     private String Resultat = null;
+    
+    /**
+     * Délai d'intervenion
+     */
+    private String DelaiIntervention = null;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -297,6 +322,8 @@ public class Ticket_0000 {
                 MyFtoubibDAO.setSelectPreparedStatement();
                 MyFtoubib = MyFtoubibDAO.select();
                 if (MyFtoubib != null) {
+                    this.setNomPrestataire1(MyFtoubib.getTlname());
+                    this.setPrenomPrestataire1(MyFtoubib.getTfname());
                     this.setPrestataire1(MyFtoubib.getTlname(), MyFtoubib.getTfname());
                     this.setNoTelephone1(MyFtoubib.getTel());
                     this.setEmail1(MyFtoubib.getTemail());
@@ -338,6 +365,8 @@ public class Ticket_0000 {
                     MyFtoubibDAO.setSelectPreparedStatement();
                     MyFtoubib = MyFtoubibDAO.select();
                     if (MyFtoubib != null) {
+                        this.setNomPrestataire2(MyFtoubib.getTlname());
+                        this.setPrenomPrestataire2(MyFtoubib.getTfname());
                         this.setPrestataire2(MyFtoubib.getTlname(), MyFtoubib.getTfname());
                         this.setNoTelephone2(MyFtoubib.getTel());
                         this.setEmail2(MyFtoubib.getTemail());
@@ -463,6 +492,15 @@ public class Ticket_0000 {
 //        this.Fcalls_0000 = Fcalls_0000;
 //        this.Fcomplmt_0000 = null;
         this(MyConnection, Fcalls_0000, null, MyEtatTicket);
+    }
+
+    /**
+     * Retourne la connexion à la base de données.
+     *
+     * @return MyConnection à la base de données.
+     */
+    public Connection getConnection() {
+        return (MyConnection);
     }
 
     /**
@@ -596,17 +634,45 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return Prestataire1 le nom du prestataire.
+     * @return Prestataire1 le nom complet du prestataire.
      */
     public String getPrestataire1() {
         return Prestataire1;
     }
 
     /**
-     * @param Prestataire1 définit le nom du prestataire.
+     * @param Prestataire1 définit le nom complet du prestataire.
      */
     public void setPrestataire1(String Prestataire1) {
         this.Prestataire1 = Prestataire1;
+    }
+
+    /**
+     * @return NomPrestataire1 le nom du prestataire.
+     */
+    public String getNomPrestataire1() {
+        return NomPrestataire1;
+    }
+
+    /**
+     * @param NomPrestataire1 définit le nom du prestataire.
+     */
+    public void setNomPrestataire1(String NomPrestataire1) {
+        this.NomPrestataire1 = NomPrestataire1;
+    }
+
+    /**
+     * @return PrenomPrestataire1 le prénom du prestataire.
+     */
+    public String getPrenomPrestataire1() {
+        return PrenomPrestataire1;
+    }
+
+    /**
+     * @param PrenomPrestataire1 définit le prénom du prestataire.
+     */
+    public void setPrenomPrestataire1(String PrenomPrestataire1) {
+        this.PrenomPrestataire1 = PrenomPrestataire1;
     }
 
     /**
@@ -702,17 +768,45 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return Prestataire2 le nom du prestataire.
+     * @return Prestataire2 le nom complet du prestataire.
      */
     public String getPrestataire2() {
         return Prestataire2;
     }
 
     /**
-     * @param Prestataire2 définit le nom du prestataire.
+     * @param Prestataire2 définit le nom complet du prestataire.
      */
     public void setPrestataire2(String Prestataire2) {
         this.Prestataire2 = Prestataire2;
+    }
+
+    /**
+     * @return NomPrestataire2 le nom du prestataire.
+     */
+    public String getNomPrestataire2() {
+        return NomPrestataire2;
+    }
+
+    /**
+     * @param NomPrestataire2 définit le nom du prestataire.
+     */
+    public void setNomPrestataire2(String NomPrestataire2) {
+        this.NomPrestataire2 = NomPrestataire2;
+    }
+
+    /**
+     * @return PrenomPrestataire2 le prénom du prestataire.
+     */
+    public String getPrenomPrestataire2() {
+        return PrenomPrestataire2;
+    }
+
+    /**
+     * @param PrenomPrestataire2 définit le prénom du prestataire.
+     */
+    public void setPrenomPrestataire2(String PrenomPrestataire2) {
+        this.PrenomPrestataire2 = PrenomPrestataire2;
     }
 
     /**
@@ -879,6 +973,27 @@ public class Ticket_0000 {
     }
 
     /**
+     * @return DelaiIntervention retourne le délai d'intervetion.
+     */
+    public String getDelaiIntervention() {
+        return(DelaiIntervention);
+    }
+    
+    /**
+     * @param DelaiIntervention définit le délai d'intervention
+     */
+    public void setDelaiIntervention(String DelaiIntervention) {
+        this.DelaiIntervention = DelaiIntervention;
+    }
+    
+    /**
+     * @param duree définit le délai d'intervention à partir d'une durée en secondes
+     */
+    public void setDelaiIntervention(int duree) {
+        setDelaiIntervention(CharDur(duree));
+    }
+    
+    /**
      * Traduit un code d'origine de l'appel en libellé. Repris de tra_origine()
      * dans libutil.4gl.)
      *
@@ -930,5 +1045,33 @@ public class Ticket_0000 {
                 break;
         }
         return (LibelleUrgence);
+    }
+    
+    /**
+     * Traduit une durée exprimée en secondes au format xxhxxmxxs.
+     * Repris de chardur.4gl.
+     * 
+     * @param duree en secondes à traduire.
+     * @return DureeAuFormat durée au format. 
+     */
+    
+    public String CharDur(int duree) {
+        StringBuffer DureeAuFormat;
+        int heure;
+        int minute;
+        int seconde;
+        
+        DureeAuFormat = null;
+
+        heure = duree / 3600;
+        if (heure > 0) DureeAuFormat.append(heure).append("h");
+        
+        minute = duree / 60 - heure * 60;
+        if (minute > 0) DureeAuFormat.append(minute).append("m");
+        
+        seconde = duree - 60 * (minute + 60 * heure);
+        if (seconde > 0) DureeAuFormat.append(seconde).append("s");
+                
+        return(DureeAuFormat.toString());
     }
 }
