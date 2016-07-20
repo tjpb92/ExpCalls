@@ -71,7 +71,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         Ticket.appendChild(MyElement);
         MyString = MyTicket.Fcalls_0000.getCWeekNum();
         if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString.substring(5, 8)));
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
         
         // Date de saisie

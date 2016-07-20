@@ -1,5 +1,6 @@
 package expcalls;
 
+import bdd.ClotureAppel;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,6 +51,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         String MyString;
         int myInt;
         Timestamp MyTimestamp;
+        ClotureAppel MyClotureAppel;
 
         Element Ticket;
 
@@ -243,6 +245,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         }
 
         // Cloture de l'appel
+        MyClotureAppel = MyTicket.getMyClotureAppel();
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
         MyElement = MyDocument.createElement("ResultatIntervention");
@@ -252,7 +255,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         // Rapport d'intervention
         MyElement = MyDocument.createElement("RapportIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getRapportIntervention();
+        MyString = MyClotureAppel.getRapport();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
@@ -260,7 +263,7 @@ public class Calls_0000_XMLDocument extends XMLDocument {
         // Le technicien est-il encore sur site ?
         MyElement = MyDocument.createElement("TechnicienSurSite");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getTechnicienSurSite();
+        MyString = MyClotureAppel.getOnSite();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }

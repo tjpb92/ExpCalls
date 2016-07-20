@@ -167,27 +167,7 @@ public class Ticket_0000 {
     private String A4name2 = null;
 
     /**
-     * Rapport d'intervention
-     */
-    private String RapportIntervention = null;
-
-    /**
-     * Le technicien est-il encore sur site ?
-     */
-    private String TechnicienSurSite = null;
-
-    /**
-     * Nature de l'intervention
-     */
-    private String Nature = null;
-
-    /**
-     * Résultat de l'intervention
-     */
-    private String Resultat = null;
-    
-    /**
-     * Délai d'intervenion
+     * Délai d'intervenion contractuel
      */
     private String DelaiIntervention = null;
 
@@ -229,18 +209,10 @@ public class Ticket_0000 {
         int tnum = 0;
         Ftoubib MyFtoubib;
         FtoubibDAO MyFtoubibDAO;
-        int egid = 0;
-        int eresult = 0;
-        StringBuffer RapportIntervention = null;
-        String Emessage = null;
         int a4num;
         String A4name;
         Factivity MyFactivity;
         FactivityDAO MyFactivityDAO;
-        Timestamp MyBegDate;
-        Timestamp MyEndDate;
-        long myLongBegDate = 0;
-        long myLongEndDate = 0;
 
         this.MyConnection = MyConnection;
         this.Fcalls_0000 = Fcalls_0000;
@@ -394,78 +366,12 @@ public class Ticket_0000 {
             }
         }
 
-        // Recherche la clôture d'appel
+        // Récupération de la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
-        this.MyClotureAppel = new ClotureAppel(this.Fcalls_0000.getCdate());
+        this.MyClotureAppel = new ClotureAppel(MyConnection, 
+                this.Fcalls_0000.getCnum(), this.Fcalls_0000.getCdate(), 
+                MyEtatTicket);
 //        System.out.println("    Une clôture d'appel trouvée : =" + this.MyClotureAppel);
-        MyFessaisDAO.setPartOfEOMPreparedStatement(this.Fcalls_0000.getCnum());
-        MyFessais = MyFessaisDAO.getPartOfEOM();
-        MyFessaisDAO.closePartOfEOMPreparedStatement();
-        if (MyFessais != null) {
-            egid = MyFessais.getEgid();
-//            System.out.println("    Une clôture d'appel trouvée : egid=" + egid);
-
-            // For debug purpose only (begin)
-            RapportIntervention = new StringBuffer("egid=" + egid);
-            // For debug purpose only (end)
-
-            MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
-            MyFessaisDAO.filterByGid(this.Fcalls_0000.getCnum(), egid);
-            MyFessaisDAO.setSelectPreparedStatement();
-            while ((MyFessais = MyFessaisDAO.select()) != null) {
-                eresult = MyFessais.getEresult();
-                Emessage = MyFessais.getEmessage();
-//                System.out.println("      eresult=" + eresult + ", emessage=" + Emessage);
-                switch (eresult) {
-                    case 69:    // Heure de début d'intervention.
-                        this.MyClotureAppel.setBegDate(MyFessais);
-                        break;
-                    case 70:    // Heure de fin d'intervention.
-                        this.MyClotureAppel.setEndDate(MyFessais);
-                        break;
-                    case 71:    // Résultat de l'intervention.
-                        this.MyClotureAppel.setResultat(Emessage);
-                        break;
-                    case 72:    // Rapport d'intervention.
-                        if (Emessage.length() > 0) {
-                            if (RapportIntervention.length() > 0) {
-                                RapportIntervention.append(" ").append(Emessage);
-                            } else {
-                                RapportIntervention.append(Emessage);
-                            }
-                        }
-                        break;
-                    case 73:    // Le technicien est-il encore sur site ?
-                        this.MyClotureAppel.setOnSite(Emessage);
-                        break;
-                    case 93:    // Nature de la panne.
-                        this.MyClotureAppel.setNature(Emessage);
-                        break;
-                }
-            }
-            MyFessaisDAO.closeSelectPreparedStatement();
-
-            // For debug purpose only (begin)
-            if ((MyBegDate = this.MyClotureAppel.getBegDate()) != null) {
-                RapportIntervention.append(" début=").append(MyBegDate);
-            }
-            if ((MyEndDate = this.MyClotureAppel.getEndDate()) != null) {
-                RapportIntervention.append(" fin=").append(MyEndDate);
-            }
-            // For debug purpose only (end)
-
-            if (RapportIntervention.length() > 0) {
-                this.MyClotureAppel.setRapport(RapportIntervention.toString());
-            }
-//            System.out.println("  " + this.MyClotureAppel);
-
-
-            this.setRapportIntervention(this.MyClotureAppel.getRapport());
-            this.setTechnicienSurSite(this.MyClotureAppel.getOnSite());
-            this.setNature(this.MyClotureAppel.getNature());
-            this.setResultat(this.MyClotureAppel.getResultat());
-        }
-        this.MyClotureAppel.ValideLaCloture();
     }
 
     /**
@@ -893,35 +799,6 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return RapportIntervention le rapport d'intervention.
-     */
-    public String getRapportIntervention() {
-        return RapportIntervention;
-    }
-
-    /**
-     * @param RapportIntervention définit le rapport d'intervention.
-     */
-    public void setRapportIntervention(String RapportIntervention) {
-        this.RapportIntervention = RapportIntervention;
-    }
-
-    /**
-     * @return TechnicienSurSite indication sur la présence du prestataire sur
-     * site.
-     */
-    public String getTechnicienSurSite() {
-        return TechnicienSurSite;
-    }
-
-    /**
-     * @param TechnicienSurSite définit la présence du prestataire sur site.
-     */
-    public void setTechnicienSurSite(String TechnicienSurSite) {
-        this.TechnicienSurSite = TechnicienSurSite;
-    }
-
-    /**
      * @return MyEtatTicket l'état du ticket.
      */
     public EtatTicket getMyEtatTicket() {
@@ -936,49 +813,22 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return Nature la nature de l'intervention.
-     */
-    public String getNature() {
-        return Nature;
-    }
-
-    /**
-     * @param Nature définit la nature de l'intervention.
-     */
-    public void setNature(String Nature) {
-        this.Nature = Nature;
-    }
-
-    /**
-     * @return Resultat le résultat de l'intervention.
-     */
-    public String getResultat() {
-        return Resultat;
-    }
-
-    /**
-     * @param Resultat définit le résultat de l'intervention.
-     */
-    public void setResultat(String Resultat) {
-        this.Resultat = Resultat;
-    }
-
-    /**
-     * @return DelaiIntervention retourne le délai d'intervetion.
+     * @return DelaiIntervention retourne le délai d'intervention contractuel.
      */
     public String getDelaiIntervention() {
         return(DelaiIntervention);
     }
     
     /**
-     * @param DelaiIntervention définit le délai d'intervention
+     * @param DelaiIntervention définit le délai d'intervention contractuel.
      */
     public void setDelaiIntervention(String DelaiIntervention) {
         this.DelaiIntervention = DelaiIntervention;
     }
     
     /**
-     * @param duree définit le délai d'intervention à partir d'une durée en secondes
+     * @param duree définit le délai d'intervention contractuel à partir d'une 
+     * durée en secondes.
      */
     public void setDelaiIntervention(int duree) {
         setDelaiIntervention(CharDur(duree));

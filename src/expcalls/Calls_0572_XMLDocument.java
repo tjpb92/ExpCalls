@@ -1,5 +1,6 @@
 package expcalls;
 
+import bdd.ClotureAppel;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +12,7 @@ import utils.XMLDocument;
  * Classe pour générer un fichier au format XML décrivant des tickets pour les
  * clients de la famille du client 572.
  *
- * @version Juin 2016
+ * @version Juillet 2016
  * @author Thierry Baribaud
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
@@ -50,6 +51,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         String MyString;
         int myInt;
         Timestamp MyTimestamp;
+        ClotureAppel MyClotureAppel;
 
         Element Ticket;
 
@@ -363,6 +365,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // Cloture de l'appel
+        MyClotureAppel = MyTicket.getMyClotureAppel();
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
         MyElement = MyDocument.createElement("InterventionCloturee");
@@ -388,7 +391,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Résultat de l'intervention
         MyElement = MyDocument.createElement("ResultatIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getResultat();
+        MyString = MyClotureAppel.getResultat();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
@@ -396,7 +399,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Rapport de clôture d'intervention
         MyElement = MyDocument.createElement("RapportIntervention");
         Ticket.appendChild(MyElement);
-        MyString = MyTicket.getRapportIntervention();
+        MyString = MyClotureAppel.getRapport();
         if (MyString != null) {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
