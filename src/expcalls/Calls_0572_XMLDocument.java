@@ -12,8 +12,8 @@ import utils.XMLDocument;
  * Classe pour générer un fichier au format XML décrivant des tickets pour les
  * clients de la famille du client 572.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -55,7 +55,8 @@ public class Calls_0572_XMLDocument extends XMLDocument {
 
         Element Ticket;
 
-        DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat monthFormat = new SimpleDateFormat("MMM");
 
         MyString = "Ticket ref=" + MyTicket.Fcalls_0000.getCnum();
         if (MyString != null) {
@@ -71,7 +72,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         Ticket.appendChild(MyElement);
         MyTimestamp = MyTicket.Fcalls_0000.getCdate();
         if (MyTimestamp != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyDateFormat.format(MyTimestamp)));
+            MyElement.appendChild(MyDocument.createTextNode(dateFormat.format(MyTimestamp)));
         }
 
         // Heure de saisie
@@ -82,13 +83,20 @@ public class Calls_0572_XMLDocument extends XMLDocument {
             MyElement.appendChild(MyDocument.createTextNode(MyString));
         }
 
+        // Mois
+        MyElement = MyDocument.createElement("Mois");
+        Ticket.appendChild(MyElement);
+        if (MyTimestamp != null) {
+            MyElement.appendChild(MyDocument.createTextNode(monthFormat.format(MyTimestamp)));
+        }
+
         // Numéro de ticket
         MyElement = MyDocument.createElement("NumeroDeDossier");
         Ticket.appendChild(MyElement);
         myInt = MyTicket.Fcalls_0000.getCseqno();
         if (myInt > 0) {
-            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt) 
-                    + "/" + String.valueOf(MyTicket.Fcalls_0000.getCnum())));
+            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt))); 
+//                    + "/" + String.valueOf(MyTicket.Fcalls_0000.getCnum())));
         }
 
         // Degré d'urgence
@@ -263,10 +271,10 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Suivi donné à la demande
         MyElement = MyDocument.createElement("SuiviDonneALaDemande");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.getEtatIntervention();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getEtatIntervention();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Contact n°1
         MyElement = MyDocument.createElement("Contact1");
@@ -285,7 +293,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // DateMissionnement1
-        MyElement = MyDocument.createElement("DateMissionnement1");
+        MyElement = MyDocument.createElement("DateDeMissionnement1");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getDateMissionnement1();
         if (MyString != null) {
@@ -293,7 +301,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // HeureMissionnement1
-        MyElement = MyDocument.createElement("HeureMissionnement1");
+        MyElement = MyDocument.createElement("HeureDeMissionnement1");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getHeureMissionnement1();
         if (MyString != null) {
@@ -333,7 +341,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // DateMissionnement2
-        MyElement = MyDocument.createElement("DateMissionnement2");
+        MyElement = MyDocument.createElement("DateDeMissionnement2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getDateMissionnement2();
         if (MyString != null) {
@@ -341,7 +349,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // HeureMissionnement2
-        MyElement = MyDocument.createElement("HeureMissionnement2");
+        MyElement = MyDocument.createElement("HeureDeMissionnement2");
         Ticket.appendChild(MyElement);
         MyString = MyTicket.getHeureMissionnement2();
         if (MyString != null) {
@@ -365,7 +373,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         }
 
         // Cloture de l'appel
-        MyClotureAppel = MyTicket.getMyClotureAppel();
+        MyClotureAppel = MyTicket.getClotureAppel();
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
         MyElement = MyDocument.createElement("InterventionCloturee");
@@ -375,18 +383,18 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Date d'intervention
         MyElement = MyDocument.createElement("DateIntervention");
         Ticket.appendChild(MyElement);
-//        MyTimestamp = MyTicket.Fcalls_0000.getCdate();
-//        if (MyTimestamp != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyDateFormat.format(MyTimestamp)));
-//        }
+        MyString = MyTicket.getDateInterventionRelevee();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Heure d'intervention
         MyElement = MyDocument.createElement("HeureIntervention");
         Ticket.appendChild(MyElement);
-//        MyString = MyTicket.Fcalls_0000.getCtime();
-//        if (MyString != null) {
-//            MyElement.appendChild(MyDocument.createTextNode(MyString));
-//        }
+        MyString = MyTicket.getHeureInterventionRelevee();
+        if (MyString != null) {
+            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        }
 
         // Résultat de l'intervention
         MyElement = MyDocument.createElement("ResultatIntervention");

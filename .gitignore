@@ -1,5 +1,9 @@
 # My .gitgnore file
-
+.gitignore
+ExpCalls.prop
 MyDatabases.prop
 tickets_[0-9]*.xml
 
+/nbproject/private/
+/build/
+/dist/

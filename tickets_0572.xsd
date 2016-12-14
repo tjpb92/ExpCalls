@@ -10,6 +10,7 @@
             <!-- Page 1 -->
             <xs:element type="xs:string" name="DateDAppel" minOccurs="0"/>
             <xs:element type="xs:string" name="HeureDAppel" minOccurs="0"/>
+            <xs:element type="xs:string" name="Mois" minOccurs="0"/>
             <xs:element type="xs:string" name="NumeroDeDossier" minOccurs="0"/>
             <xs:element type="xs:string" name="DegreDUrgence" minOccurs="0"/>
             <xs:element type="xs:string" name="Patrimoine" minOccurs="0"/>

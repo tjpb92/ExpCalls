@@ -12,8 +12,8 @@ import org.w3c.dom.Element;
  * Classe pour générer un fichier au format XML décrivant des tickets des
  * clients de la famille 609.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class Calls_0609_XMLDocument extends XMLDocument {
 
@@ -298,7 +298,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         }
 
         // Cloture de l'appel
-        MyClotureAppel = MyTicket.getMyClotureAppel();
+        MyClotureAppel = MyTicket.getClotureAppel();
         myInt = MyTicket.Fcalls_0000.getCnote();
         MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
         MyElement = MyDocument.createElement("InterventionCloturee");

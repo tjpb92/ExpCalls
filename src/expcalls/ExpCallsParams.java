@@ -10,15 +10,15 @@ import java.text.DecimalFormat;
 /**
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class ExpCallsParams {
 
     /**
      * Connexion à la base de données courante.
      */
-    private Connection MyConnection;
+    private Connection connection;
 
     /**
      * Identifiant du client.
@@ -28,27 +28,27 @@ public class ExpCallsParams {
     /**
      * Nom du client.
      */
-    private String Uname;
+    private String uname;
 
     /**
      * Nom abrégé du client.
      */
-    private String Uabbname;
+    private String uabbname;
 
     /**
      * Date de début de l'export à 0h.
      */
-    private Timestamp BegDate;
+    private Timestamp begDate;
 
     /**
      * Date de fin de l'export à 0h.
      */
-    private Timestamp EndDate;
+    private Timestamp endDate;
 
     /**
      * Modèle de rapport XML.
      */
-    private ModeleDeRapport MyModeleDeRapport;
+    private ModeleDeRapport modeleDeRapport;
     
     /**
      * Nom du fichier de sortie au format XML.
@@ -65,28 +65,28 @@ public class ExpCallsParams {
      */
     private String ExcelFilename = DetermineExcelFilename(0);
 
-    public ExpCallsParams(Connection MyConnection, GetArgs MyArgs) throws ClassNotFoundException, SQLException {
-        FurgentDAO MyFurgentDAO;
-        Furgent MyFurgent;
+    public ExpCallsParams(Connection connection, GetArgs args) throws ClassNotFoundException, SQLException {
+        FurgentDAO furgentDAO;
+        Furgent furgent;
 
-        setMyConnection(MyConnection);
+        setConnection(connection);
 
-        setUnum(MyArgs.getUnum());
-        MyFurgentDAO = new FurgentDAO(MyConnection);
-        MyFurgentDAO.filterById(unum);
-        MyFurgentDAO.setSelectPreparedStatement();
-        MyFurgent = MyFurgentDAO.select();
-        if (MyFurgent != null) {
-            setUname(MyFurgent.getUname());
-            setUabbname(MyFurgent.getUabbname());
+        setUnum(args.getUnum());
+        furgentDAO = new FurgentDAO(connection);
+        furgentDAO.filterById(unum);
+        furgentDAO.setSelectPreparedStatement();
+        furgent = furgentDAO.select();
+        if (furgent != null) {
+            setUname(furgent.getUname());
+            setUabbname(furgent.getUabbname());
         } else {
             setUname("Inconnu");
             setUabbname("INCONNU");
         }
-        MyFurgentDAO.closeSelectPreparedStatement();
+        furgentDAO.closeSelectPreparedStatement();
 
-        setBegDate(MyArgs.getBegDate());
-        setEndDate(MyArgs.getEndDate());
+        setBegDate(args.getBegDate());
+        setEndDate(args.getEndDate());
         setXMLFilename(DetermineXMLFilename(unum));
         setXSDFilename(DetermineXSDFilename(unum));
         setExcelFilename(DetermineExcelFilename(unum));
@@ -107,17 +107,17 @@ public class ExpCallsParams {
     }
 
     /**
-     * @param BegDate définit la date de début de l'export à 0h.
+     * @param begDate définit la date de début de l'export à 0h.
      */
-    public void setBegDate(Timestamp BegDate) {
-        this.BegDate = BegDate;
+    public void setBegDate(Timestamp begDate) {
+        this.begDate = begDate;
     }
 
     /**
-     * @param EndDate définit la date de fin de l'export à 0h.
+     * @param endDate définit la date de fin de l'export à 0h.
      */
-    public void setEndDate(Timestamp EndDate) {
-        this.EndDate = EndDate;
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
     }
 
     /**
@@ -128,17 +128,17 @@ public class ExpCallsParams {
     }
 
     /**
-     * @return BegDate la date de début de l'export à 0h.
+     * @return begDate la date de début de l'export à 0h.
      */
     public Timestamp getBegDate() {
-        return (BegDate);
+        return (begDate);
     }
 
     /**
-     * @return EndDate la date de fin de l'export à 0h.
+     * @return endDate la date de fin de l'export à 0h.
      */
     public Timestamp getEndDate() {
-        return (EndDate);
+        return (endDate);
     }
 
     /**
@@ -176,126 +176,126 @@ public class ExpCallsParams {
         switch (unum) {
             case 105:
 //                setMyModeleDeRapport(ModeleDeRapport.VES);
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 125:
 //                setMyModeleDeRapport(ModeleDeRapport.VES);
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 341:
-                setMyModeleDeRapport(ModeleDeRapport.SAU);
+                setModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 513:
-                setMyModeleDeRapport(ModeleDeRapport.CAR);
+                setModeleDeRapport(ModeleDeRapport.CAR);
                 break;
             case 515:
-                setMyModeleDeRapport(ModeleDeRapport.SAU);
+                setModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 552:
-                setMyModeleDeRapport(ModeleDeRapport.SOL);
+                setModeleDeRapport(ModeleDeRapport.SOL);
                 break;
             case 555:
-                setMyModeleDeRapport(ModeleDeRapport.GEO);
+                setModeleDeRapport(ModeleDeRapport.GEO);
                 break;
             case 557:
-                setMyModeleDeRapport(ModeleDeRapport.SAU);
+                setModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 567:
-                setMyModeleDeRapport(ModeleDeRapport.CEG);
+                setModeleDeRapport(ModeleDeRapport.CEG);
                 break;
             case 572:
-                setMyModeleDeRapport(ModeleDeRapport.NEX);
+                setModeleDeRapport(ModeleDeRapport.NEX);
                 break;
             case 573:
-                setMyModeleDeRapport(ModeleDeRapport.PHI);
+                setModeleDeRapport(ModeleDeRapport.PHI);
                 break;
             case 582:
-                setMyModeleDeRapport(ModeleDeRapport.ENE);
+                setModeleDeRapport(ModeleDeRapport.ENE);
                 break;
             case 592:
 //                setMyModeleDeRapport(ModeleDeRapport.VES);
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 600:
-                setMyModeleDeRapport(ModeleDeRapport.PRI);
+                setModeleDeRapport(ModeleDeRapport.PRI);
                 break;
             case 602:
-                setMyModeleDeRapport(ModeleDeRapport.SAU);
+                setModeleDeRapport(ModeleDeRapport.SAU);
                 break;
             case 603:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 604:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 605:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 606:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 607:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 608:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 609:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 610:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 611:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 612:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 613:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 614:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 615:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 616:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 617:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 620:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 626:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 627:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 629:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 630:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 632:
-                setMyModeleDeRapport(ModeleDeRapport.VF);
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 634:
-                setMyModeleDeRapport(ModeleDeRapport.NEX);
+                setModeleDeRapport(ModeleDeRapport.NEX);
                 break;
             case 635:
-                setMyModeleDeRapport(ModeleDeRapport.BOU);
+                setModeleDeRapport(ModeleDeRapport.BOU);
                 break;
             default:
-                setMyModeleDeRapport(ModeleDeRapport.STD);
+                setModeleDeRapport(ModeleDeRapport.STD);
                 break;
         }
-        return ("tickets_" + MyModeleDeRapport + ".xsd");
+        return ("tickets_" + modeleDeRapport + ".xsd");
     }
 
     /**
@@ -344,59 +344,59 @@ public class ExpCallsParams {
     }
 
     /**
-     * @return MyConnection connection à la base de données locale.
+     * @return connection connection à la base de données locale.
      */
-    public Connection getMyConnection() {
-        return MyConnection;
+    public Connection getConnection() {
+        return connection;
     }
 
     /**
-     * @param MyConnection définit la connection à la base de données locale.
+     * @param connection définit la connection à la base de données locale.
      */
-    public void setMyConnection(Connection MyConnection) {
-        this.MyConnection = MyConnection;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     /**
-     * @return Uname le nom du client.
+     * @return uname le nom du client.
      */
     public String getUname() {
-        return Uname;
+        return uname;
     }
 
     /**
-     * @param Uname définit le nom du client.
+     * @param uname définit le nom du client.
      */
-    public void setUname(String Uname) {
-        this.Uname = Uname;
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 
     /**
-     * @return Uabbname le nom abrégé du client.
+     * @return uabbname le nom abrégé du client.
      */
     public String getUabbname() {
-        return Uabbname;
+        return uabbname;
     }
 
     /**
-     * @param Uabbname définit le nom abrégé du client.
+     * @param uabbname définit le nom abrégé du client.
      */
-    public void setUabbname(String Uabbname) {
-        this.Uabbname = Uabbname;
+    public void setUabbname(String uabbname) {
+        this.uabbname = uabbname;
     }
 
     /**
-     * @return MyModeleDeRapport le modèle de rappport XML.
+     * @return modeleDeRapport le modèle de rappport XML.
      */
-    public ModeleDeRapport getMyModeleDeRapport() {
-        return MyModeleDeRapport;
+    public ModeleDeRapport getModeleDeRapport() {
+        return modeleDeRapport;
     }
 
     /**
-     * @param MyModeleDeRapport définit le modèle de rappport XML.
+     * @param modeleDeRapport définit le modèle de rappport XML.
      */
-    public void setMyModeleDeRapport(ModeleDeRapport MyModeleDeRapport) {
-        this.MyModeleDeRapport = MyModeleDeRapport;
+    public void setModeleDeRapport(ModeleDeRapport modeleDeRapport) {
+        this.modeleDeRapport = modeleDeRapport;
     }
 
 }

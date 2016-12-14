@@ -1,6 +1,6 @@
 # Projet extraction d'appels en mode ligne
 
-Le but de ce projet est de créer un programme Java permettant d'exporter les appels d'un service d'urgence au format XML.
+Le but de ce projet est de créer un programme Java permettant d'exporter au format XML les appels d'un service d'urgence.
 
 Il y a un appel par ligne.
 
@@ -8,7 +8,7 @@ Ce fichier est importable dans Microsoft Excel.
 
 ##Utilisation:
 ```
-java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-d] [-t] 
+java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-p path] [-d] [-t] 
 ```
 où :
 * ```-dbserver db``` est la référence à la base de données, par défaut désigne la base de données de développement. Voir fichier *myDatabases.prop* (optionnel).
@@ -16,6 +16,7 @@ où :
 * ```-b début``` : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (paramètre optionnel).
 * ```-e fin``` : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (paramètre optionnel).
 * ```-o fichier.xml``` est le nom du fichier qui recevra les agences au format XML. Amorcé à *tickets_0000.xml* par défaut (paramètre optionnel).
+* ```-p path``` est le répertoire vers lequel exporter le fichier des résultats. Par défaut c'est le répertoire courant du programme (paramètre optionnel).
 * ```-d``` le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (paramètre optionnel).
 * ```-t``` le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (paramètre optionnel).
 
@@ -38,9 +39,9 @@ Ce fichier permet de spécifier les paramètres d'accès aux différentes bases de d
 
 A adapter selon les implémentations locales.
 
-Ce fichier est nommé : *MyDatabases.prop*.
+Ce fichier est nommé : *ExpCalls.prop*.
 
-Le fichier *MyDatabases_Example.prop* est fourni à titre d'exemple.
+Le fichier *ExpCalls_Example.prop* est fourni à titre d'exemple.
 
 ##Références:
 

@@ -26,8 +26,8 @@ import java.text.SimpleDateFormat;
  * l'association d'un appel Fcalls et d'un complément d'appel Fcomplmt s'il
  * existe. Les tickets spécifiques à un client dériveront de celui-ci.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class Ticket_0000 {
 
@@ -174,7 +174,7 @@ public class Ticket_0000 {
     /**
      * Clôture d'appel associée au ticket.
      */
-    private ClotureAppel MyClotureAppel;
+    private ClotureAppel clotureAppel;
     
     /**
      * Contructeur principal de la classe Ticket.
@@ -368,10 +368,10 @@ public class Ticket_0000 {
 
         // Récupération de la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
-        this.MyClotureAppel = new ClotureAppel(MyConnection, 
+        this.clotureAppel = new ClotureAppel(MyConnection, 
                 this.Fcalls_0000.getCnum(), this.Fcalls_0000.getCdate(), 
                 MyEtatTicket);
-//        System.out.println("    Une clôture d'appel trouvée : =" + this.MyClotureAppel);
+//        System.out.println("    Une clôture d'appel trouvée : =" + this.clotureAppel);
     }
 
     /**
@@ -921,16 +921,16 @@ public class Ticket_0000 {
     }
 
     /**
-     * @return MyClotureAppel la clôture d'appel associée au ticket.
+     * @return la clôture d'appel associée au ticket.
      */
-    public ClotureAppel getMyClotureAppel() {
-        return MyClotureAppel;
+    public ClotureAppel getClotureAppel() {
+        return clotureAppel;
     }
 
     /**
-     * @param MyClotureAppel définit la clôture d'appel associée au ticket.
+     * @param clotureAppel définit la clôture d'appel associée au ticket.
      */
-    public void setMyClotureAppel(ClotureAppel MyClotureAppel) {
-        this.MyClotureAppel = MyClotureAppel;
+    public void setClotureAppel(ClotureAppel clotureAppel) {
+        this.clotureAppel = clotureAppel;
     }
 }

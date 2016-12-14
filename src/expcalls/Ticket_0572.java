@@ -9,8 +9,8 @@ import java.sql.SQLException;
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
- * @version Juin 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -18,7 +18,7 @@ public class Ticket_0572 extends Ticket_0000 {
      * Degré d'urgence de la demande d'intervention.
      */
     private String DegreDUrgence;
-    
+
     /**
      * Indication de dégâts des eaux OUI/NON..
      */
@@ -28,12 +28,22 @@ public class Ticket_0572 extends Ticket_0000 {
      * Indication de site trouvé en base de données.
      */
     private String SiteEnBase;
-    
+
     /**
      * Type de demande.
      */
     private String TypeDeDemande;
-    
+
+    /**
+     * Date d'intervention relevée (format jj/mm/aaaa).
+     */
+    private String dateInterventionRelevee = null;
+
+    /**
+     * Heure d'intervention relevée (format hh:mm:ss).
+     */
+    private String heureInterventionRelevee = null;
+
     /**
      * Contructeur principal de la classe Ticket.
      *
@@ -65,25 +75,23 @@ public class Ticket_0572 extends Ticket_0000 {
         // Indication de dégâts des eaux cf. tra_degat_eau_0572() dans libspc0572.4gl.
         if ("1".equals(this.Fcalls_0000.getCsector1())) {
             setDegatsDesEaux("OUI");
-        }
-        else {
+        } else {
             setDegatsDesEaux("NON");
         }
 
         // Indication de site trouvé en base de données cf. librep0572.4gl en dur.
         if ("SIEGE".equals(getA6abbname())) {
             setSiteEnBase("NON");
-        }
-        else {
+        } else {
             setSiteEnBase("OUI");
         }
 
         // Indication du type de demande cf. tra_typinter_0572() dans libspc0572.4gl.
         switch (this.Fcomplmt_0000.getC6int2()) {
-            case 1: 
+            case 1:
                 setTypeDeDemande("DIC");
                 break;
-            case 2: 
+            case 2:
                 setTypeDeDemande("DI");
                 break;
             default:
@@ -112,6 +120,9 @@ public class Ticket_0572 extends Ticket_0000 {
 //                setTypeDeDemande("Inconnu");
 //                break;
 //        }
+        
+        setDateInterventionRelevee(getClotureAppel().getDateInterventionRelevee());
+        setHeureInterventionRelevee(getClotureAppel().getHeureInterventionRelevee());
     }
 
     /**
@@ -157,7 +168,7 @@ public class Ticket_0572 extends Ticket_0000 {
     }
 
     /**
-     * @return SiteEnBase Indication de site trouvé en base de données. 
+     * @return SiteEnBase Indication de site trouvé en base de données.
      */
     public String getSiteEnBase() {
         return SiteEnBase;
@@ -184,4 +195,31 @@ public class Ticket_0572 extends Ticket_0000 {
         this.TypeDeDemande = TypeDeDemande;
     }
 
+    /**
+     * @return la date d'intervention relevée
+     */
+    public String getDateInterventionRelevee() {
+        return dateInterventionRelevee;
+    }
+
+    /**
+     * @param dateInterventionRelevee définit la date d'intervention relevée
+     */
+    public void setDateInterventionRelevee(String dateInterventionRelevee) {
+        this.dateInterventionRelevee = dateInterventionRelevee;
+    }
+
+    /**
+     * @return l'heure d'intervention relevée
+     */
+    public String getHeureInterventionRelevee() {
+        return heureInterventionRelevee;
+    }
+
+    /**
+     * @param heureInterventionRelevee définit l'heure d'intervention relevée
+     */
+    public void setHeureInterventionRelevee(String heureInterventionRelevee) {
+        this.heureInterventionRelevee = heureInterventionRelevee;
+    }
 }

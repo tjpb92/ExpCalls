@@ -8,9 +8,9 @@ import java.util.Date;
 /**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
- * 
- * @version Mai 2016.
+ *
  * @author Thierry Baribaud.
+ * @version 0.25
  */
 public class GetArgs {
 
@@ -29,10 +29,16 @@ public class GetArgs {
     private int unum = 0;
 
     /**
-     * FileOut : fichier qui recevra les résultats du chargement. Valeur par
+     * filename : fichier qui recevra les résultats du chargement. Valeur par
      * défaut : tickets_0000.xml.
      */
-    private String FileOut = "tickets_0000.xml";
+    private String filename = "tickets_0000.xml";
+
+    /**
+     * Directory : répertoire vers lequel exporter le fichier des résultats. Par
+     * défaut c'est le répertoire du programme.
+     */
+    private String directory = ".";
 
     /**
      * BegDate : date de début de l'export à 0h.
@@ -64,10 +70,10 @@ public class GetArgs {
     }
 
     /**
-     * @return FileOut : le nom du fichier où envoyer les résultats.
+     * @return filename : le nom du fichier où envoyer les résultats.
      */
-    public String getFileOut() {
-        return (FileOut);
+    public String getFilename() {
+        return (filename);
     }
 
     /**
@@ -113,10 +119,10 @@ public class GetArgs {
     }
 
     /**
-     * @param FileOut : définit le fichier où envoyer les résultats.
+     * @param filename : définit le fichier où envoyer les résultats.
      */
-    public void setFileOut(String FileOut) {
-        this.FileOut = FileOut;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     /**
@@ -244,10 +250,17 @@ public class GetArgs {
                 }
             } else if (Args[i].equals("-o")) {
                 if (ip1 < n) {
-                    setFileOut(Args[ip1]);
+                    setFilename(Args[ip1]);
                     i = ip1;
                 } else {
                     throw new GetArgsException("Nom de fichier non défini");
+                }
+            } else if (Args[i].equals("-p")) {
+                if (ip1 < n) {
+                    setDirectory(Args[ip1]);
+                    i = ip1;
+                } else {
+                    throw new GetArgsException("Répertoire non défini");
                 }
             } else if (Args[i].equals("-d")) {
                 setDebugMode(true);
@@ -269,7 +282,22 @@ public class GetArgs {
      */
     public static void usage() {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum "
-                + " [-b début] [-f fin] [-o fichier.xml] [-d] [-t]");
+                + " [-b début] [-f fin] [-o fichier.xml] [-p répertoire] [-d] [-t]");
+    }
+
+    /**
+     * @return le répertoire où exporter le fichier des résultats
+     */
+    public String getDirectory() {
+        return directory;
+    }
+
+    /**
+     * @param directory définit le répertoire où exporter le fichier des
+     * résultats
+     */
+    public void setDirectory(String directory) {
+        this.directory = directory;
     }
 
     /**
@@ -279,12 +307,13 @@ public class GetArgs {
      */
     @Override
     public String toString() {
-        return this.getClass().getName()
-                + " : {dbServer=" + SourceServer
+        return "GetArgs:{"
+                + "dbServer=" + SourceServer
                 + ", unum=" + unum
                 + ", début=" + MyDateFormat.format(BegDate)
                 + ", fin=" + MyDateFormat.format(EndDate)
-                + ", fichier=" + FileOut
+                + ", fichier=" + filename
+                + ", répertoire=" + directory
                 + ", debugMode=" + debugMode
                 + ", testMode=" + testMode
                 + "}";

@@ -70,7 +70,7 @@ public class ExpCalls_0609 extends AbstractExpCalls {
         Connection MyConnection;
 
         try {
-            MyConnection = MyExpcallsParams.getMyConnection();
+            MyConnection = MyExpcallsParams.getConnection();
 
             MyFcallsDAO = new FcallsDAO(MyConnection, MyEtatTicket);
             MyFcallsDAO.filterByDate(MyExpcallsParams.getUnum(),

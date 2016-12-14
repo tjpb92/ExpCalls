@@ -14,8 +14,8 @@ import utils.DBServerException;
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.25
  */
 public class ExpCalls {
 
@@ -48,7 +48,7 @@ public class ExpCalls {
             System.out.println(MyArgs);
 
             System.out.println("Lecture du fichier de paramètres ...");
-            MyApplicationProperties = new ApplicationProperties("MyDatabases.prop");
+            MyApplicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
             MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
@@ -59,7 +59,7 @@ public class ExpCalls {
             MyConnection = MyDBManager.getConnection();
             MyExpCallsParams = new ExpCallsParams(MyConnection, MyArgs);
 
-            switch (MyExpCallsParams.getMyModeleDeRapport()) {
+            switch (MyExpCallsParams.getModeleDeRapport()) {
                 case CAR:
                     MyExpCalls_0513 = new ExpCalls_0513(MyExpCallsParams);
                     break;
@@ -74,13 +74,13 @@ public class ExpCalls {
                     break;
             }
 
-        } catch (GetArgsException MyException) {
-            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, MyException);
+        } catch (GetArgsException exception) {
+            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
             GetArgs.usage();
-        } catch (ClassNotFoundException MyException) {
-            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, MyException);
-        } catch (SQLException MyException) {
-            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, MyException);
+        } catch (ClassNotFoundException exception) {
+            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
+        } catch (SQLException exception) {
+            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
         }
 
     }
@@ -91,15 +91,15 @@ public class ExpCalls {
      * @param Args paramètres de la ligne de commande.
      */
     public static void main(String[] Args) {
-        ExpCalls MyExpCalls = null;
+        ExpCalls expCalls = null;
 
         System.out.println("Lancement de ExpCalls ...");
 
         try {
-            MyExpCalls = new ExpCalls(Args);
-        } catch (Exception MyException) {
-            System.out.println("Problème lors du lancement de ExpCalls " + MyException);
-            MyException.printStackTrace();
+            expCalls = new ExpCalls(Args);
+        } catch (Exception exception) {
+            System.out.println("Problème lors du lancement de ExpCalls " + exception);
+            exception.printStackTrace();
         }
 
         System.out.println("Traitement terminé.");
