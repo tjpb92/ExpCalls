@@ -15,7 +15,7 @@ import utils.DBServerException;
  * format XML.
  *
  * @author Thierry Baribaud
- * @version 0.25
+ * @version 0.26
  */
 public class ExpCalls {
 
@@ -23,54 +23,58 @@ public class ExpCalls {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
-     * @param Args arguments de la ligne de commande.
+     * @param args arguments de la ligne de commande.
      * @throws java.io.IOException en cas de fichier non lisible ou absent.
      * @throws utils.DBServerException en cas de propriété incorrecte.
      * @throws java.sql.SQLException en cas d'une erreur SQL.
      */
-    public ExpCalls(String[] Args) throws IOException, DBServerException, SQLException {
+    public ExpCalls(String[] args) throws IOException, DBServerException, SQLException {
 
-        GetArgs MyArgs;
-        ApplicationProperties MyApplicationProperties;
-        DBServer MyDBServer;
-        DBManager MyDBManager;
-        Connection MyConnection;
-        ExpCallsParams MyExpCallsParams;
-        ExpCalls_0000 MyExpCalls_0000;
-        ExpCalls_0513 MyExpCalls_0513;
-        ExpCalls_0572 MyExpCalls_0572;
-        ExpCalls_0609 MyExpCalls_0609;
+        GetArgs getArgs;
+        ApplicationProperties applicationProperties;
+        DBServer dBServer;
+        DBManager dBManager;
+        Connection connection;
+        ExpCallsParams expCallsParams;
+        ExpCalls_0000 expCalls_0000;
+        ExpCalls_0513 expCalls_0513;
+        ExpCalls_0572 expCalls_0572;
+        ExpCalls_0582 expCalls_0582;
+        ExpCalls_0609 expCalls_0609;
 
         // On récupère les arguments de la ligne de commande.
         System.out.println("Récupération des arguments en ligne de commande ...");
         try {
-            MyArgs = new GetArgs(Args);
-            System.out.println(MyArgs);
+            getArgs = new GetArgs(args);
+            System.out.println(getArgs);
 
             System.out.println("Lecture du fichier de paramètres ...");
-            MyApplicationProperties = new ApplicationProperties("ExpCalls.prop");
+            applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
-            MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
-            System.out.println("  " + MyDBServer);
+            dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
+            System.out.println("  " + dBServer);
 
-            MyDBManager = new DBManager(MyDBServer);
+            dBManager = new DBManager(dBServer);
 
-            MyConnection = MyDBManager.getConnection();
-            MyExpCallsParams = new ExpCallsParams(MyConnection, MyArgs);
+            connection = dBManager.getConnection();
+            expCallsParams = new ExpCallsParams(connection, getArgs);
 
-            switch (MyExpCallsParams.getModeleDeRapport()) {
+            switch (expCallsParams.getModeleDeRapport()) {
                 case CAR:
-                    MyExpCalls_0513 = new ExpCalls_0513(MyExpCallsParams);
+                    expCalls_0513 = new ExpCalls_0513(expCallsParams);
                     break;
                 case NEX:
-                    MyExpCalls_0572 = new ExpCalls_0572(MyExpCallsParams);
+                    expCalls_0572 = new ExpCalls_0572(expCallsParams);
+                    break;
+                case ENE:
+                    expCalls_0582 = new ExpCalls_0582(expCallsParams);
                     break;
                 case VF:
-                    MyExpCalls_0609 = new ExpCalls_0609(MyExpCallsParams);
+                    expCalls_0609 = new ExpCalls_0609(expCallsParams);
                     break;
                 default:
-                    MyExpCalls_0000 = new ExpCalls_0000(MyExpCallsParams);
+                    expCalls_0000 = new ExpCalls_0000(expCallsParams);
                     break;
             }
 
@@ -88,15 +92,15 @@ public class ExpCalls {
     /**
      * Méthode permettant le lancement du programme d'extraction d'appels.
      *
-     * @param Args paramètres de la ligne de commande.
+     * @param args paramètres de la ligne de commande.
      */
-    public static void main(String[] Args) {
+    public static void main(String[] args) {
         ExpCalls expCalls = null;
 
         System.out.println("Lancement de ExpCalls ...");
 
         try {
-            expCalls = new ExpCalls(Args);
+            expCalls = new ExpCalls(args);
         } catch (Exception exception) {
             System.out.println("Problème lors du lancement de ExpCalls " + exception);
             exception.printStackTrace();
