@@ -1,20 +1,24 @@
-/**
- * Fcalls_0000 is a class that describes an active calls. It extends Fcalls
- * class and implements methods to generate CSV and XML records.
- *
- * @version May 2016.
- * @author Thierry Baribaud.
- */
 package expcalls;
 
 import bdd.Fcalls;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+/**
+ * Fcalls_0000 is a class that describes an active calls. It extends Fcalls
+ * class and implements methods to generate CSV and XML records.
+ *
+ * @author Thierry Baribaud.
+ * @version 0.27
+ */
 public class Fcalls_0000 extends Fcalls {
 
     private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    /**
+     * Constructeur principal de la classe
+     * @param MyCalls appel veant de la base de données.
+     */
     public Fcalls_0000(Fcalls MyCalls) {
         setCnum(MyCalls.getCnum());
         setCname(MyCalls.getCname());
@@ -32,11 +36,19 @@ public class Fcalls_0000 extends Fcalls {
         setCtime2(MyCalls.getCtime2());
     }
 
+    /**
+     *
+     * @return la ligne de titre du fichier CSV
+     */
     public final static String CSV_Title() {
         return ("ID;Nom;Téléphone;Adresse;Complément;Accès;CP;Ville"
                 + "Raison d'appel;Digicode;Saisi le;à;Modifié le;à");
     }
 
+    /**
+     *
+     * @return une ligne de données dans le fichier CSV
+     */
     public String toCSV() {
         return (getCnum() + ";" + getCname() + ";" + getCtel() + ";"
                 + getCaddress() + ";" + getCaddress2() + ";" + getCaccess() + ";"
@@ -46,6 +58,9 @@ public class Fcalls_0000 extends Fcalls {
                 + MyDateFormat.format(getCdate2()) + ";" + getCtime2() + ";");
     }
 
+    /**
+     * Convertion au format XML
+     */
     public void toXML() {
     }
 }

@@ -14,8 +14,8 @@ import utils.DBServerException;
  * Ce programme exporte les appels des services d'urgence de la famille du
  * client 513 dans un fichier au format XML.
  *
- * @version Juillet 2016
  * @author Thierry Baribaud
+ * @version 0.27
  */
 public class ExpCalls_0513 extends AbstractExpCalls {
 
@@ -92,6 +92,12 @@ public class ExpCalls_0513 extends AbstractExpCalls {
         }
     }
 
+    /**
+     *
+     * @param MyExpcallsParams paramètres d'exécution
+     * @param MyXMLDocument document XML
+     * @param MyEtatTicket état du ticket
+     */
     @Override
     public void processTickets(ExpCallsParams MyExpcallsParams, Calls_0000_XMLDocument MyXMLDocument, EtatTicket MyEtatTicket) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.25
+ * @version 0.27
  */
 public class ExpCallsParams {
 
@@ -65,6 +65,13 @@ public class ExpCallsParams {
      */
     private String ExcelFilename = DetermineExcelFilename(0);
 
+    /**
+     *
+     * @param connection connexion à la base de données locale
+     * @param args argument(s) de la ligne de commande
+     * @throws ClassNotFoundException en cas de classe non trouvée
+     * @throws SQLException en cas d'erreur SQL
+     */
     public ExpCallsParams(Connection connection, GetArgs args) throws ClassNotFoundException, SQLException {
         FurgentDAO furgentDAO;
         Furgent furgent;

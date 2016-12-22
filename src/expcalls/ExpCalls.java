@@ -15,9 +15,21 @@ import utils.DBServerException;
  * format XML.
  *
  * @author Thierry Baribaud
- * @version 0.26
+ * @version 0.27
  */
 public class ExpCalls {
+
+    /**
+     * debugMode : fonctionnement du programme en mode debug (true/false).
+     * Valeur par défaut : false.
+     */
+    private static boolean debugMode = false;
+
+    /**
+     * testMode : fonctionnement du programme en mode test (true/false). Valeur
+     * par défaut : false.
+     */
+    private static boolean testMode = false;
 
     /**
      * Les arguments en ligne de commande permettent de changer le mode de
@@ -42,18 +54,19 @@ public class ExpCalls {
         ExpCalls_0582 expCalls_0582;
         ExpCalls_0609 expCalls_0609;
 
-        // On récupère les arguments de la ligne de commande.
-        System.out.println("Récupération des arguments en ligne de commande ...");
         try {
+            System.out.println("Analyse des arguments de la ligne de commande ...");
             getArgs = new GetArgs(args);
-            System.out.println(getArgs);
+            setDebugMode(getArgs.getDebugMode());
+            setTestMode(getArgs.getTestMode());
+            if (debugMode) System.out.println(getArgs);
 
-            System.out.println("Lecture du fichier de paramètres ...");
+            System.out.println("Lecture des paramètres d'exécution ...");
             applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
             dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
-            System.out.println("  " + dBServer);
+            if (debugMode) System.out.println("  " + dBServer);
 
             dBManager = new DBManager(dBServer);
 
@@ -110,4 +123,32 @@ public class ExpCalls {
 
     }
 
+    /**
+     * @param debugMode : fonctionnement du programme en mode debug
+     * (true/false).
+     */
+    public void setDebugMode(boolean debugMode) {
+        ExpCalls.debugMode = debugMode;
+    }
+
+    /**
+     * @param testMode : fonctionnement du programme en mode test (true/false).
+     */
+    public void setTestMode(boolean testMode) {
+        ExpCalls.testMode = testMode;
+    }
+
+    /**
+     * @return debugMode : retourne le mode de fonctionnement debug.
+     */
+    public boolean getDebugMode() {
+        return (debugMode);
+    }
+
+    /**
+     * @return testMode : retourne le mode de fonctionnement test.
+     */
+    public boolean getTestMode() {
+        return (testMode);
+    }
 }
