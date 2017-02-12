@@ -3,14 +3,19 @@ package expcalls;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.25
+ * @version 0.28
  */
 public class GetArgs {
 
@@ -50,6 +55,16 @@ public class GetArgs {
      */
     private Timestamp EndDate = new Timestamp(new java.util.Date().getTime());
 
+    /**
+     * nbJour : nombre de jours à compter de la date courante
+     */
+    private int nbJour;
+    
+    /**
+     * suffix : suffixe optionnel à rajouter au nom du fichier
+     */
+    private String suffix = null;
+    
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
      * Valeur par défaut : false.
@@ -175,6 +190,8 @@ public class GetArgs {
      * format DD/MM/AAAA (optionnel).</li>
      * <li>-o fichier : fichier vers lequel exporter les données des appels, nom
      * par défaut <i>calls_0000.xml</i>(optionnel).</li>
+     * <li>-n nbJour : nombre de jour(s) à compter de la date courante.</li>
+     * <li>-s suffixe : suffixe optionnel à ajouter au nom du fichier.</li>
      * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux,
      * désactivé par défaut (optionnel).</li>
      * <li>-t : le programme fonctionne en mode de test, les transactions en
@@ -248,6 +265,17 @@ public class GetArgs {
                 } else {
                     throw new GetArgsException("Date de fin non définie");
                 }
+            } else if (Args[i].equals("-n")) {
+                if (ip1 < n) {
+                    try {
+                        setNbJour(Integer.parseInt(Args[ip1]));
+                        i = ip1;
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("Le nombre de jour(s) doit être numérique : " + Args[ip1]);
+                    }
+                } else {
+                    throw new GetArgsException("Nombre de jour(s) non défini");
+                }
             } else if (Args[i].equals("-o")) {
                 if (ip1 < n) {
                     setFilename(Args[ip1]);
@@ -261,6 +289,13 @@ public class GetArgs {
                     i = ip1;
                 } else {
                     throw new GetArgsException("Répertoire non défini");
+                }
+            } else if (Args[i].equals("-s")) {
+                if (ip1 < n) {
+                    setSuffix(Args[ip1]);
+                    i = ip1;
+                } else {
+                    throw new GetArgsException("Suffixe non défini");
                 }
             } else if (Args[i].equals("-d")) {
                 setDebugMode(true);
@@ -282,7 +317,8 @@ public class GetArgs {
      */
     public static void usage() {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum "
-                + " [-b début] [-f fin] [-o fichier.xml] [-p répertoire] [-d] [-t]");
+                + " [[-b début] [-f fin]|[-n nbJour]] [-o fichier.xml]"
+                + " [-p répertoire] [-s suffix] [-d] [-t]");
     }
 
     /**
@@ -314,8 +350,55 @@ public class GetArgs {
                 + ", fin=" + MyDateFormat.format(EndDate)
                 + ", fichier=" + filename
                 + ", répertoire=" + directory
+                + ", nbJour=" + nbJour
+                + ", suffixe=" + suffix
                 + ", debugMode=" + debugMode
                 + ", testMode=" + testMode
                 + "}";
+    }
+
+    /**
+     * @return le nombre de jours à compter de la date courante
+     */
+    public int getNbJour() {
+        return nbJour;
+    }
+
+    /**
+     * @param nbJour définit le nombre de jours à compter de la date courante
+     * La date de début et la date de fin sont définit en conséquence.
+     */
+    public void setNbJour(int nbJour) {
+        Calendar calendar;
+        
+        this.nbJour = nbJour;
+
+        // Récupère la date du jour
+        calendar = new GregorianCalendar();
+        
+        // Elimine les heures, minutes, secondes et millisecondes.
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        setEndDate(new Timestamp(calendar.getTimeInMillis()));
+        
+        // Calcule la date de début d'extraction
+        calendar.add(Calendar.DAY_OF_YEAR, - nbJour);
+        setBegDate(new Timestamp(calendar.getTimeInMillis()));
+    }
+
+    /**
+     * @return le suffixe à ajouter au nom du fichier
+     */
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * @param suffix définit le suffixe à ajouter au nom du fichier
+     */
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 }

@@ -17,7 +17,6 @@ import bdd.Ftoubib;
 import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -27,7 +26,7 @@ import java.text.SimpleDateFormat;
  * existe. Les tickets spécifiques à un client dériveront de celui-ci.
  *
  * @author Thierry Baribaud
- * @version 0.25
+ * @version 0.28
  */
 public class Ticket_0000 {
 
@@ -127,6 +126,12 @@ public class Ticket_0000 {
     private String A4name1 = null;
 
     /**
+     * Délai d'intervention contractuel (exprimé en secondes) du premier
+     * technicien contacté
+     */
+    private String delaiIntervention1 = null;
+
+    /**
      * Prestataire sur la dernière transmission.
      */
     private String Prestataire2 = null;
@@ -167,6 +172,12 @@ public class Ticket_0000 {
     private String A4name2 = null;
 
     /**
+     * Délai d'intervention contractuel (exprimé en secondes) du premier
+     * technicien contacté
+     */
+    private String delaiIntervention2 = null;
+
+    /**
      * Délai d'intervenion contractuel
      */
     private String DelaiIntervention = null;
@@ -175,7 +186,7 @@ public class Ticket_0000 {
      * Clôture d'appel associée au ticket.
      */
     private ClotureAppel clotureAppel;
-    
+
     /**
      * Contructeur principal de la classe Ticket.
      *
@@ -213,6 +224,7 @@ public class Ticket_0000 {
         String A4name;
         Factivity MyFactivity;
         FactivityDAO MyFactivityDAO;
+        int delay;
 
         this.MyConnection = MyConnection;
         this.Fcalls_0000 = Fcalls_0000;
@@ -303,6 +315,8 @@ public class Ticket_0000 {
                     this.setPrestataire1(MyFtoubib.getTlname(), MyFtoubib.getTfname());
                     this.setNoTelephone1(MyFtoubib.getTel());
                     this.setEmail1(MyFtoubib.getTemail());
+                    delay=MyFtoubib.getTdelay1() * 60;
+                    if (delay>0) this.setDelaiIntervention1(CharDur(delay));
                     a4num = MyFtoubib.getTa4num();
                     if (a4num > 0) {
                         MyFactivityDAO = new FactivityDAO(MyConnection);
@@ -346,6 +360,8 @@ public class Ticket_0000 {
                         this.setPrestataire2(MyFtoubib.getTlname(), MyFtoubib.getTfname());
                         this.setNoTelephone2(MyFtoubib.getTel());
                         this.setEmail2(MyFtoubib.getTemail());
+                        delay=MyFtoubib.getTdelay1() * 60;
+                        if (delay>0) this.setDelaiIntervention2(CharDur(delay));
                         a4num = MyFtoubib.getTa4num();
                         if (a4num > 0) {
                             MyFactivityDAO = new FactivityDAO(MyConnection);
@@ -368,8 +384,10 @@ public class Ticket_0000 {
 
         // Récupération de la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
-        this.clotureAppel = new ClotureAppel(MyConnection, 
-                this.Fcalls_0000.getCnum(), this.Fcalls_0000.getCdate(), 
+        this.clotureAppel = new ClotureAppel(MyConnection,
+                this.Fcalls_0000.getCnum(), this.Fcalls_0000.getCdate(),
+                DateMissionnement1, HeureMissionnement1,
+                DateMissionnement2, HeureMissionnement2,
                 MyEtatTicket);
 //        System.out.println("    Une clôture d'appel trouvée : =" + this.clotureAppel);
     }
@@ -665,6 +683,30 @@ public class Ticket_0000 {
     }
 
     /**
+     * @return delaiIntervention1 retourne le délai d'intervention du premier
+     * intervenant contacté.
+     */
+    public String getDelaiIntervention1() {
+        return (delaiIntervention1);
+    }
+
+    /**
+     * @param delaiIntervention1 définit le délai d'intervention du premier
+     * intervenant contacté.
+     */
+    public void setDelaiIntervention1(String delaiIntervention1) {
+        this.delaiIntervention1 = delaiIntervention1;
+    }
+
+    /**
+     * @param duree définit le délai d'intervention du premier intervenant
+     * contacté à partir d'une durée en secondes.
+     */
+    public void setDelaiIntervention1(int duree) {
+        setDelaiIntervention1(CharDur(duree));
+    }
+
+    /**
      * @return Prestataire2 le nom complet du prestataire.
      */
     public String getPrestataire2() {
@@ -799,6 +841,30 @@ public class Ticket_0000 {
     }
 
     /**
+     * @return delaiIntervention2 retourne le délai d'intervention du second
+     * intervenant contacté.
+     */
+    public String getDelaiIntervention2() {
+        return (delaiIntervention2);
+    }
+
+    /**
+     * @param delaiIntervention2 définit le délai d'intervention du second
+     * intervenant contacté.
+     */
+    public void setDelaiIntervention2(String delaiIntervention2) {
+        this.delaiIntervention2 = delaiIntervention2;
+    }
+
+    /**
+     * @param duree définit le délai d'intervention du second intervenant
+     * contacté à partir d'une durée en secondes.
+     */
+    public void setDelaiIntervention2(int duree) {
+        setDelaiIntervention2(CharDur(duree));
+    }
+
+    /**
      * @return MyEtatTicket l'état du ticket.
      */
     public EtatTicket getMyEtatTicket() {
@@ -816,24 +882,24 @@ public class Ticket_0000 {
      * @return DelaiIntervention retourne le délai d'intervention contractuel.
      */
     public String getDelaiIntervention() {
-        return(DelaiIntervention);
+        return (DelaiIntervention);
     }
-    
+
     /**
      * @param DelaiIntervention définit le délai d'intervention contractuel.
      */
     public void setDelaiIntervention(String DelaiIntervention) {
         this.DelaiIntervention = DelaiIntervention;
     }
-    
+
     /**
-     * @param duree définit le délai d'intervention contractuel à partir d'une 
+     * @param duree définit le délai d'intervention contractuel à partir d'une
      * durée en secondes.
      */
     public void setDelaiIntervention(int duree) {
         setDelaiIntervention(CharDur(duree));
     }
-    
+
     /**
      * Traduit un code d'origine de l'appel en libellé. Repris de tra_origine()
      * dans libutil.4gl.)
@@ -887,37 +953,47 @@ public class Ticket_0000 {
         }
         return (LibelleUrgence);
     }
-    
+
     /**
-     * Traduit une durée exprimée en secondes au format xxhxxmxxs.
-     * Repris de chardur.4gl.
-     * 
+     * Traduit une durée exprimée en secondes au format xxhxxmxxs. Repris de
+     * chardur.4gl.
+     *
      * @param duree en secondes à traduire.
-     * @return DureeAuFormat durée au format. 
+     * @return DureeAuFormat durée au format.
      */
-    
     public String CharDur(int duree) {
         StringBuffer DureeAuFormat;
         int heure;
         int minute;
         int seconde;
-        
+
         DureeAuFormat = null;
 
+//        System.out.println("duree="+duree);
         heure = duree / 3600;
-        if (heure > 0) DureeAuFormat = new StringBuffer(heure + "h");
-        
+        if (heure > 0) {
+            DureeAuFormat = new StringBuffer(heure + "h");
+        }
+
         minute = duree / 60 - heure * 60;
-        if (minute > 0) 
-            if (DureeAuFormat == null ) DureeAuFormat = new StringBuffer(minute + "m");
-            else DureeAuFormat.append(minute).append("m");
-        
+        if (minute > 0) {
+            if (DureeAuFormat == null) {
+                DureeAuFormat = new StringBuffer(minute + "m");
+            } else {
+                DureeAuFormat.append(minute).append("m");
+            }
+        }
+
         seconde = duree - 60 * (minute + 60 * heure);
-        if (seconde > 0) 
-            if (DureeAuFormat == null ) DureeAuFormat = new StringBuffer(seconde + "s");
-            else DureeAuFormat.append(seconde).append("s");
-                
-        return(DureeAuFormat.toString());
+        if (seconde > 0) {
+            if (DureeAuFormat == null) {
+                DureeAuFormat = new StringBuffer(seconde + "s");
+            } else {
+                DureeAuFormat.append(seconde).append("s");
+            }
+        }
+
+        return (DureeAuFormat.toString());
     }
 
     /**

@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.27
+ * @version 0.28
  */
 public class ExpCallsParams {
 
@@ -44,6 +44,11 @@ public class ExpCallsParams {
      * Date de fin de l'export à 0h.
      */
     private Timestamp endDate;
+
+    /**
+     * suffix : Suffixe optionel à rajouter au nom du fichier
+     */
+    private String suffix = null;
 
     /**
      * Modèle de rapport XML.
@@ -94,6 +99,7 @@ public class ExpCallsParams {
 
         setBegDate(args.getBegDate());
         setEndDate(args.getEndDate());
+        setSuffix(args.getSuffix());
         setXMLFilename(DetermineXMLFilename(unum));
         setXSDFilename(DetermineXSDFilename(unum));
         setExcelFilename(DetermineExcelFilename(unum));
@@ -149,6 +155,20 @@ public class ExpCallsParams {
     }
 
     /**
+     * @return le suffixe à ajouter au nom du fichier
+     */
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * @param suffix définit le suffixe à ajouter au nom du fichier
+     */
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    /**
      * Méthode qui détermine la racine du nom d'un fichier par rapport à
      * l'identifiant du client.
      *
@@ -157,8 +177,12 @@ public class ExpCallsParams {
      */
     private String DefaultFilename(int unum) {
         DecimalFormat MyFormatter = new DecimalFormat("0000");
+        StringBuffer filename;
 
-        return ("tickets_" + MyFormatter.format(unum));
+        filename = new StringBuffer("tickets_" + MyFormatter.format(unum));
+        if (suffix != null) filename.append("_").append(suffix);
+        
+        return (filename.toString());
     }
 
     /**

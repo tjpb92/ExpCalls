@@ -51,6 +51,7 @@
             <!-- Page 6 -->
             <xs:element type="xs:string" name="NoTelephone1" minOccurs="0"/>
             <xs:element type="xs:string" name="AdresseEmail1" minOccurs="0"/>
+            <xs:element type="xs:string" name="DelaiIntervention1" minOccurs="0"/>
             <xs:element type="xs:string" name="Contact2" minOccurs="0"/>
             <xs:element type="xs:string" name="TypeDeContact2" minOccurs="0"/>
             <xs:element type="xs:string" name="DateDeMissionnement2" minOccurs="0"/>
@@ -59,6 +60,7 @@
             <!-- Page 7 -->
             <xs:element type="xs:string" name="NoTelephone2" minOccurs="0"/>
             <xs:element type="xs:string" name="AdresseEmail2" minOccurs="0"/>
+            <xs:element type="xs:string" name="DelaiIntervention2" minOccurs="0"/>
             <xs:element type="xs:string" name="InterventionCloturee" minOccurs="0"/>
             <xs:element type="xs:string" name="DateIntervention" minOccurs="0"/>
             <xs:element type="xs:string" name="HeureIntervention" minOccurs="0"/>
@@ -66,6 +68,7 @@
             
             <!-- Page 8 -->
             <xs:element type="xs:string" name="RapportIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="DelaiIntervention" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>
