@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  * clients de la famille 582.
  *
  * @author Thierry Baribaud
- * @version 0.25
+ * @version 0.29
  */
 public class Calls_0582_XMLDocument extends XMLDocument {
 
@@ -42,333 +42,333 @@ public class Calls_0582_XMLDocument extends XMLDocument {
      * Ajoute un ticket au document XML. Le ticket est décrit de manière non
      * structurée - flat schema -
      *
-     * @param MyTicket ticket à transcrire en XML.
+     * @param ticket_0582 ticket à transcrire en XML.
      */
-    public void AddToXMLDocument(Ticket_0582 MyTicket) {
+    public void AddToXMLDocument(Ticket_0582 ticket_0582) {
 
-        Comment MyComment;
-        Element MyElement;
-        String MyString;
-        int myInt;
-        Timestamp MyTimestamp;
-        ClotureAppel MyClotureAppel;
+        Comment comment;
+        Element element;
+        String aString;
+        int anInt;
+        Timestamp aTimestamp;
+        ClotureAppel clotureAppel;
 
         Element Ticket;
 
         DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        MyString = "Ticket ref=" + MyTicket.Fcalls_0000.getCnum();
-        if (MyString != null) {
-            MyComment = MyDocument.createComment(MyString);
-            MyElements.appendChild(MyComment);
+        aString = "Ticket ref=" + ticket_0582.Fcalls_0000.getCnum();
+        if (aString != null) {
+            comment = MyDocument.createComment(aString);
+            MyElements.appendChild(comment);
         }
 
         Ticket = MyDocument.createElement("ticket");
         MyElements.appendChild(Ticket);
 
         // Numéro de semaine
-        MyElement = MyDocument.createElement("Semaine");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCWeekNum();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Semaine");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCWeekNum();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Date de saisie
-        MyElement = MyDocument.createElement("DateAppel");
-        Ticket.appendChild(MyElement);
-        MyTimestamp = MyTicket.Fcalls_0000.getCdate();
-        if (MyTimestamp != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyDateFormat.format(MyTimestamp)));
+        element = MyDocument.createElement("DateAppel");
+        Ticket.appendChild(element);
+        aTimestamp = ticket_0582.Fcalls_0000.getCdate();
+        if (aTimestamp != null) {
+            element.appendChild(MyDocument.createTextNode(MyDateFormat.format(aTimestamp)));
         }
 
         // Heure de saisie
-        MyElement = MyDocument.createElement("HeureAppel");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCtime();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("HeureAppel");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCtime();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Numéro de ticket
-        MyElement = MyDocument.createElement("NumeroDeDossier");
-        Ticket.appendChild(MyElement);
-        myInt = MyTicket.Fcalls_0000.getCseqno();
-        if (myInt > 0) {
-            MyElement.appendChild(MyDocument.createTextNode(String.valueOf(myInt)));
+        element = MyDocument.createElement("NumeroDeDossier");
+        Ticket.appendChild(element);
+        anInt = ticket_0582.Fcalls_0000.getCseqno();
+        if (anInt > 0) {
+            element.appendChild(MyDocument.createTextNode(String.valueOf(anInt)));
         }
 
         // Agence
-        MyElement = MyDocument.createElement("Entreprise");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getA6name();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Entreprise");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getA6name();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Site trouvé en base de données ?
-        MyElement = MyDocument.createElement("SiteEnBase");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getSiteEnBase();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("SiteEnBase");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getSiteEnBase();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Site sous contrat
-        MyElement = MyDocument.createElement("SiteSousContrat");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber8();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("SiteSousContrat");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCnumber8();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Numéro responsable
-        MyElement = MyDocument.createElement("NumeroResponsable");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber9();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("NumeroResponsable");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCnumber9();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Délai d'intervention
-        MyElement = MyDocument.createElement("Delai");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getDelaiIntervention();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Delai");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getDelaiIntervention();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Numéro HUGO
-        MyElement = MyDocument.createElement("NumeroHugo");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcomplmt_0000.getC6alpha2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("NumeroHugo");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcomplmt_0000.getC6alpha2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Client
-        MyElement = MyDocument.createElement("Client");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCorp();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Client");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCorp();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Adresse complète
-        MyElement = MyDocument.createElement("Adresse");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCaddress();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Adresse");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCaddress();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
-        MyElement = MyDocument.createElement("Complement");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCaddress2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Complement");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCaddress2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
-        MyElement = MyDocument.createElement("CP");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCposcode();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("CP");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCposcode();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
-        MyElement = MyDocument.createElement("Ville");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCity();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Ville");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCity();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Digicode
-        MyElement = MyDocument.createElement("Digicode");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber6();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Digicode");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCnumber6();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
         // Bâtiment
-        MyElement = MyDocument.createElement("Batiment");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber4();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Batiment");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCnumber4();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
         // Escalier
-        MyElement = MyDocument.createElement("Escalier");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCnumber5();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Escalier");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCnumber5();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Nom de l'appelant
         // On remplace la barre verticale qui sépare le nom du prénom par un espace.
-        MyElement = MyDocument.createElement("Nom");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCname().replace('|', ' ');
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Nom");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCname().replace('|', ' ');
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Téléphone de l'appelant
-        MyElement = MyDocument.createElement("TelAppelant");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCtel();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("TelAppelant");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCtel();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Raison d'appel
-        MyElement = MyDocument.createElement("RaisonAppel");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getM6name();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("RaisonAppel");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getM6name();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Famille/Métier
-        MyElement = MyDocument.createElement("FamilleMetier");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getM6extname();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("FamilleMetier");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getM6extname();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Demande d'intervention
-        MyElement = MyDocument.createElement("DemandeIntervention");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.Fcalls_0000.getCsympt();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("DemandeIntervention");
+        Ticket.appendChild(element);
+        aString = ticket_0582.Fcalls_0000.getCsympt();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Etat de l'intervention
-        MyElement = MyDocument.createElement("SuiviDonneALaDemande");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getEtatIntervention();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("SuiviDonneALaDemande");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getEtatIntervention();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Prestataire1
-        MyElement = MyDocument.createElement("Prestataire1");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getNomPrestataire1();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Prestataire1");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getNomPrestataire1();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // DateMissionnement1
-        MyElement = MyDocument.createElement("DateMissionnement1");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getDateMissionnement1();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("DateMissionnement1");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getDateMissionnement1();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // HeureMissionnement1
-        MyElement = MyDocument.createElement("HeureMissionnement1");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getHeureMissionnement1();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("HeureMissionnement1");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getHeureMissionnement1();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // NoTelephone1
-        MyElement = MyDocument.createElement("NoTelephone1");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getNoTelephone1();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("NoTelephone1");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getNoTelephone1();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Prestataire2
-        MyElement = MyDocument.createElement("Prestataire2");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getNomPrestataire2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Prestataire2");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getNomPrestataire2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // DateMissionnement2
-        MyElement = MyDocument.createElement("DateMissionnement2");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getDateMissionnement2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("DateMissionnement2");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getDateMissionnement2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // HeureMissionnement2
-        MyElement = MyDocument.createElement("HeureMissionnement2");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getHeureMissionnement2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("HeureMissionnement2");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getHeureMissionnement2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // NoTelephone2
-        MyElement = MyDocument.createElement("NoTelephone2");
-        Ticket.appendChild(MyElement);
-        MyString = MyTicket.getNoTelephone2();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("NoTelephone2");
+        Ticket.appendChild(element);
+        aString = ticket_0582.getNoTelephone2();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Cloture de l'appel
-        MyClotureAppel = MyTicket.getClotureAppel();
-        myInt = MyTicket.Fcalls_0000.getCnote();
-        MyString = (myInt == 1) ? "Appel clôturé" : "Appel non clôturé";
-        MyElement = MyDocument.createElement("InterventionCloturee");
-        Ticket.appendChild(MyElement);
-        MyElement.appendChild(MyDocument.createTextNode(MyString));
+        clotureAppel = ticket_0582.getClotureAppel();
+        anInt = ticket_0582.Fcalls_0000.getCnote();
+        aString = (anInt == 1) ? "Appel clôturé" : "Appel non clôturé";
+        element = MyDocument.createElement("InterventionCloturee");
+        Ticket.appendChild(element);
+        element.appendChild(MyDocument.createTextNode(aString));
 
         // Heure de début d'intervention
-        MyElement = MyDocument.createElement("HeureDebutIntervention");
-        Ticket.appendChild(MyElement);
-        MyString = MyClotureAppel.getHeureDebutRelevee();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("HeureDebutIntervention");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getHeureDebutRelevee();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Heure de fin d'intervention
-        MyElement = MyDocument.createElement("HeureFinIntervention");
-        Ticket.appendChild(MyElement);
-        MyString = MyClotureAppel.getHeureFinRelevee();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("HeureFinIntervention");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getHeureFinRelevee();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Durée d'intervention
-        MyElement = MyDocument.createElement("DureeIntervention");
-        Ticket.appendChild(MyElement);
-        myInt = MyClotureAppel.getDureeIntervention();
-        if (myInt > 0) {
-            MyElement.appendChild(MyDocument.createTextNode(MyTicket.CharDur(myInt)));
+        element = MyDocument.createElement("DureeIntervention");
+        Ticket.appendChild(element);
+        anInt = clotureAppel.getDureeIntervention();
+        if (anInt > 0) {
+            element.appendChild(MyDocument.createTextNode(ticket_0582.CharDur(anInt)));
         }
 
         // Résultat de l'intervention
-        MyElement = MyDocument.createElement("ResultatIntervention");
-        Ticket.appendChild(MyElement);
-        MyString = MyClotureAppel.getResultat();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("ResultatIntervention");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getResultat();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Rapport d'intervention
-        MyElement = MyDocument.createElement("Commentaires");
-        Ticket.appendChild(MyElement);
-        MyString = MyClotureAppel.getRapport();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("Commentaires");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getRapport();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
 
         // Le technicien est-il encore sur site ?
-        MyElement = MyDocument.createElement("TechnicienSurSite");
-        Ticket.appendChild(MyElement);
-        MyString = MyClotureAppel.getOnSite();
-        if (MyString != null) {
-            MyElement.appendChild(MyDocument.createTextNode(MyString));
+        element = MyDocument.createElement("TechnicienSurSite");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getOnSite();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
     }
 }

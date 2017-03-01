@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.28
+ * @version 0.29
  */
 public class ExpCallsParams {
 
@@ -71,6 +71,12 @@ public class ExpCallsParams {
     private String ExcelFilename = DetermineExcelFilename(0);
 
     /**
+     * debugMode : fonctionnement du programme en mode debug (true/false).
+     * Valeur par défaut : false.
+     */
+    private static boolean debugMode = false;
+
+    /**
      *
      * @param connection connexion à la base de données locale
      * @param args argument(s) de la ligne de commande
@@ -103,6 +109,7 @@ public class ExpCallsParams {
         setXMLFilename(DetermineXMLFilename(unum));
         setXSDFilename(DetermineXSDFilename(unum));
         setExcelFilename(DetermineExcelFilename(unum));
+        setDebugMode(args.getDebugMode());
     }
 
     /**
@@ -428,6 +435,21 @@ public class ExpCallsParams {
      */
     public void setModeleDeRapport(ModeleDeRapport modeleDeRapport) {
         this.modeleDeRapport = modeleDeRapport;
+    }
+
+    /**
+     * @return debugMode : retourne le mode de fonctionnement debug.
+     */
+    public boolean getDebugMode() {
+        return (debugMode);
+    }
+
+    /**
+     * @param debugMode : fonctionnement du programme en mode debug
+     * (true/false).
+     */
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
     }
 
 }

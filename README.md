@@ -8,15 +8,17 @@ Ce fichier est importable dans Microsoft Excel.
 
 ##Utilisation:
 ```
-java ExpCalls [-dbserver db] -u unum [-b début] [-e fin] [-o fichier.xml] [-p path] [-d] [-t] 
+java ExpCalls [-dbserver db] -u unum [[-b début] [-e fin]|[-n nbJour]] [-o fichier.xml] [-p path] [-s suffixe] [-d] [-t] 
 ```
 où :
 * ```-dbserver db``` est la référence à la base de données, par défaut désigne la base de données de développement. Voir fichier *myDatabases.prop* (optionnel).
 * ```-u unum``` est la référence du service d'urgence (paramètre obligatoire).
 * ```-b début``` : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (paramètre optionnel).
 * ```-e fin``` : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (paramètre optionnel).
+* ```-n nbJour``` : précise le nombre de jour(s) à compter de la date courante. Non définit par défaut (paramètre optionnel).
 * ```-o fichier.xml``` est le nom du fichier qui recevra les agences au format XML. Amorcé à *tickets_0000.xml* par défaut (paramètre optionnel).
 * ```-p path``` est le répertoire vers lequel exporter le fichier des résultats. Par défaut c'est le répertoire courant du programme (paramètre optionnel).
+* ```-s suffixe``` est le suffixe à ajouter au nom du fichier. Par défaut il n'y a pas de suffixe (paramètre optionnel).
 * ```-d``` le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (paramètre optionnel).
 * ```-t``` le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (paramètre optionnel).
 
