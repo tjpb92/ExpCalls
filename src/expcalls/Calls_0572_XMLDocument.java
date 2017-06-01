@@ -1,6 +1,7 @@
 package expcalls;
 
 import bdd.ClotureAppel;
+import bdd.Survey;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.28
+ * @version 0.30
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -52,6 +53,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         int anInt;
         Timestamp aTimestamp;
         ClotureAppel clotureAppel;
+        Survey survey;
 
         Element Ticket;
 
@@ -434,6 +436,55 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         anInt = clotureAppel.getDelaiIntervention2();
         if (anInt > 0) {
             element.appendChild(MyDocument.createTextNode(ticket_0572.CharDur(anInt)));
+        }
+        
+        // Enquête de satisfaction
+        survey = ticket_0572.getSurvey();
+        element = MyDocument.createElement("EnqueteEffectuee");
+        Ticket.appendChild(element);
+        aString = survey.getEnqueteEffectuee();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Qualité de l'accueil téléphonique
+        element = MyDocument.createElement("QualiteAccueilTelephonique");
+        Ticket.appendChild(element);
+        aString = survey.getQualiteAccueilTelephonique();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Qualité du délai d'intervention
+        element = MyDocument.createElement("QualiteDelaiIntervention");
+        Ticket.appendChild(element);
+        aString = survey.getQualiteDelaiIntervention();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Respect du rendez-vous
+        element = MyDocument.createElement("RespectRendezVous");
+        Ticket.appendChild(element);
+        aString = survey.getRespectRendezVous();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Qualité de l'intervention
+        element = MyDocument.createElement("QualiteIntervention");
+        Ticket.appendChild(element);
+        aString = survey.getQualiteIntervention();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Satisfaction globale
+        element = MyDocument.createElement("SatisfactionGlobale");
+        Ticket.appendChild(element);
+        aString = survey.getSatisfactionGlobale();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
         }
     }
 }

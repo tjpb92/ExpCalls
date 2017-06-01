@@ -3,6 +3,7 @@ package expcalls;
 import bdd.EtatTicket;
 import bdd.Fcalls;
 import bdd.Fcomplmt;
+import bdd.Survey;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -10,7 +11,7 @@ import java.sql.SQLException;
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.25
+ * @version 0.30
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -43,6 +44,11 @@ public class Ticket_0572 extends Ticket_0000 {
      * Heure d'intervention relevée (format hh:mm:ss).
      */
     private String heureInterventionRelevee = null;
+
+    /**
+     * Enquête de satisfaction.
+     */
+    private Survey survey;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -120,9 +126,10 @@ public class Ticket_0572 extends Ticket_0000 {
 //                setTypeDeDemande("Inconnu");
 //                break;
 //        }
-        
         setDateInterventionRelevee(getClotureAppel().getDateInterventionRelevee());
         setHeureInterventionRelevee(getClotureAppel().getHeureInterventionRelevee());
+
+        setSurvey(new Survey(MyConnection, this.Fcalls_0000.getCnum(), this.Fcomplmt_0000.getC6int4(), MyEtatTicket));
     }
 
     /**
@@ -221,5 +228,19 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public void setHeureInterventionRelevee(String heureInterventionRelevee) {
         this.heureInterventionRelevee = heureInterventionRelevee;
+    }
+
+    /**
+     * @return l'enquête de satisfaction
+     */
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    /**
+     * @param survey définit l'enquête de satisfaction
+     */
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 }
