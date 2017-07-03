@@ -15,7 +15,7 @@ import utils.DBServerException;
  * format XML.
  *
  * @author Thierry Baribaud
- * @version 0.27
+ * @version 0.31
  */
 public class ExpCalls {
 
@@ -53,6 +53,7 @@ public class ExpCalls {
         ExpCalls_0572 expCalls_0572;
         ExpCalls_0582 expCalls_0582;
         ExpCalls_0609 expCalls_0609;
+        ExpCalls_0648 expCalls_0648;
 
         try {
             System.out.println("Analyse des arguments de la ligne de commande ...");
@@ -85,6 +86,9 @@ public class ExpCalls {
                     break;
                 case VF:
                     expCalls_0609 = new ExpCalls_0609(expCallsParams);
+                    break;
+                case MIQ:
+                    expCalls_0648 = new ExpCalls_0648(expCallsParams);
                     break;
                 default:
                     expCalls_0000 = new ExpCalls_0000(expCallsParams);

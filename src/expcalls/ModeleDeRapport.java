@@ -7,7 +7,7 @@ package expcalls;
  * peuvent pas être indiqués ici. On se contente de références numériques.
  *
  * @author Thierry Baribaud
- * @version 0.27
+ * @version 0.31
  */
 public enum ModeleDeRapport {
 
@@ -57,7 +57,11 @@ public enum ModeleDeRapport {
      */
     BOU("0635"),
     /**
-     * Famille de client standard
+     * Famille de client 635
+     */
+    MIQ("0648"),
+    /**
+     * Famille de client 648
      */
     STD("0000");
 
