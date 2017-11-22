@@ -6,28 +6,28 @@ Il y a un appel par ligne.
 
 Ce fichier est importable dans Microsoft Excel.
 
-##Utilisation:
+## Utilisation:
 ```
 java ExpCalls [-dbserver db] -u unum [[-b début] [-e fin]|[-n nbJour]] [-o fichier.xml] [-p path] [-s suffixe] [-d] [-t] 
 ```
 où :
-* ```-dbserver db``` est la référence à la base de données, par défaut désigne la base de données de développement. Voir fichier *myDatabases.prop* (optionnel).
+* ```-dbserver db``` est la référence à la base de données, par défaut désigne la base de données de développement. Voir fichier *ExpCalls.prop* (optionnel).
 * ```-u unum``` est la référence du service d'urgence (paramètre obligatoire).
 * ```-b début``` : date de début de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à hier par défaut (paramètre optionnel).
 * ```-e fin``` : date de fin de l'extraction à 0h au format JJ/MM/AAAA. Amorcé à aujourd'hui par défaut (paramètre optionnel).
-* ```-n nbJour``` : précise le nombre de jour(s) à compter de la date courante. Non définit par défaut (paramètre optionnel).
-* ```-o fichier.xml``` est le nom du fichier qui recevra les agences au format XML. Amorcé à *tickets_0000.xml* par défaut (paramètre optionnel).
+* ```-n nbJour``` : précise le nombre de jour(s) à compter de la date courante. Non défini par défaut (paramètre optionnel).
+* ```-o fichier.xml``` est le nom du fichier qui recevra les résultats au format XML. Amorcé à *tickets_0000.xml* par défaut (paramètre optionnel).
 * ```-p path``` est le répertoire vers lequel exporter le fichier des résultats. Par défaut c'est le répertoire courant du programme (paramètre optionnel).
 * ```-s suffixe``` est le suffixe à ajouter au nom du fichier. Par défaut il n'y a pas de suffixe (paramètre optionnel).
 * ```-d``` le programme s'exécute en mode débug, il est beaucoup plus verbeux. Désactivé par défaut (paramètre optionnel).
-* ```-t``` le programme s'exécute en mode test, les transcations en base de données ne sont pas faites. Désactivé par défaut (paramètre optionnel).
+* ```-t``` le programme s'exécute en mode test, les transactions en base de données ne sont pas faites. Désactivé par défaut (paramètre optionnel).
 
-##Pré-requis :
+## Pré-requis :
 - Java 6 ou supérieur.
 - JDBC Informix
 - JDBC MySql
 
-##Formats XML reconnus :
+## Formats XML reconnus :
 
 Il existe plusieurs types de formats XML reconnus pour décrire les appels. 
 
@@ -35,7 +35,7 @@ Ils dépendent du service d'urgence concerné.
 
 Il y a un format par défaut : *tickets_0000.xsd*.
 
-##Fichier des paramètres : 
+## Fichier des paramètres : 
 
 Ce fichier permet de spécifier les paramètres d'accès aux différentes bases de données.
 
@@ -45,7 +45,7 @@ Ce fichier est nommé : *ExpCalls.prop*.
 
 Le fichier *ExpCalls_Example.prop* est fourni à titre d'exemple.
 
-##Références:
+## Références:
 
 - Construire une application XML, J.C. Bernadac, F. Knab, Eyrolles.
 

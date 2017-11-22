@@ -14,10 +14,20 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.30
+ * @version 0.32
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
+    /**
+     * Format pour le rendu des dates : jj/mm/aaaa.
+     */
+    private final static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    /**
+     * Format pour le rendu des mois : janvier, février, ..., décembre.
+     */
+    private final static DateFormat monthFormat = new SimpleDateFormat("MMMM");
+    
     /**
      * Initialise le document XML - constructeur principal.
      *
@@ -56,9 +66,6 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         Survey survey;
 
         Element Ticket;
-
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        DateFormat monthFormat = new SimpleDateFormat("MMM");
 
         aString = "Ticket ref=" + ticket_0572.Fcalls_0000.getCnum();
         if (aString != null) {
@@ -483,6 +490,14 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         element = MyDocument.createElement("SatisfactionGlobale");
         Ticket.appendChild(element);
         aString = survey.getSatisfactionGlobale();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Mois de l'enquête
+        element = MyDocument.createElement("MoisEnquete");
+        Ticket.appendChild(element);
+        aString = survey.getMoisDeLEnquete();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
