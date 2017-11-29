@@ -8,15 +8,19 @@
     <xs:complexType>
         <xs:sequence>
             <xs:element type="xs:string" name="DateDeSaisie" minOccurs="0"/>
+            <xs:element type="xs:string" name="MoisDeSaisie" minOccurs="0"/>
             <xs:element type="xs:string" name="HeureDeSaisie" minOccurs="0"/>
             <xs:element type="xs:string" name="NumeroDeDossier" minOccurs="0"/>
             <xs:element type="xs:string" name="ProgrammeAgence" minOccurs="0"/>
+            <xs:element type="xs:string" name="CodeGroupe" minOccurs="0"/>
+            <xs:element type="xs:string" name="LibelleGroupe" minOccurs="0"/>
             <xs:element type="xs:string" name="Adresse" minOccurs="0"/>
             <xs:element type="xs:string" name="Complement" minOccurs="0"/>
             <xs:element type="xs:string" name="CP" minOccurs="0"/>
             <xs:element type="xs:string" name="Ville" minOccurs="0"/>
             <xs:element type="xs:string" name="Batiment" minOccurs="0"/>
             <xs:element type="xs:string" name="Escalier" minOccurs="0"/>
+            <xs:element type="xs:string" name="TypeDeContrat" minOccurs="0"/>
             <xs:element type="xs:string" name="Nom" minOccurs="0"/>
             <xs:element type="xs:string" name="TelAppelant" minOccurs="0"/>
             <xs:element type="xs:string" name="RaisonAppel" minOccurs="0"/>

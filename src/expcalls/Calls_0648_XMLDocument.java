@@ -10,12 +10,22 @@ import org.w3c.dom.Element;
 
 /**
  * Classe pour générer un fichier au format XML décrivant des tickets des
- * clients de la famille 609.
+ * clients de la famille 648.
  *
  * @author Thierry Baribaud
- * @version 0.31
+ * @version 0.33
  */
 public class Calls_0648_XMLDocument extends XMLDocument {
+
+    /**
+     * Format pour le rendu des dates : jj/mm/aaaa.
+     */
+    private final static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    /**
+     * Format pour le rendu des mois : 01, 02, ..., 12.
+     */
+    private final static DateFormat monthFormat = new SimpleDateFormat("MM");
 
     /**
      * Initialise le document XML - constructeur principal.
@@ -55,8 +65,6 @@ public class Calls_0648_XMLDocument extends XMLDocument {
 
         Element Ticket;
 
-        DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
         aString = "Ticket ref=" + ticket_0648.Fcalls_0000.getCnum();
         if (aString != null) {
             comment = MyDocument.createComment(aString);
@@ -71,7 +79,14 @@ public class Calls_0648_XMLDocument extends XMLDocument {
         Ticket.appendChild(element);
         aTimestamp = ticket_0648.Fcalls_0000.getCdate();
         if (aTimestamp != null) {
-            element.appendChild(MyDocument.createTextNode(MyDateFormat.format(aTimestamp)));
+            element.appendChild(MyDocument.createTextNode(dateFormat.format(aTimestamp)));
+        }
+
+        // Mois de saisie
+        element = MyDocument.createElement("MoisDeSaisie");
+        Ticket.appendChild(element);
+        if (aTimestamp != null) {
+            element.appendChild(MyDocument.createTextNode(monthFormat.format(aTimestamp)));
         }
 
         // Heure de saisie
@@ -98,6 +113,20 @@ public class Calls_0648_XMLDocument extends XMLDocument {
             aString = ticket_0648.getA6name();
         }
         if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Code groupe
+        element = MyDocument.createElement("CodeGroupe");
+        Ticket.appendChild(element);
+        if ((aString = ticket_0648.Fcomplmt_0000.getC6alpha2()) != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // libellé groupe
+        element = MyDocument.createElement("LibelleGroupe");
+        Ticket.appendChild(element);
+        if ((aString = ticket_0648.Fcalls_0000.getCorp()) != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
 
@@ -134,10 +163,19 @@ public class Calls_0648_XMLDocument extends XMLDocument {
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
+
         // Escalier
         element = MyDocument.createElement("Escalier");
         Ticket.appendChild(element);
         aString = ticket_0648.Fcalls_0000.getCnumber5();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Type de contrat
+        element = MyDocument.createElement("TypeDeContrat");
+        Ticket.appendChild(element);
+        aString = ticket_0648.Fcalls_0000.getCnumber8();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

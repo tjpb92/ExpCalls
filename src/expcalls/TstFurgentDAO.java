@@ -12,7 +12,7 @@ import utils.DBServerException;
 /**
  * TstFurgentDAO programme permettant de tester le pattern DAO pour Furgent.
  *
- * @version Juin 2016
+ * @version 0.33
  * @author Thierry Baribaud
  */
 public class TstFurgentDAO {
@@ -21,82 +21,82 @@ public class TstFurgentDAO {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
-     * @param Args arguments de la ligne de commande.
+     * @param args arguments de la ligne de commande.
      * @throws GetArgsException en cas de problème sur les paramètres.
      */
-    public static void main(String[] Args) throws GetArgsException {
-        GetArgs MyArgs;
-        ApplicationProperties MyApplicationProperties;
-        DBServer MyDBServer;
-        DBManager MyDBManager;
-        FurgentDAO MyFurgentDAO;
-        Furgent MyFurgent1;
-        Furgent MyFurgent;
+    public static void main(String[] args) throws GetArgsException {
+        GetArgs getArgs;
+        ApplicationProperties applicationProperties;
+        DBServer dBServer;
+        DBManager dBManager;
+        FurgentDAO furgentDAO;
+        Furgent furgent1;
+        Furgent furgent;
         long i;
 
         try {
             System.out.println("Récupération des arguments en ligne de commande ...");
-            MyArgs = new GetArgs(Args);
-            System.out.println(MyArgs);
+            getArgs = new GetArgs(args);
+            System.out.println(getArgs);
 
             System.out.println("Lecture du fichier de paramètres ...");
-            MyApplicationProperties = new ApplicationProperties("MyDatabases.prop");
+            applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
-            MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
-            System.out.println("  " + MyDBServer);
+            dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
+            System.out.println("  " + dBServer);
 
-            MyDBManager = new DBManager(MyDBServer);
+            dBManager = new DBManager(dBServer);
 
 // Essai d'insertion
-            MyFurgentDAO = new FurgentDAO(MyDBManager.getConnection());
-            MyFurgentDAO.setInsertPreparedStatement();
-            MyFurgent1 = new Furgent();
-            MyFurgent1.setUnum(0);
-            MyFurgent1.setUname("terra incognita");
-            MyFurgent1.setUabbname("INCOGNIT");
-            MyFurgent1.setUnewurg(5);
-            System.out.println("Furgent(avant insertion)=" + MyFurgent1);
-            MyFurgentDAO.insert(MyFurgent1);
-            MyFurgentDAO.closeInsertPreparedStatement();
-            System.out.println("Furgent(après insertion)=" + MyFurgent1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFurgentDAO.getNbAffectedRow());
+            furgentDAO = new FurgentDAO(dBManager.getConnection());
+            furgentDAO.setInsertPreparedStatement();
+            furgent1 = new Furgent();
+            furgent1.setUnum(0);
+            furgent1.setUname("terra incognita");
+            furgent1.setUabbname("INCOGNIT");
+            furgent1.setUnewurg(5);
+            System.out.println("Furgent(avant insertion)=" + furgent1);
+            furgentDAO.insert(furgent1);
+            furgentDAO.closeInsertPreparedStatement();
+            System.out.println("Furgent(après insertion)=" + furgent1);
+            System.out.println("Rangée(s) affectée(s)=" + furgentDAO.getNbAffectedRow());
 
 // Essai de mise à jour
-            MyFurgentDAO.setUpdatePreparedStatement();
-            MyFurgent1.setUname(MyFurgent1.getUname() + " at Atlantis");
-            MyFurgentDAO.update(MyFurgent1);
-            System.out.println("Furgent(après mise-à-jour)=" + MyFurgent1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFurgentDAO.getNbAffectedRow());
-            MyFurgentDAO.closeUpdatePreparedStatement();
+            furgentDAO.setUpdatePreparedStatement();
+            furgent1.setUname(furgent1.getUname() + " at Atlantis");
+            furgentDAO.update(furgent1);
+            System.out.println("Furgent(après mise-à-jour)=" + furgent1);
+            System.out.println("Rangée(s) affectée(s)=" + furgentDAO.getNbAffectedRow());
+            furgentDAO.closeUpdatePreparedStatement();
 
 // Essai de lecture
-            MyFurgentDAO.filterByCode("INCOGNIT");
-            MyFurgentDAO.filterByName(MyFurgent1.getUnum(), "terra");
-            System.out.println("  SelectStatement=" + MyFurgentDAO.getSelectStatement());
-            MyFurgentDAO.setSelectPreparedStatement();
+            furgentDAO.filterByCode("INCOGNIT");
+            furgentDAO.filterByName(furgent1.getUnum(), "terra");
+            System.out.println("  SelectStatement=" + furgentDAO.getSelectStatement());
+            furgentDAO.setSelectPreparedStatement();
             i = 0;
-            while ((MyFurgent = MyFurgentDAO.select()) != null) {
+            while ((furgent = furgentDAO.select()) != null) {
                 i++;
-                System.out.println("Furgent(" + i + ")=" + MyFurgent);
+                System.out.println("Furgent(" + i + ")=" + furgent);
             }
-            MyFurgentDAO.closeSelectPreparedStatement();
+            furgentDAO.closeSelectPreparedStatement();
 
 // Essai de suppression
-            System.out.println("Suppression de : " + MyFurgent1);
-            MyFurgentDAO.setDeletePreparedStatement();
-            MyFurgentDAO.delete(MyFurgent1.getUnum());
-            MyFurgentDAO.closeDeletePreparedStatement();
-            System.out.println("Rangée(s) affectée(s)=" + MyFurgentDAO.getNbAffectedRow());
+            System.out.println("Suppression de : " + furgent1);
+            furgentDAO.setDeletePreparedStatement();
+            furgentDAO.delete(furgent1.getUnum());
+            furgentDAO.closeDeletePreparedStatement();
+            System.out.println("Rangée(s) affectée(s)=" + furgentDAO.getNbAffectedRow());
 
-        } catch (IOException MyException) {
-            System.out.println("Erreur en lecture du fichier des propriétés " + MyException);
-        } catch (DBServerException MyException) {
-            System.out.println("Erreur avec le serveur de base de données " + MyException);
-        } catch (ClassNotFoundException MyException) {
-            System.out.println("Erreur classe non trouvée " + MyException);
-        } catch (SQLException MyException) {
-            System.out.println("Erreur SQL rencontrée " + MyException);
+        } catch (IOException exception) {
+            System.out.println("Erreur en lecture du fichier des propriétés " + exception);
+        } catch (DBServerException exception) {
+            System.out.println("Erreur avec le serveur de base de données " + exception);
+        } catch (ClassNotFoundException exception) {
+            System.out.println("Erreur classe non trouvée " + exception);
+        } catch (SQLException exception) {
+            System.out.println("Erreur SQL rencontrée " + exception);
         }
     }
 }

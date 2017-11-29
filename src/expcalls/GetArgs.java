@@ -6,16 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.28
+ * @version 0.33
  */
 public class GetArgs {
 

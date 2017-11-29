@@ -12,7 +12,7 @@ import utils.DBServerException;
 /**
  * TstFtypeDAO programme permettant de tester le pattern DAO pour Ftype.
  *
- * @version Juillet 2016
+ * @version 0.33
  * @author Thierry Baribaud
  */
 public class TstFtypeDAO {
@@ -21,82 +21,82 @@ public class TstFtypeDAO {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
-     * @param Args arguments de la ligne de commande.
+     * @param args arguments de la ligne de commande.
      * @throws GetArgsException en cas de problème sur les paramètres.
      */
-    public static void main(String[] Args) throws GetArgsException {
-        GetArgs MyArgs;
-        ApplicationProperties MyApplicationProperties;
-        DBServer MyDBServer;
-        DBManager MyDBManager;
-        FtypeDAO MyFtypeDAO;
-        Ftype MyFtype1;
-        Ftype MyFtype;
+    public static void main(String[] args) throws GetArgsException {
+        GetArgs getArgs;
+        ApplicationProperties applicationProperties;
+        DBServer dBServer;
+        DBManager dBManager;
+        FtypeDAO ftypeDAO;
+        Ftype ftype1;
+        Ftype ftype;
         long i;
 
         try {
             System.out.println("Récupération des arguments en ligne de commande ...");
-            MyArgs = new GetArgs(Args);
-            System.out.println(MyArgs);
+            getArgs = new GetArgs(args);
+            System.out.println(getArgs);
 
             System.out.println("Lecture du fichier de paramètres ...");
-            MyApplicationProperties = new ApplicationProperties("MyDatabases.prop");
+            applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
-            MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
-            System.out.println("  " + MyDBServer);
+            dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
+            System.out.println("  " + dBServer);
 
-            MyDBManager = new DBManager(MyDBServer);
+            dBManager = new DBManager(dBServer);
 
 // Essai d'insertion
-            MyFtypeDAO = new FtypeDAO(MyDBManager.getConnection());
-            MyFtypeDAO.setInsertPreparedStatement();
-            MyFtype1 = new Ftype();
-            MyFtype1.setTtnum(0);
-            MyFtype1.setTtunum(MyArgs.getUnum());
-            MyFtype1.setTtextname("message sans suite");
-            MyFtype1.setTtypename("message");
-            MyFtype1.setTtype(99);
-            System.out.println("Ftype(avant insertion)=" + MyFtype1);
-            MyFtypeDAO.insert(MyFtype1);
-            MyFtypeDAO.closeInsertPreparedStatement();
-            System.out.println("Ftype(après insertion)=" + MyFtype1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFtypeDAO.getNbAffectedRow());
+            ftypeDAO = new FtypeDAO(dBManager.getConnection());
+            ftypeDAO.setInsertPreparedStatement();
+            ftype1 = new Ftype();
+            ftype1.setTtnum(0);
+            ftype1.setTtunum(getArgs.getUnum());
+            ftype1.setTtextname("message sans suite");
+            ftype1.setTtypename("message");
+            ftype1.setTtype(99);
+            System.out.println("Ftype(avant insertion)=" + ftype1);
+            ftypeDAO.insert(ftype1);
+            ftypeDAO.closeInsertPreparedStatement();
+            System.out.println("Ftype(après insertion)=" + ftype1);
+            System.out.println("Rangée(s) affectée(s)=" + ftypeDAO.getNbAffectedRow());
 
 // Essai de mise à jour
-            MyFtypeDAO.setUpdatePreparedStatement();
-            MyFtype1.setTtypename(MyFtype1.getTtypename() + " simple");
-            MyFtypeDAO.update(MyFtype1);
-            System.out.println("Ftype(après mise-à-jour)=" + MyFtype1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFtypeDAO.getNbAffectedRow());
-            MyFtypeDAO.closeUpdatePreparedStatement();
+            ftypeDAO.setUpdatePreparedStatement();
+            ftype1.setTtypename(ftype1.getTtypename() + " simple");
+            ftypeDAO.update(ftype1);
+            System.out.println("Ftype(après mise-à-jour)=" + ftype1);
+            System.out.println("Rangée(s) affectée(s)=" + ftypeDAO.getNbAffectedRow());
+            ftypeDAO.closeUpdatePreparedStatement();
 
 // Essai de lecture
-            MyFtypeDAO.filterByName(MyArgs.getUnum(), "m");
-            System.out.println("  SelectStatement=" + MyFtypeDAO.getSelectStatement());
-            MyFtypeDAO.setSelectPreparedStatement();
+            ftypeDAO.filterByName(getArgs.getUnum(), "m");
+            System.out.println("  SelectStatement=" + ftypeDAO.getSelectStatement());
+            ftypeDAO.setSelectPreparedStatement();
             i = 0;
-            while ((MyFtype = MyFtypeDAO.select()) != null) {
+            while ((ftype = ftypeDAO.select()) != null) {
                 i++;
-                System.out.println("Ftype(" + i + ")=" + MyFtype);
+                System.out.println("Ftype(" + i + ")=" + ftype);
             }
-            MyFtypeDAO.closeSelectPreparedStatement();
+            ftypeDAO.closeSelectPreparedStatement();
 
 // Essai de suppression
-            System.out.println("Suppression de : " + MyFtype1);
-            MyFtypeDAO.setDeletePreparedStatement();
-            MyFtypeDAO.delete(MyFtype1.getTtnum());
-            MyFtypeDAO.closeDeletePreparedStatement();
-            System.out.println("Rangée(s) affectée(s)=" + MyFtypeDAO.getNbAffectedRow());
+            System.out.println("Suppression de : " + ftype1);
+            ftypeDAO.setDeletePreparedStatement();
+            ftypeDAO.delete(ftype1.getTtnum());
+            ftypeDAO.closeDeletePreparedStatement();
+            System.out.println("Rangée(s) affectée(s)=" + ftypeDAO.getNbAffectedRow());
 
-        } catch (IOException MyException) {
-            System.out.println("Erreur en lecture du fichier des propriétés " + MyException);
-        } catch (DBServerException MyException) {
-            System.out.println("Erreur avec le serveur de base de données " + MyException);
-        } catch (ClassNotFoundException MyException) {
-            System.out.println("Erreur classe non trouvée " + MyException);
-        } catch (SQLException MyException) {
-            System.out.println("Erreur SQL rencontrée " + MyException);
+        } catch (IOException exception) {
+            System.out.println("Erreur en lecture du fichier des propriétés " + exception);
+        } catch (DBServerException exception) {
+            System.out.println("Erreur avec le serveur de base de données " + exception);
+        } catch (ClassNotFoundException exception) {
+            System.out.println("Erreur classe non trouvée " + exception);
+        } catch (SQLException exception) {
+            System.out.println("Erreur SQL rencontrée " + exception);
         }
     }
 }

@@ -12,7 +12,7 @@ import utils.DBServerException;
 /**
  * TstFoperatDAO programme permettant de tester le pattern DAO pour Foperat.
  *
- * @version Juillet 2016
+ * @version 0.33
  * @author Thierry Baribaud
  */
 public class TstFoperatDAO {
@@ -21,81 +21,81 @@ public class TstFoperatDAO {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
-     * @param Args arguments de la ligne de commande.
+     * @param args arguments de la ligne de commande.
      * @throws GetArgsException en cas de problème sur les paramètres.
      */
-    public static void main(String[] Args) throws GetArgsException {
-        GetArgs MyArgs;
-        ApplicationProperties MyApplicationProperties;
-        DBServer MyDBServer;
-        DBManager MyDBManager;
-        FoperatDAO MyFoperatDAO;
-        Foperat MyFoperat1;
-        Foperat MyFoperat;
+    public static void main(String[] args) throws GetArgsException {
+        GetArgs getArgs;
+        ApplicationProperties applicationProperties;
+        DBServer dBServer;
+        DBManager dBManager;
+        FoperatDAO foperatDAO;
+        Foperat foperat1;
+        Foperat foperat;
         long i;
 
         try {
             System.out.println("Récupération des arguments en ligne de commande ...");
-            MyArgs = new GetArgs(Args);
-            System.out.println(MyArgs);
+            getArgs = new GetArgs(args);
+            System.out.println(getArgs);
 
             System.out.println("Lecture du fichier de paramètres ...");
-            MyApplicationProperties = new ApplicationProperties("MyDatabases.prop");
+            applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
-            MyDBServer = new DBServer(MyArgs.getSourceServer(), MyApplicationProperties);
-            System.out.println("  " + MyDBServer);
+            dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
+            System.out.println("  " + dBServer);
 
-            MyDBManager = new DBManager(MyDBServer);
+            dBManager = new DBManager(dBServer);
 
 // Essai d'insertion
-            MyFoperatDAO = new FoperatDAO(MyDBManager.getConnection());
-            MyFoperatDAO.setInsertPreparedStatement();
-            MyFoperat1 = new Foperat();
-            MyFoperat1.setOnum(0);
-            MyFoperat1.setOname("polo marco");
-            MyFoperat1.setOabbname("MPO");
-            MyFoperat1.setOnumpabx(99);
-            System.out.println("Foperat(avant insertion)=" + MyFoperat1);
-            MyFoperatDAO.insert(MyFoperat1);
-            MyFoperatDAO.closeInsertPreparedStatement();
-            System.out.println("Foperat(après insertion)=" + MyFoperat1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFoperatDAO.getNbAffectedRow());
+            foperatDAO = new FoperatDAO(dBManager.getConnection());
+            foperatDAO.setInsertPreparedStatement();
+            foperat1 = new Foperat();
+            foperat1.setOnum(0);
+            foperat1.setOname("polo marco");
+            foperat1.setOabbname("MPO");
+            foperat1.setOnumpabx(99);
+            System.out.println("Foperat(avant insertion)=" + foperat1);
+            foperatDAO.insert(foperat1);
+            foperatDAO.closeInsertPreparedStatement();
+            System.out.println("Foperat(après insertion)=" + foperat1);
+            System.out.println("Rangée(s) affectée(s)=" + foperatDAO.getNbAffectedRow());
 
 // Essai de mise à jour
-            MyFoperatDAO.setUpdatePreparedStatement();
-            MyFoperat1.setOname(MyFoperat1.getOname() + " del monte");
-            MyFoperatDAO.update(MyFoperat1);
-            System.out.println("Foperat(après mise-à-jour)=" + MyFoperat1);
-            System.out.println("Rangée(s) affectée(s)=" + MyFoperatDAO.getNbAffectedRow());
-            MyFoperatDAO.closeUpdatePreparedStatement();
+            foperatDAO.setUpdatePreparedStatement();
+            foperat1.setOname(foperat1.getOname() + " del monte");
+            foperatDAO.update(foperat1);
+            System.out.println("Foperat(après mise-à-jour)=" + foperat1);
+            System.out.println("Rangée(s) affectée(s)=" + foperatDAO.getNbAffectedRow());
+            foperatDAO.closeUpdatePreparedStatement();
 
 // Essai de lecture
-            MyFoperatDAO.filterByName("po");
-            System.out.println("  SelectStatement=" + MyFoperatDAO.getSelectStatement());
-            MyFoperatDAO.setSelectPreparedStatement();
+            foperatDAO.filterByName("po");
+            System.out.println("  SelectStatement=" + foperatDAO.getSelectStatement());
+            foperatDAO.setSelectPreparedStatement();
             i = 0;
-            while ((MyFoperat = MyFoperatDAO.select()) != null) {
+            while ((foperat = foperatDAO.select()) != null) {
                 i++;
-                System.out.println("Foperat(" + i + ")=" + MyFoperat);
+                System.out.println("Foperat(" + i + ")=" + foperat);
             }
-            MyFoperatDAO.closeSelectPreparedStatement();
+            foperatDAO.closeSelectPreparedStatement();
 
 // Essai de suppression
-            System.out.println("Suppression de : " + MyFoperat1);
-            MyFoperatDAO.setDeletePreparedStatement();
-            MyFoperatDAO.delete(MyFoperat1.getOnum());
-            MyFoperatDAO.closeDeletePreparedStatement();
-            System.out.println("Rangée(s) affectée(s)=" + MyFoperatDAO.getNbAffectedRow());
+            System.out.println("Suppression de : " + foperat1);
+            foperatDAO.setDeletePreparedStatement();
+            foperatDAO.delete(foperat1.getOnum());
+            foperatDAO.closeDeletePreparedStatement();
+            System.out.println("Rangée(s) affectée(s)=" + foperatDAO.getNbAffectedRow());
 
-        } catch (IOException MyException) {
-            System.out.println("Erreur en lecture du fichier des propriétés " + MyException);
-        } catch (DBServerException MyException) {
-            System.out.println("Erreur avec le serveur de base de données " + MyException);
-        } catch (ClassNotFoundException MyException) {
-            System.out.println("Erreur classe non trouvée " + MyException);
-        } catch (SQLException MyException) {
-            System.out.println("Erreur SQL rencontrée " + MyException);
+        } catch (IOException exception) {
+            System.out.println("Erreur en lecture du fichier des propriétés " + exception);
+        } catch (DBServerException exception) {
+            System.out.println("Erreur avec le serveur de base de données " + exception);
+        } catch (ClassNotFoundException exception) {
+            System.out.println("Erreur classe non trouvée " + exception);
+        } catch (SQLException exception) {
+            System.out.println("Erreur SQL rencontrée " + exception);
         }
     }
 }
