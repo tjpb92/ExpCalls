@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.33
+ * @version 0.35
  */
 public class ExpCallsParams {
 
@@ -113,6 +113,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le nom du fichier de sortie au format XML.
+     * 
      * @return XMLFilename le nom du fichier de sortie au format XML.
      */
     public String getXMLFilename() {
@@ -120,6 +122,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit la référence client.
+     * 
      * @param unum définit la référence client.
      */
     public void setUnum(int unum) {
@@ -127,6 +131,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit la date de début de l'export à 0h.
+     * 
      * @param begDate définit la date de début de l'export à 0h.
      */
     public void setBegDate(Timestamp begDate) {
@@ -134,6 +140,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit la date de fin de l'export à 0h.
+     * 
      * @param endDate définit la date de fin de l'export à 0h.
      */
     public void setEndDate(Timestamp endDate) {
@@ -141,6 +149,7 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne l'identifiant du client.
      * @return Unum l'identifiant du client.
      */
     public int getUnum() {
@@ -148,6 +157,7 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne la date de début de l'export à 0h.
      * @return begDate la date de début de l'export à 0h.
      */
     public Timestamp getBegDate() {
@@ -155,6 +165,7 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne la date de fin de l'export à 0h.
      * @return endDate la date de fin de l'export à 0h.
      */
     public Timestamp getEndDate() {
@@ -162,14 +173,18 @@ public class ExpCallsParams {
     }
 
     /**
-     * @return le suffixe à ajouter au nom du fichier
+     * Méthode qui retourne le suffixe à ajouter au nom du fichier.
+     * 
+     * @return le suffixe à ajouter au nom du fichier.
      */
     public String getSuffix() {
         return suffix;
     }
 
     /**
-     * @param suffix définit le suffixe à ajouter au nom du fichier
+     * Méthode qui définit le suffixe à ajouter au nom du fichier.
+     * 
+     * @param suffix définit le suffixe à ajouter au nom du fichier.
      */
     public void setSuffix(String suffix) {
         this.suffix = suffix;
@@ -332,6 +347,9 @@ public class ExpCallsParams {
             case 648:
                 setModeleDeRapport(ModeleDeRapport.MIQ);
                 break;
+            case 654:
+                setModeleDeRapport(ModeleDeRapport.NEX);
+                break;
             case 655:
                 setModeleDeRapport(ModeleDeRapport.NEX);
                 break;
@@ -353,6 +371,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le le nom du fichier de sortie au format XML.
+     * 
      * @param XMLFilename définit le nom du fichier de sortie au format XML.
      */
     public void setXMLFilename(String XMLFilename) {
@@ -360,6 +380,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le nom du fichier contenant le schéma XML.
+     * 
      * @return XSDFilename le nom du fichier contenant le schéma XML.
      */
     public String getXSDFilename() {
@@ -367,6 +389,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le nom du fichier contenant le schéma XML.
+     * 
      * @param XSDFilename définit le nom du fichier contenant le schéma XML.
      */
     public void setXSDFilename(String XSDFilename) {
@@ -374,6 +398,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le nom du fichier de sortie au format Excel.
+     * 
      * @return ExcelFilename le nom du fichier de sortie au format Excel.
      */
     public String getExcelFilename() {
@@ -381,6 +407,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méhode qui définit le nom du fichier de sortie au format Excel.
+     * 
      * @param ExcelFilename définit le nom du fichier de sortie au format Excel.
      */
     public void setExcelFilename(String ExcelFilename) {
@@ -388,6 +416,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne la connection à la base de données locale.
+     * 
      * @return connection connection à la base de données locale.
      */
     public Connection getConnection() {
@@ -395,6 +425,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit la connection à la base de données locale.
+     * 
      * @param connection définit la connection à la base de données locale.
      */
     public void setConnection(Connection connection) {
@@ -402,6 +434,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le nom du client.
+     * 
      * @return uname le nom du client.
      */
     public String getUname() {
@@ -409,6 +443,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le nom du client.
+     * 
      * @param uname définit le nom du client.
      */
     public void setUname(String uname) {
@@ -416,6 +452,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le nom abrégé du client.
+     * 
      * @return uabbname le nom abrégé du client.
      */
     public String getUabbname() {
@@ -423,6 +461,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le nom abrégé du client.
+     * 
      * @param uabbname définit le nom abrégé du client.
      */
     public void setUabbname(String uabbname) {
@@ -430,6 +470,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le modèle de rappport XML.
+     * 
      * @return modeleDeRapport le modèle de rappport XML.
      */
     public ModeleDeRapport getModeleDeRapport() {
@@ -437,6 +479,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le modèle de rappport XML.
+     * 
      * @param modeleDeRapport définit le modèle de rappport XML.
      */
     public void setModeleDeRapport(ModeleDeRapport modeleDeRapport) {
@@ -444,6 +488,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui retourne le mode de fonctionnement debug.
+     * 
      * @return debugMode : retourne le mode de fonctionnement debug.
      */
     public boolean getDebugMode() {
@@ -451,6 +497,8 @@ public class ExpCallsParams {
     }
 
     /**
+     * Méthode qui définit le fonctionnement du programme en mode debug.
+     * 
      * @param debugMode : fonctionnement du programme en mode debug
      * (true/false).
      */

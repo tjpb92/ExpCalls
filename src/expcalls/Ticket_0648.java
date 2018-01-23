@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Classe représentant un ticket pour les clients de la famille du client 609
+ * Classe représentant un ticket pour les clients de la famille du client 648.
  *
- * @version 0.31
+ * @version 0.35
  * @author Thierry Baribaud
  */
 public class Ticket_0648 extends Ticket_0000 {
