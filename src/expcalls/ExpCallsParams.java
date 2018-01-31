@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.35
+ * @version 0.36
  */
 public class ExpCallsParams {
 
@@ -352,6 +352,9 @@ public class ExpCallsParams {
                 break;
             case 655:
                 setModeleDeRapport(ModeleDeRapport.NEX);
+                break;
+            case 670:
+                setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             default:
                 setModeleDeRapport(ModeleDeRapport.STD);
