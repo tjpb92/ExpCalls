@@ -62,11 +62,14 @@
             <xs:element type="xs:string" name="AdresseEmail2" minOccurs="0"/>
             <xs:element type="xs:string" name="DelaiIntervention2" minOccurs="0"/>
             <xs:element type="xs:string" name="InterventionCloturee" minOccurs="0"/>
-            <xs:element type="xs:string" name="DateIntervention" minOccurs="0"/>
-            <xs:element type="xs:string" name="HeureIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateDebutIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureDebutIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="DateFinIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="HeureFinIntervention" minOccurs="0"/>
             <xs:element type="xs:string" name="ResultatIntervention" minOccurs="0"/>
             
             <!-- Page 8 -->
+            <xs:element type="xs:string" name="NaturePanne" minOccurs="0"/>
             <xs:element type="xs:string" name="RapportIntervention" minOccurs="0"/>
             <xs:element type="xs:string" name="DelaiIntervention" minOccurs="0"/>
             

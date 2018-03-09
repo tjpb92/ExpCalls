@@ -14,7 +14,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.34
+ * @version 0.37
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -404,18 +404,34 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         Ticket.appendChild(element);
         element.appendChild(MyDocument.createTextNode(aString));
 
-        // Date d'intervention
-        element = MyDocument.createElement("DateIntervention");
+        // Date de début d'intervention
+        element = MyDocument.createElement("DateDebutIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getDateInterventionRelevee();
+        aString = ticket_0572.getDateDebutInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
 
-        // Heure d'intervention
-        element = MyDocument.createElement("HeureIntervention");
+        // Heure de début d'intervention
+        element = MyDocument.createElement("HeureDebutIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getHeureInterventionRelevee();
+        aString = ticket_0572.getHeureDebutInterventionRelevee();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Date de fin d'intervention
+        element = MyDocument.createElement("DateFinIntervention");
+        Ticket.appendChild(element);
+        aString = ticket_0572.getDateFinInterventionRelevee();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Heure de fin d'intervention
+        element = MyDocument.createElement("HeureFinIntervention");
+        Ticket.appendChild(element);
+        aString = ticket_0572.getHeureDebutInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -424,6 +440,14 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         element = MyDocument.createElement("ResultatIntervention");
         Ticket.appendChild(element);
         aString = clotureAppel.getResultat();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Nature de la panne
+        element = MyDocument.createElement("NaturePanne");
+        Ticket.appendChild(element);
+        aString = clotureAppel.getNature();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
