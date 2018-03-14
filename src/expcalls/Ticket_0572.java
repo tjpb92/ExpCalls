@@ -1,10 +1,18 @@
 package expcalls;
 
 import bdd.EtatTicket;
+import bdd.Factivity;
+import bdd.FactivityDAO;
 import bdd.Fcalls;
 import bdd.Fcomplmt;
+import bdd.Fessais;
+import bdd.FessaisDAO;
+import bdd.Ftoubib;
+import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
@@ -13,6 +21,11 @@ import java.sql.SQLException;
  * @version 0.37
  */
 public class Ticket_0572 extends Ticket_0000 {
+
+    /**
+     * Format de date "dd/mm/aaaa".
+     */
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Degré d'urgence de la demande d'intervention.
@@ -67,16 +80,29 @@ public class Ticket_0572 extends Ticket_0000 {
     /**
      * Contructeur principal de la classe Ticket.
      *
-     * @param MyConnection connexion à la base de données courante.
+     * @param connection connexion à la base de données courante.
      * @param Fcalls_0000 appel,
      * @param Fcomplmt_0000 complément d'appel.
-     * @param MyEtatTicket etat du ticket.
+     * @param etatTicket etat du ticket.
      * @throws java.lang.ClassNotFoundException en cas de classe non trouvée.
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
-    public Ticket_0572(Connection MyConnection, Fcalls Fcalls_0000, Fcomplmt Fcomplmt_0000, EtatTicket MyEtatTicket) throws ClassNotFoundException, SQLException {
+    public Ticket_0572(Connection connection, Fcalls Fcalls_0000, Fcomplmt Fcomplmt_0000, EtatTicket etatTicket) throws ClassNotFoundException, SQLException {
+        super(connection, Fcalls_0000, Fcomplmt_0000, etatTicket);
 
-        super(MyConnection, Fcalls_0000, Fcomplmt_0000, MyEtatTicket);
+        Fessais fessais;
+        FessaisDAO fessaisDAO;
+        int tnum = 0;
+        Ftoubib ftoubib;
+        FtoubibDAO ftoubibDAO;
+        boolean loop = true;
+        int n;
+        int delay;
+        int enumabs1 = 0;
+        int a4num;
+        String a4name;
+        Factivity factivity;
+        FactivityDAO factivityDAO;
 
         // Degré d'urgence cf. tra_nat_urg_0572() dans libspc0572.4gl.
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
@@ -147,6 +173,159 @@ public class Ticket_0572 extends Ticket_0000 {
         setHeureDebutInterventionRelevee(getClotureAppel().getHeureDebutInterventionRelevee());
         setDateFinInterventionRelevee(getClotureAppel().getDateFinInterventionRelevee());
         setHeureFinInterventionRelevee(getClotureAppel().getHeureFinInterventionRelevee());
+
+        // Pour la famille du client 572, on gère les status Intervention/Message autrement
+        this.setEtatIntervention("Message");
+
+        // Recherche la première mise en sommeil sur un ticket de type message
+//        System.out.println("  Récupération de la première mise en sommeil");
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(connection, etatTicket);
+//          fessaisDAO.setTrialStatementOrderby("order by edate desc, etime desc");
+            fessaisDAO.setTrialStatementOrderby("order by edate, etime");
+            fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 23);
+            n = 0;
+            loop = true;
+            while (loop && (fessais = fessaisDAO.getTrial()) != null) {
+                n++;
+                if ((tnum = fessais.getEtnum()) > 0) {
+                    ftoubibDAO = new FtoubibDAO(connection);
+                    ftoubibDAO.filterById(tnum);
+                    ftoubibDAO.setSelectPreparedStatement();
+                    if ((ftoubib = ftoubibDAO.select()) != null) {
+                        if (!ftoubib.getTlname().contentEquals("message")) {
+                            this.setEtatIntervention("Intervention");
+                            this.setNomPrestataire1(ftoubib.getTlname());
+                            this.setPrenomPrestataire1(ftoubib.getTfname());
+                            this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
+                            this.setNoTelephone1(ftoubib.getTel());
+                            this.setEmail1(ftoubib.getTemail());
+                            delay = ftoubib.getTdelay1() * 60;
+                            if (delay > 0) {
+                                this.setDelaiIntervention1(CharDur(delay));
+                            }
+                            a4num = ftoubib.getTa4num();
+                            if (a4num > 0) {
+                                factivityDAO = new FactivityDAO(connection);
+                                factivityDAO.filterById(a4num);
+                                factivityDAO.setSelectPreparedStatement();
+                                factivity = factivityDAO.select();
+                                if (factivity != null) {
+                                    a4name = factivity.getA4name();
+                                    if (a4name != null) {
+                                        this.setA4name1(a4name);
+                                    }
+                                }
+                                factivityDAO.closeSelectPreparedStatement();
+                            }
+                            loop = false;
+                        }
+                    }
+                    ftoubibDAO.closeSelectPreparedStatement();
+                }
+            }
+            fessaisDAO.closeTrialPreparedStatement();
+        }
+
+        // Recherche la première transmission
+//        System.out.println("  Récupération de la première transmission");
+        fessaisDAO = new FessaisDAO(connection, etatTicket);
+        fessaisDAO.setTrialStatementOrderby("order by edate, etime");
+        fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
+        n = 0;
+        loop = true;
+        while (loop && (fessais = fessaisDAO.getTrial()) != null) {
+            n++;
+            if ((tnum = fessais.getEtnum()) > 0) {
+                ftoubibDAO = new FtoubibDAO(connection);
+                ftoubibDAO.filterById(tnum);
+                ftoubibDAO.setSelectPreparedStatement();
+                if ((ftoubib = ftoubibDAO.select()) != null) {
+                    if (!ftoubib.getTlname().contentEquals("message")) {
+                        enumabs1 = fessais.getEnumabs();
+                        this.setEtatIntervention("Intervention");
+                        this.setNomPrestataire1(ftoubib.getTlname());
+                        this.setPrenomPrestataire1(ftoubib.getTfname());
+                        this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
+                        this.setNoTelephone1(ftoubib.getTel());
+                        this.setEmail1(ftoubib.getTemail());
+                        delay = ftoubib.getTdelay1() * 60;
+                        if (delay > 0) {
+                            this.setDelaiIntervention1(CharDur(delay));
+                        }
+                        a4num = ftoubib.getTa4num();
+                        if (a4num > 0) {
+                            factivityDAO = new FactivityDAO(connection);
+                            factivityDAO.filterById(a4num);
+                            factivityDAO.setSelectPreparedStatement();
+                            factivity = factivityDAO.select();
+                            if (factivity != null) {
+                                a4name = factivity.getA4name();
+                                if (a4name != null) {
+                                    this.setA4name1(a4name);
+                                }
+                            }
+                            factivityDAO.closeSelectPreparedStatement();
+                        }
+                        loop = false;
+                    }
+                }
+                ftoubibDAO.closeSelectPreparedStatement();
+            }
+        }
+        fessaisDAO.closeTrialPreparedStatement();
+
+        // Recherche la dernière transmission
+        //System.out.println("  Récupération de la dernière transmission");
+        // ATTENTION : Incorporer enumabs1 dans la requête ultérieurement
+        fessaisDAO = new FessaisDAO(connection, etatTicket);
+        fessaisDAO.setTrialStatementOrderby("order by edate desc, etime desc");
+        fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
+        n = 0;
+        loop = true;
+        while (loop && (fessais = fessaisDAO.getTrial()) != null) {
+            n++;
+            if (fessais.getEnumabs() != enumabs1) {
+                if ((tnum = fessais.getEtnum()) > 0) {
+                    ftoubibDAO = new FtoubibDAO(connection);
+                    ftoubibDAO.filterById(tnum);
+                    ftoubibDAO.setSelectPreparedStatement();
+                    if ((ftoubib = ftoubibDAO.select()) != null) {
+                        if (!ftoubib.getTlname().contentEquals("message")) {
+                            this.setEtatIntervention("Intervention");
+                            this.setNomPrestataire2(ftoubib.getTlname());
+                            this.setPrenomPrestataire2(ftoubib.getTfname());
+                            this.setPrestataire2(ftoubib.getTlname(), ftoubib.getTfname());
+                            this.setNoTelephone2(ftoubib.getTel());
+                            this.setEmail2(ftoubib.getTemail());
+                            delay = ftoubib.getTdelay1() * 60;
+                            if (delay > 0) {
+                                this.setDelaiIntervention2(CharDur(delay));
+                            }
+                            a4num = ftoubib.getTa4num();
+                            if (a4num > 0) {
+                                factivityDAO = new FactivityDAO(connection);
+                                factivityDAO.filterById(a4num);
+                                factivityDAO.setSelectPreparedStatement();
+                                factivity = factivityDAO.select();
+                                if (factivity != null) {
+                                    a4name = factivity.getA4name();
+                                    if (a4name != null) {
+                                        this.setA4name1(a4name);
+                                    }
+                                }
+                                factivityDAO.closeSelectPreparedStatement();
+                            }
+                            loop = false;
+                        }
+                    }
+                    ftoubibDAO.closeSelectPreparedStatement();
+                }
+            } else {
+                loop = false;
+            }
+        }
+        fessaisDAO.closeTrialPreparedStatement();
 
     }
 
