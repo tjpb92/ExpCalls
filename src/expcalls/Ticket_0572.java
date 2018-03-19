@@ -11,21 +11,14 @@ import bdd.Ftoubib;
 import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.37
+ * @version 0.39
  */
 public class Ticket_0572 extends Ticket_0000 {
-
-    /**
-     * Format de date "dd/mm/aaaa".
-     */
-    private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Degré d'urgence de la demande d'intervention.
@@ -46,36 +39,6 @@ public class Ticket_0572 extends Ticket_0000 {
      * Type de demande.
      */
     private String TypeDeDemande;
-
-    /**
-     * Date d'intervention relevée (format jj/mm/aaaa).
-     */
-    private String dateInterventionRelevee = null;
-
-    /**
-     * Heure d'intervention relevée (format hh:mm:ss).
-     */
-    private String heureInterventionRelevee = null;
-
-    /**
-     * Date de début d'intervention relevée (format jj/mm/aaaa, second modèle).
-     */
-    private String dateDebutInterventionRelevee = null;
-
-    /**
-     * Heure de début d'intervention relevée (format hh:mm:ss, second modèle).
-     */
-    private String heureDebutInterventionRelevee = null;
-
-    /**
-     * Date de fin d'intervention relevée (format jj/mm/aaaa, second modèle).
-     */
-    private String dateFinInterventionRelevee = null;
-
-    /**
-     * Heure de fin d'intervention relevée (format hh:mm:ss, second modèle).
-     */
-    private String heureFinInterventionRelevee = null;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -103,6 +66,7 @@ public class Ticket_0572 extends Ticket_0000 {
         String a4name;
         Factivity factivity;
         FactivityDAO factivityDAO;
+        StringBuffer etatIntervention;
 
         // Degré d'urgence cf. tra_nat_urg_0572() dans libspc0572.4gl.
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
@@ -166,14 +130,6 @@ public class Ticket_0572 extends Ticket_0000 {
 //                setTypeDeDemande("Inconnu");
 //                break;
 //        }
-        setDateInterventionRelevee(getClotureAppel().getDateInterventionRelevee());
-        setHeureInterventionRelevee(getClotureAppel().getHeureInterventionRelevee());
-
-        setDateDebutInterventionRelevee(getClotureAppel().getDateDebutInterventionRelevee());
-        setHeureDebutInterventionRelevee(getClotureAppel().getHeureDebutInterventionRelevee());
-        setDateFinInterventionRelevee(getClotureAppel().getDateFinInterventionRelevee());
-        setHeureFinInterventionRelevee(getClotureAppel().getHeureFinInterventionRelevee());
-
         // Pour la famille du client 572, on gère les status Intervention/Message autrement
         this.setEtatIntervention("Message");
 
@@ -262,6 +218,7 @@ public class Ticket_0572 extends Ticket_0000 {
                             if (factivity != null) {
                                 a4name = factivity.getA4name();
                                 if (a4name != null) {
+//                                    this.setA4name1(a4name  + " , a4num=" + a4num + ", tnum=" + tnum);
                                     this.setA4name1(a4name);
                                 }
                             }
@@ -311,7 +268,7 @@ public class Ticket_0572 extends Ticket_0000 {
                                 if (factivity != null) {
                                     a4name = factivity.getA4name();
                                     if (a4name != null) {
-                                        this.setA4name1(a4name);
+                                        this.setA4name2(a4name);
                                     }
                                 }
                                 factivityDAO.closeSelectPreparedStatement();
@@ -327,6 +284,16 @@ public class Ticket_0572 extends Ticket_0000 {
         }
         fessaisDAO.closeTrialPreparedStatement();
 
+        if (isTicketCanceled()) {
+            etatIntervention = new StringBuffer(getEtatIntervention());
+
+            if ("Message".equals(etatIntervention.toString())) {
+                etatIntervention.append(" annulé");
+            } else {
+                etatIntervention.append(" annulée");
+            }
+            setEtatIntervention(etatIntervention.toString());
+        }
     }
 
     /**
@@ -397,95 +364,5 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public void setTypeDeDemande(String TypeDeDemande) {
         this.TypeDeDemande = TypeDeDemande;
-    }
-
-    /**
-     * @return la date d'intervention relevée
-     */
-    public String getDateInterventionRelevee() {
-        return dateInterventionRelevee;
-    }
-
-    /**
-     * @param dateInterventionRelevee définit la date d'intervention relevée
-     */
-    public void setDateInterventionRelevee(String dateInterventionRelevee) {
-        this.dateInterventionRelevee = dateInterventionRelevee;
-    }
-
-    /**
-     * @return l'heure d'intervention relevée
-     */
-    public String getHeureInterventionRelevee() {
-        return heureInterventionRelevee;
-    }
-
-    /**
-     * @param heureInterventionRelevee définit l'heure d'intervention relevée
-     */
-    public void setHeureInterventionRelevee(String heureInterventionRelevee) {
-        this.heureInterventionRelevee = heureInterventionRelevee;
-    }
-
-    /**
-     * @return la date de début d'intervention relevée
-     */
-    public String getDateDebutInterventionRelevee() {
-        return dateDebutInterventionRelevee;
-    }
-
-    /**
-     * @return la date de fin d'intervention relevée
-     */
-    public String getDateFinInterventionRelevee() {
-        return dateDebutInterventionRelevee;
-    }
-
-    /**
-     * @param dateDebutInterventionRelevee définit la date de début
-     * d'intervention relevée
-     */
-    public void setDateDebutInterventionRelevee(String dateDebutInterventionRelevee) {
-        this.dateDebutInterventionRelevee = dateDebutInterventionRelevee;
-    }
-
-    /**
-     * @param dateFinInterventionRelevee définit la date de fin d'intervention
-     * relevée
-     */
-    public void setDateFinInterventionRelevee(String dateFinInterventionRelevee) {
-        this.dateFinInterventionRelevee = dateFinInterventionRelevee;
-    }
-
-    /**
-     * @return heureDebutInterventionRelevee l'heure de début d'intervention
-     * relevée (second modèle).
-     */
-    public String getHeureDebutInterventionRelevee() {
-        return heureDebutInterventionRelevee;
-    }
-
-    /**
-     * @param heureDebutInterventionRelevee définit l'heure de début
-     * d'intervention relevée (second modèle).
-     */
-    public void setHeureDebutInterventionRelevee(String heureDebutInterventionRelevee) {
-        this.heureDebutInterventionRelevee = heureDebutInterventionRelevee;
-    }
-
-    /**
-     * @return heureFinInterventionRelevee l'heure de début d'intervention
-     * relevée (second modèle).
-     */
-    public String getHeureFinInterventionRelevee() {
-        return heureFinInterventionRelevee;
-    }
-
-    /**
-     * @param heureFinInterventionRelevee définit l'heure de début
-     * d'intervention relevée (second modèle).
-     */
-    public void setHeureFinInterventionRelevee(String heureFinInterventionRelevee) {
-        this.heureFinInterventionRelevee = heureFinInterventionRelevee;
     }
 }

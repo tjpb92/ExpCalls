@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
  * existe. Les tickets spécifiques à un client dériveront de celui-ci.
  *
  * @author Thierry Baribaud
- * @version 0.28
+ * @version 0.39
  */
 public class Ticket_0000 {
 
@@ -188,6 +188,11 @@ public class Ticket_0000 {
     private ClotureAppel clotureAppel;
 
     /**
+     * Le ticket est-il annulé ou non ?
+     */
+    private boolean ticketCanceled;
+    
+    /**
      * Contructeur principal de la classe Ticket.
      *
      * @param MyConnection connexion à la base de données courante.
@@ -215,8 +220,8 @@ public class Ticket_0000 {
         Fmenuit MyFmenuit;
         FmenuitDAO MyFmenuitDAO;
         int enumabs1 = 0;
-        Fessais MyFessais;
-        FessaisDAO MyFessaisDAO;
+        Fessais fessais;
+        FessaisDAO fessaisDAO;
         int tnum = 0;
         Ftoubib MyFtoubib;
         FtoubibDAO MyFtoubibDAO;
@@ -294,16 +299,16 @@ public class Ticket_0000 {
 
         // Recherche la première transmission
 //        System.out.println("  Récupération de la première transmission");
-        MyFessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
-        MyFessaisDAO.setFirstTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
-        MyFessais = MyFessaisDAO.getFirstTransmission();
-        MyFessaisDAO.closeFirstTransmissionPreparedStatement();
-        if (MyFessais != null) {
-            enumabs1 = MyFessais.getEnumabs();
+        fessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
+        fessaisDAO.setFirstTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
+        fessais = fessaisDAO.getFirstTransmission();
+        fessaisDAO.closeFirstTransmissionPreparedStatement();
+        if (fessais != null) {
+            enumabs1 = fessais.getEnumabs();
             this.setEtatIntervention("Intervention");
-            this.setDateMissionnement1(MyDateFormat.format(MyFessais.getEdate()));
-            this.setHeureMissionnement1(MyFessais.getEtime());
-            tnum = MyFessais.getEtnum();
+            this.setDateMissionnement1(MyDateFormat.format(fessais.getEdate()));
+            this.setHeureMissionnement1(fessais.getEtime());
+            tnum = fessais.getEtnum();
             if (tnum > 0) {
                 MyFtoubibDAO = new FtoubibDAO(MyConnection);
                 MyFtoubibDAO.filterById(tnum);
@@ -340,15 +345,15 @@ public class Ticket_0000 {
 
         // Recherche la dernière transmission
 //        System.out.println("  Récupération de la dernière transmission");
-        MyFessaisDAO.setLastTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
-        MyFessais = MyFessaisDAO.getLastTransmission();
-        MyFessaisDAO.closeLastTransmissionPreparedStatement();
-        if (MyFessais != null) {
-            if (enumabs1 != MyFessais.getEnumabs()) {
+        fessaisDAO.setLastTransmissionPreparedStatement(this.Fcalls_0000.getCnum());
+        fessais = fessaisDAO.getLastTransmission();
+        fessaisDAO.closeLastTransmissionPreparedStatement();
+        if (fessais != null) {
+            if (enumabs1 != fessais.getEnumabs()) {
                 this.setEtatIntervention("Intervention");
-                this.setDateMissionnement2(MyDateFormat.format(MyFessais.getEdate()));
-                this.setHeureMissionnement2(MyFessais.getEtime());
-                tnum = MyFessais.getEtnum();
+                this.setDateMissionnement2(MyDateFormat.format(fessais.getEdate()));
+                this.setHeureMissionnement2(fessais.getEtime());
+                tnum = fessais.getEtnum();
                 if (tnum > 0) {
                     MyFtoubibDAO = new FtoubibDAO(MyConnection);
                     MyFtoubibDAO.filterById(tnum);
@@ -382,6 +387,13 @@ public class Ticket_0000 {
             }
         }
 
+        // Le ticket est-il annulé ?
+        fessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
+        fessaisDAO.prepareTicketCanceledStatement(this.Fcalls_0000.getCnum());
+        fessais = fessaisDAO.getTicketCanceled();
+        setTicketCanceled(fessais != null);
+        fessaisDAO.closeTicketCanceledPreparedStatement();
+        
         // Récupération de la clôture d'appel
 //        System.out.println("  Récupération de la clôture d'appel");
         this.clotureAppel = new ClotureAppel(MyConnection,
@@ -1008,5 +1020,19 @@ public class Ticket_0000 {
      */
     public void setClotureAppel(ClotureAppel clotureAppel) {
         this.clotureAppel = clotureAppel;
+    }
+
+    /**
+     * @return si le ticket est annulé ou non
+     */
+    public boolean isTicketCanceled() {
+        return ticketCanceled;
+    }
+
+    /**
+     * @param ticketCanceled définit si le ticket est annulé ou non
+     */
+    public void setTicketCanceled(boolean ticketCanceled) {
+        this.ticketCanceled = ticketCanceled;
     }
 }

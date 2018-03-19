@@ -14,7 +14,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.37
+ * @version 0.39
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -407,7 +407,8 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Date de début d'intervention
         element = MyDocument.createElement("DateDebutIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getDateDebutInterventionRelevee();
+//        aString = ticket_0572.getDateDebutInterventionRelevee();
+        aString = clotureAppel.getDateDebutInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -415,7 +416,8 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Heure de début d'intervention
         element = MyDocument.createElement("HeureDebutIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getHeureDebutInterventionRelevee();
+//        aString = ticket_0572.getHeureDebutInterventionRelevee();
+        aString = clotureAppel.getHeureDebutInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -423,7 +425,8 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Date de fin d'intervention
         element = MyDocument.createElement("DateFinIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getDateFinInterventionRelevee();
+//        aString = ticket_0572.getDateFinInterventionRelevee();
+        aString = clotureAppel.getDateFinInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -431,7 +434,8 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Heure de fin d'intervention
         element = MyDocument.createElement("HeureFinIntervention");
         Ticket.appendChild(element);
-        aString = ticket_0572.getHeureDebutInterventionRelevee();
+//        aString = ticket_0572.getHeureDebutInterventionRelevee();
+        aString = clotureAppel.getHeureFinInterventionRelevee();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
