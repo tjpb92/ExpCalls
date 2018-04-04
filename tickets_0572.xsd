@@ -73,6 +73,15 @@
             <xs:element type="xs:string" name="RapportIntervention" minOccurs="0"/>
             <xs:element type="xs:string" name="DelaiIntervention" minOccurs="0"/>
             
+            <!-- Page 9 -->
+            <xs:element type="xs:string" name="EnqueteEffectuee" minOccurs="0"/>
+            <xs:element type="xs:string" name="QualiteAccueilTelephonique" minOccurs="0"/>
+            <xs:element type="xs:string" name="QualiteDelaiIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="RespectRendezVous" minOccurs="0"/>
+            <xs:element type="xs:string" name="QualiteIntervention" minOccurs="0"/>
+            <xs:element type="xs:string" name="SatisfactionGlobale" minOccurs="0"/>
+            <xs:element type="xs:string" name="Commentaire" minOccurs="0"/>
+            <xs:element type="xs:string" name="MoisEnquete" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>

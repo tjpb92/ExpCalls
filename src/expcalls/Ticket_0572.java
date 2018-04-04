@@ -11,12 +11,13 @@ import bdd.Ftoubib;
 import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import bdd.Survey;
 
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.39
+ * @version 0.40
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -39,6 +40,11 @@ public class Ticket_0572 extends Ticket_0000 {
      * Type de demande.
      */
     private String TypeDeDemande;
+
+    /**
+     * Enquête de satisfaction.
+     */
+    private Survey survey;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -294,6 +300,7 @@ public class Ticket_0572 extends Ticket_0000 {
             }
             setEtatIntervention(etatIntervention.toString());
         }
+        setSurvey(new Survey(connection, this.Fcalls_0000.getCnum(), this.Fcomplmt_0000.getC6int4(), etatTicket));
     }
 
     /**
@@ -364,5 +371,19 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public void setTypeDeDemande(String TypeDeDemande) {
         this.TypeDeDemande = TypeDeDemande;
+    }
+
+    /**
+     * @return l'enquête de satisfaction
+     */
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    /**
+     * @param survey définit l'enquête de satisfaction
+     */
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 }
