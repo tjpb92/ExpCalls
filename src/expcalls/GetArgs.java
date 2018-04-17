@@ -12,17 +12,17 @@ import java.util.GregorianCalendar;
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.33
+ * @version 0.40
  */
 public class GetArgs {
 
-    private static final DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
-     * SourceServer : prod pour le serveur de production, dev pour le serveur de
+     * sourceServer : prod pour le serveur de production, dev pour le serveur de
      * développement. Valeur par défaut : dev.
      */
-    private String SourceServer = "dev";
+    private String sourceServer = "dev";
 
     /**
      * Unum : Référence du client. Valeur par défaut : doit être spécifié en
@@ -43,25 +43,48 @@ public class GetArgs {
     private String directory = ".";
 
     /**
-     * BegDate : date de début de l'export à 0h.
+     * begDate : date de début de l'export à 0h.
      */
-    private Timestamp BegDate = new Timestamp((new java.util.Date().getTime()) - 1000 * 60 * 60 * 24);
+    private Timestamp begDate = new Timestamp((new java.util.Date().getTime()) - 1000 * 60 * 60 * 24);
 
     /**
-     * EndDate : date de fin de l'export à 0h.
+     * endDate : date de fin de l'export à 0h.
      */
-    private Timestamp EndDate = new Timestamp(new java.util.Date().getTime());
+    private Timestamp endDate = new Timestamp(new java.util.Date().getTime());
 
     /**
      * nbJour : nombre de jours à compter de la date courante
      */
     private int nbJour;
-    
+
     /**
      * suffix : suffixe optionnel à rajouter au nom du fichier
      */
     private String suffix = null;
-    
+
+    /**
+     * Filtrer les tickets ouverts
+     */
+    private boolean openedTicket = false;
+
+    /**
+     * Retourne s'il y a ou non filtrage des tickets ouverts
+     *
+     * @return s'il y a ou non filtrage des tickets ouverts
+     */
+    public boolean isOpenedTicket() {
+        return openedTicket;
+    }
+
+    /**
+     * Définit l'état de filtrage des tickets ouverts
+     *
+     * @param openedTicket état de filtrage des tickets ouverts
+     */
+    public void setOpenedTicket(boolean openedTicket) {
+        this.openedTicket = openedTicket;
+    }
+
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
      * Valeur par défaut : false.
@@ -75,10 +98,10 @@ public class GetArgs {
     private boolean testMode = false;
 
     /**
-     * @return SourceServer : la valeur pour le serveur source.
+     * @return sourceServer : la valeur pour le serveur source.
      */
     public String getSourceServer() {
-        return (SourceServer);
+        return (sourceServer);
     }
 
     /**
@@ -96,17 +119,17 @@ public class GetArgs {
     }
 
     /**
-     * @return BegDate : date de début de l'export à 0h.
+     * @return begDate : date de début de l'export à 0h.
      */
     public Timestamp getBegDate() {
-        return (BegDate);
+        return (begDate);
     }
 
     /**
-     * @return EndDate : date de fin de l'export à 0h.
+     * @return endDate : date de fin de l'export à 0h.
      */
     public Timestamp getEndDate() {
-        return (EndDate);
+        return (endDate);
     }
 
     /**
@@ -124,10 +147,10 @@ public class GetArgs {
     }
 
     /**
-     * @param SourceServer : définit le serveur source.
+     * @param sourceServer : définit le serveur source.
      */
-    public void setSourceServer(String SourceServer) {
-        this.SourceServer = SourceServer;
+    public void setSourceServer(String sourceServer) {
+        this.sourceServer = sourceServer;
     }
 
     /**
@@ -145,17 +168,17 @@ public class GetArgs {
     }
 
     /**
-     * @param BegDate : date de début de l'export à 0h.
+     * @param begDate : date de début de l'export à 0h.
      */
-    public void setBegDate(Timestamp BegDate) {
-        this.BegDate = BegDate;
+    public void setBegDate(Timestamp begDate) {
+        this.begDate = begDate;
     }
 
     /**
-     * @param EndDate : date de fin de l'export à 0h.
+     * @param endDate : date de fin de l'export à 0h.
      */
-    public void setEndDate(Timestamp EndDate) {
-        this.EndDate = EndDate;
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
     }
 
     /**
@@ -189,6 +212,8 @@ public class GetArgs {
      * par défaut <i>calls_0000.xml</i>(optionnel).</li>
      * <li>-n nbJour : nombre de jour(s) à compter de la date courante.</li>
      * <li>-s suffixe : suffixe optionnel à ajouter au nom du fichier.</li>
+     * <li>-openedTicket : permet de filtrer les tickets ouverts. inactif par
+ défaut (optionnel)</li>
      * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux,
      * désactivé par défaut (optionnel).</li>
      * <li>-t : le programme fonctionne en mode de test, les transactions en
@@ -207,7 +232,7 @@ public class GetArgs {
         Date MyDate;
 
         // Demande une analyse d'une date valide
-        MyDateFormat.setLenient(false);
+        dateFormat.setLenient(false);
         n = Args.length;
 
         System.out.println("nargs=" + n);
@@ -219,7 +244,7 @@ public class GetArgs {
             if (Args[i].equals("-dbserver")) {
                 if (ip1 < n) {
                     if (Args[ip1].equals("dev") || Args[ip1].equals("prod") || Args[ip1].equals("mysql")) {
-                        setSourceServer(Args[ip1]);
+                        sourceServer = Args[ip1];
                     } else {
                         throw new GetArgsException("Mauvaise source de données : " + Args[ip1]);
                     }
@@ -230,7 +255,7 @@ public class GetArgs {
             } else if (Args[i].equals("-u")) {
                 if (ip1 < n) {
                     try {
-                        setUnum(Integer.parseInt(Args[ip1]));
+                        unum = Integer.parseInt(Args[ip1]);
                         i = ip1;
                     } catch (Exception MyException) {
                         throw new GetArgsException("La référence client doit être numérique : " + Args[ip1]);
@@ -241,8 +266,8 @@ public class GetArgs {
             } else if (Args[i].equals("-b")) {
                 if (ip1 < n) {
                     try {
-                        MyDate = (Date) MyDateFormat.parse(Args[ip1]);
-                        setBegDate(new Timestamp(MyDate.getTime()));
+                        MyDate = (Date) dateFormat.parse(Args[ip1]);
+                        begDate = new Timestamp(MyDate.getTime());
                         i = ip1;
                     } catch (Exception MyException) {
                         throw new GetArgsException("La date de début doit être valide jj/mm/aaaa : " + Args[ip1]);
@@ -253,8 +278,8 @@ public class GetArgs {
             } else if (Args[i].equals("-e")) {
                 if (ip1 < n) {
                     try {
-                        MyDate = (Date) MyDateFormat.parse(Args[ip1]);
-                        setEndDate(new Timestamp(MyDate.getTime()));
+                        MyDate = (Date) dateFormat.parse(Args[ip1]);
+                        endDate = new Timestamp(MyDate.getTime());
                         i = ip1;
                     } catch (Exception MyException) {
                         throw new GetArgsException("La date de fin doit être valide jj/mm/aaaa : " + Args[ip1]);
@@ -265,7 +290,7 @@ public class GetArgs {
             } else if (Args[i].equals("-n")) {
                 if (ip1 < n) {
                     try {
-                        setNbJour(Integer.parseInt(Args[ip1]));
+                        nbJour = Integer.parseInt(Args[ip1]);
                         i = ip1;
                     } catch (Exception MyException) {
                         throw new GetArgsException("Le nombre de jour(s) doit être numérique : " + Args[ip1]);
@@ -275,37 +300,39 @@ public class GetArgs {
                 }
             } else if (Args[i].equals("-o")) {
                 if (ip1 < n) {
-                    setFilename(Args[ip1]);
+                    filename = Args[ip1];
                     i = ip1;
                 } else {
                     throw new GetArgsException("Nom de fichier non défini");
                 }
             } else if (Args[i].equals("-p")) {
                 if (ip1 < n) {
-                    setDirectory(Args[ip1]);
+                    directory = Args[ip1];
                     i = ip1;
                 } else {
                     throw new GetArgsException("Répertoire non défini");
                 }
             } else if (Args[i].equals("-s")) {
                 if (ip1 < n) {
-                    setSuffix(Args[ip1]);
+                    suffix = Args[ip1];
                     i = ip1;
                 } else {
                     throw new GetArgsException("Suffixe non défini");
                 }
+            } else if (Args[i].equals("-openedTicket")) {
+                openedTicket = true;
             } else if (Args[i].equals("-d")) {
-                setDebugMode(true);
+                debugMode = true;
             } else if (Args[i].equals("-t")) {
-                setTestMode(true);
+                testMode = true;
             } else {
                 throw new GetArgsException("Mauvais argument : " + Args[i]);
             }
             i++;
         }
-        if (getBegDate().after(getEndDate())) {
-            throw new GetArgsException("La date de début " + MyDateFormat.format(getBegDate())
-                    + " doit être antérieure à la date de fin " + MyDateFormat.format(getEndDate()));
+        if (begDate.after(endDate)) {
+            throw new GetArgsException("La date de début " + dateFormat.format(begDate)
+                    + " doit être antérieure à la date de fin " + dateFormat.format(endDate));
         }
     }
 
@@ -315,7 +342,8 @@ public class GetArgs {
     public static void usage() {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum "
                 + " [[-b début] [-f fin]|[-n nbJour]] [-o fichier.xml]"
-                + " [-p répertoire] [-s suffix] [-d] [-t]");
+                + " [-p répertoire] [-s suffixe] [-ticketOpened]"
+                + " [-d] [-t]");
     }
 
     /**
@@ -341,14 +369,15 @@ public class GetArgs {
     @Override
     public String toString() {
         return "GetArgs:{"
-                + "dbServer=" + SourceServer
+                + "dbServer=" + sourceServer
                 + ", unum=" + unum
-                + ", début=" + MyDateFormat.format(BegDate)
-                + ", fin=" + MyDateFormat.format(EndDate)
+                + ", début=" + dateFormat.format(begDate)
+                + ", fin=" + dateFormat.format(endDate)
                 + ", fichier=" + filename
                 + ", répertoire=" + directory
                 + ", nbJour=" + nbJour
                 + ", suffixe=" + suffix
+                + ", ticketOuvert=" + openedTicket
                 + ", debugMode=" + debugMode
                 + ", testMode=" + testMode
                 + "}";
@@ -362,26 +391,26 @@ public class GetArgs {
     }
 
     /**
-     * @param nbJour définit le nombre de jours à compter de la date courante
-     * La date de début et la date de fin sont définit en conséquence.
+     * @param nbJour définit le nombre de jours à compter de la date courante La
+     * date de début et la date de fin sont définit en conséquence.
      */
     public void setNbJour(int nbJour) {
         Calendar calendar;
-        
+
         this.nbJour = nbJour;
 
         // Récupère la date du jour
         calendar = new GregorianCalendar();
-        
+
         // Elimine les heures, minutes, secondes et millisecondes.
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         setEndDate(new Timestamp(calendar.getTimeInMillis()));
-        
+
         // Calcule la date de début d'extraction
-        calendar.add(Calendar.DAY_OF_YEAR, - nbJour);
+        calendar.add(Calendar.DAY_OF_YEAR, -nbJour);
         setBegDate(new Timestamp(calendar.getTimeInMillis()));
     }
 

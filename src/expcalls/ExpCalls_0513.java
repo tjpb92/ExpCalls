@@ -15,7 +15,7 @@ import utils.DBServerException;
  * client 513 dans un fichier au format XML.
  *
  * @author Thierry Baribaud
- * @version 0.27
+ * @version 0.42
  */
 public class ExpCalls_0513 extends AbstractExpCalls {
 
@@ -23,72 +23,76 @@ public class ExpCalls_0513 extends AbstractExpCalls {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement. Voir GetArgs pour plus de détails.
      *
-     * @param MyExpcallsParams paramètres pour l'extraction des appels.
+     * @param expCallsParams paramètres pour l'extraction des appels.
      * @throws java.io.IOException en cas de fichier non lisible ou absent.
      * @throws utils.DBServerException en cas de propriété incorrecte.
      * @throws java.sql.SQLException en cas d'une erreur SQL.
      */
-    public ExpCalls_0513(ExpCallsParams MyExpcallsParams) throws IOException, DBServerException, SQLException {
+    public ExpCalls_0513(ExpCallsParams expCallsParams) throws IOException, DBServerException, SQLException {
 
         Calls_0513_XMLDocument MyXMLDocument;
-        String MyString;
+        String aString;
 
         // Indique les références du client en commentaires
-        MyString = "Client " + MyExpcallsParams.getUname() + " ("
-                + MyExpcallsParams.getUabbname() + "), id=" + MyExpcallsParams.getUnum();
+        aString = "Client " + expCallsParams.getUname() + " ("
+                + expCallsParams.getUabbname() + "), id=" + expCallsParams.getUnum();
 
         // Amorçage du fichier XML contenant les résultats.
         MyXMLDocument = new Calls_0513_XMLDocument("tickets",
-                MyExpcallsParams.getXSDFilename(), MyString);
+                expCallsParams.getXSDFilename(), aString);
 
         // Traitement des appels en cours.
-        processTickets(MyExpcallsParams, MyXMLDocument, EtatTicket.EN_COURS);
+        processTickets(expCallsParams, MyXMLDocument, EtatTicket.EN_COURS);
 
         // Traitement des appels archivés.
-        processTickets(MyExpcallsParams, MyXMLDocument, EtatTicket.ARCHIVE);
+        processTickets(expCallsParams, MyXMLDocument, EtatTicket.ARCHIVE);
 
 //            A voir plus tard ...
 //            MyXMLDocument.FinalizeXMLDocument(MyArgs.getFileOut());
-        MyXMLDocument.FinalizeXMLDocument(MyExpcallsParams.getXMLFilename());
+        MyXMLDocument.FinalizeXMLDocument(expCallsParams.getXMLFilename());
 
     }
 
     /**
      * Méthode qui traite les tickets.
      *
-     * @param MyExpcallsParams paramètres d'extraction des appels.
+     * @param expCallsParams paramètres d'extraction des appels.
      * @param MyXMLDocument document XML contenant les appels.
-     * @param MyEtatTicket état du ticket.
+     * @param etatTicket état du ticket.
      */
-    public void processTickets(ExpCallsParams MyExpcallsParams,
-            Calls_0513_XMLDocument MyXMLDocument, EtatTicket MyEtatTicket) {
+    public void processTickets(ExpCallsParams expCallsParams,
+            Calls_0513_XMLDocument MyXMLDocument, EtatTicket etatTicket) {
 
-        Fcalls MyFcalls;
-        FcallsDAO MyFcallsDAO;
+        Fcalls fcalls;
+        FcallsDAO fcallsDAO;
         int i;
-        Ticket_0513 MyTicket_0513;
-        Connection MyConnection;
+        Ticket_0513 ticket_0513;
+        Connection connection;
 
         try {
-            MyConnection = MyExpcallsParams.getConnection();
+            connection = expCallsParams.getConnection();
 
-            MyFcallsDAO = new FcallsDAO(MyConnection, MyEtatTicket);
-            MyFcallsDAO.filterByDate(MyExpcallsParams.getUnum(),
-                    MyExpcallsParams.getBegDate(), MyExpcallsParams.getEndDate());
-            MyFcallsDAO.setSelectPreparedStatement();
+            fcallsDAO = new FcallsDAO(connection, etatTicket);
+            if (expCallsParams.isOpenedTicket()) {
+                fcallsDAO.filterOpenedTicket();
+            }
+            fcallsDAO.filterByDate(expCallsParams.getUnum(),
+                    expCallsParams.getBegDate(), expCallsParams.getEndDate());
+            fcallsDAO.setSelectPreparedStatement();
+            if (expCallsParams.getDebugMode() == true) {
+                System.out.println("stmt=" + fcallsDAO.getSelectStatement());
+            }
 
             i = 0;
-            while ((MyFcalls = MyFcallsDAO.select()) != null) {
+            while ((fcalls = fcallsDAO.select()) != null) {
                 i++;
-                MyTicket_0513 = new Ticket_0513(MyConnection, MyFcalls, MyEtatTicket);
-                System.out.println("Ticket(" + i + ")=" + MyTicket_0513);
-                MyXMLDocument.AddToXMLDocument(MyTicket_0513);
+                ticket_0513 = new Ticket_0513(connection, fcalls, etatTicket);
+                System.out.println("Ticket(" + i + ")=" + ticket_0513);
+                MyXMLDocument.AddToXMLDocument(ticket_0513);
             }
-            MyFcallsDAO.closeSelectPreparedStatement();
-        } catch (ClassNotFoundException MyException) {
-            Logger.getLogger(ExpCalls_0000.class.getName()).log(Level.SEVERE, null, MyException);
-        } catch (SQLException MyException) {
-            Logger.getLogger(ExpCalls_0000.class.getName()).log(Level.SEVERE, null, MyException);
+            fcallsDAO.closeSelectPreparedStatement();
+        } catch (ClassNotFoundException | SQLException exception) {
+            Logger.getLogger(ExpCalls_0000.class.getName()).log(Level.SEVERE, null, exception);
         }
     }
 
