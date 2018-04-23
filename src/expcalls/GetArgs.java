@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.40
+ * @version 0.43
  */
 public class GetArgs {
 
@@ -290,7 +290,7 @@ public class GetArgs {
             } else if (Args[i].equals("-n")) {
                 if (ip1 < n) {
                     try {
-                        nbJour = Integer.parseInt(Args[ip1]);
+                        this.setNbJour(Integer.parseInt(Args[ip1]));
                         i = ip1;
                     } catch (Exception MyException) {
                         throw new GetArgsException("Le nombre de jour(s) doit être numérique : " + Args[ip1]);
@@ -394,7 +394,7 @@ public class GetArgs {
      * @param nbJour définit le nombre de jours à compter de la date courante La
      * date de début et la date de fin sont définit en conséquence.
      */
-    public void setNbJour(int nbJour) {
+    public final void setNbJour(int nbJour) {
         Calendar calendar;
 
         this.nbJour = nbJour;
