@@ -14,7 +14,7 @@ import utils.DBServerException;
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
  *
- * @version 0.42
+ * @version 0.44
  * @author Thierry Baribaud
  */
 public class ExpCalls_0000 extends AbstractExpCalls {
@@ -29,7 +29,7 @@ public class ExpCalls_0000 extends AbstractExpCalls {
      * @throws java.sql.SQLException en cas d'une erreur SQL.
      */
     public ExpCalls_0000(ExpCallsParams expcallsParams) throws IOException, DBServerException, SQLException {
-
+        
         Calls_0000_XMLDocument MyXMLDocument;
         String aString;
 
@@ -50,7 +50,7 @@ public class ExpCalls_0000 extends AbstractExpCalls {
 //            A voir plus tard ...
 //            MyXMLDocument.FinalizeXMLDocument(MyArgs.getFileOut());
         MyXMLDocument.FinalizeXMLDocument(expcallsParams.getXMLFilename());
-
+        
     }
 
     /**
@@ -63,19 +63,23 @@ public class ExpCalls_0000 extends AbstractExpCalls {
     @Override
     public void processTickets(ExpCallsParams expCallsParams,
             Calls_0000_XMLDocument MyXMLDocument, EtatTicket etatTicket) {
-
+        
         Fcalls fcalls;
         FcallsDAO fcallsDAO;
         int i;
         Ticket_0000 ticket_0000;
         Connection connection;
-
+        int tnum;
+        
         try {
             connection = expCallsParams.getConnection();
-
+            
             fcallsDAO = new FcallsDAO(connection, etatTicket);
             if (expCallsParams.isOpenedTicket()) {
                 fcallsDAO.filterOpenedTicket();
+            }
+            if ((tnum = expCallsParams.getTnum()) > 0) {
+                fcallsDAO.filterByProvider(tnum);
             }
             fcallsDAO.filterByDate(expCallsParams.getUnum(),
                     expCallsParams.getBegDate(), expCallsParams.getEndDate());
@@ -83,7 +87,7 @@ public class ExpCalls_0000 extends AbstractExpCalls {
             if (expCallsParams.getDebugMode() == true) {
                 System.out.println("stmt=" + fcallsDAO.getSelectStatement());
             }
-
+            
             i = 0;
             while ((fcalls = fcallsDAO.select()) != null) {
                 i++;

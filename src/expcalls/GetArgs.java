@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.43
+ * @version 0.44
  */
 public class GetArgs {
 
@@ -68,23 +68,10 @@ public class GetArgs {
     private boolean openedTicket = false;
 
     /**
-     * Retourne s'il y a ou non filtrage des tickets ouverts
-     *
-     * @return s'il y a ou non filtrage des tickets ouverts
+     * Filter les tickets associés à l'intervenant
      */
-    public boolean isOpenedTicket() {
-        return openedTicket;
-    }
-
-    /**
-     * Définit l'état de filtrage des tickets ouverts
-     *
-     * @param openedTicket état de filtrage des tickets ouverts
-     */
-    public void setOpenedTicket(boolean openedTicket) {
-        this.openedTicket = openedTicket;
-    }
-
+    private int tnum;
+    
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
      * Valeur par défaut : false.
@@ -130,6 +117,15 @@ public class GetArgs {
      */
     public Timestamp getEndDate() {
         return (endDate);
+    }
+
+    /**
+     * Retourne s'il y a ou non filtrage des tickets ouverts
+     *
+     * @return s'il y a ou non filtrage des tickets ouverts
+     */
+    public boolean isOpenedTicket() {
+        return openedTicket;
     }
 
     /**
@@ -179,6 +175,15 @@ public class GetArgs {
      */
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * Définit l'état de filtrage des tickets ouverts
+     *
+     * @param openedTicket état de filtrage des tickets ouverts
+     */
+    public void setOpenedTicket(boolean openedTicket) {
+        this.openedTicket = openedTicket;
     }
 
     /**
@@ -321,6 +326,17 @@ public class GetArgs {
                 }
             } else if (Args[i].equals("-openedTicket")) {
                 openedTicket = true;
+            } else if (Args[i].equals("-provider")) {
+                if (ip1 < n) {
+                    try {
+                        tnum = Integer.parseInt(Args[ip1]);
+                        i = ip1;
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("La référence à l'intervenant doit être numérique : " + Args[ip1]);
+                    }
+                } else {
+                    throw new GetArgsException("Référence intervenant non définie");
+                }
             } else if (Args[i].equals("-d")) {
                 debugMode = true;
             } else if (Args[i].equals("-t")) {
@@ -343,6 +359,7 @@ public class GetArgs {
         System.out.println("Usage : java ExpCalls -dbserver prod -u unum "
                 + " [[-b début] [-f fin]|[-n nbJour]] [-o fichier.xml]"
                 + " [-p répertoire] [-s suffixe] [-ticketOpened]"
+                + " [-provider tnum]"
                 + " [-d] [-t]");
     }
 
@@ -378,6 +395,7 @@ public class GetArgs {
                 + ", nbJour=" + nbJour
                 + ", suffixe=" + suffix
                 + ", ticketOuvert=" + openedTicket
+                + ", provider=" + tnum
                 + ", debugMode=" + debugMode
                 + ", testMode=" + testMode
                 + "}";
@@ -426,5 +444,19 @@ public class GetArgs {
      */
     public void setSuffix(String suffix) {
         this.suffix = suffix;
+    }
+
+    /**
+     * @return retourne la référence de l'intervenant à filtrer
+     */
+    public int getTnum() {
+        return tnum;
+    }
+
+    /**
+     * @param tnum définit la référence de l'intervenant à filter
+     */
+    public void setTnum(int tnum) {
+        this.tnum = tnum;
     }
 }

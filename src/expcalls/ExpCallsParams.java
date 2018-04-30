@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.40
+ * @version 0.44
  */
 public class ExpCallsParams {
 
@@ -69,11 +69,16 @@ public class ExpCallsParams {
      * Nom du fichier de sortie au format Excel.
      */
     private String ExcelFilename = DetermineExcelFilename(0);
-    
+
     /**
      * Filtrer les tickets ouverts
      */
     private boolean openedTicket = false;
+
+    /**
+     * Filter les tickets associés à l'intervenant
+     */
+    private int tnum;
 
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
@@ -100,22 +105,23 @@ public class ExpCallsParams {
         furgentDAO.setSelectPreparedStatement();
         furgent = furgentDAO.select();
         if (furgent != null) {
-            uname=furgent.getUname();
-            uabbname=furgent.getUabbname();
+            uname = furgent.getUname();
+            uabbname = furgent.getUabbname();
         } else {
-            uname="Inconnu";
-            uabbname="INCONNU";
+            uname = "Inconnu";
+            uabbname = "INCONNU";
         }
         furgentDAO.closeSelectPreparedStatement();
 
-        begDate=args.getBegDate();
-        endDate=args.getEndDate();
-        suffix=args.getSuffix();
-        XMLFilename=DetermineXMLFilename(unum);
-        XSDFilename=DetermineXSDFilename(unum);
-        ExcelFilename=DetermineExcelFilename(unum);
-        openedTicket=args.isOpenedTicket();
-        debugMode=args.getDebugMode();
+        begDate = args.getBegDate();
+        endDate = args.getEndDate();
+        suffix = args.getSuffix();
+        XMLFilename = DetermineXMLFilename(unum);
+        XSDFilename = DetermineXSDFilename(unum);
+        ExcelFilename = DetermineExcelFilename(unum);
+        openedTicket = args.isOpenedTicket();
+        tnum = args.getTnum();
+        debugMode = args.getDebugMode();
     }
 
     /**
@@ -536,6 +542,20 @@ public class ExpCallsParams {
      */
     public void setDebugMode(boolean debugMode) {
         ExpCallsParams.debugMode = debugMode;
+    }
+
+    /**
+     * @return retourne la référence de l'intervenant à filtrer
+     */
+    public int getTnum() {
+        return tnum;
+    }
+
+    /**
+     * @param tnum définit la référence de l'intervenant à filter
+     */
+    public void setTnum(int tnum) {
+        this.tnum = tnum;
     }
 
 }

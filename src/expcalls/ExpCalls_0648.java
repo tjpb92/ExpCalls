@@ -15,7 +15,7 @@ import utils.DBServerException;
  * client 648 dans un fichier au format XML.
  *
  * @author Thierry Baribaud
- * @version 0.42
+ * @version 0.44
  */
 public class ExpCalls_0648 extends AbstractExpCalls {
 
@@ -68,6 +68,7 @@ public class ExpCalls_0648 extends AbstractExpCalls {
         int i;
         Ticket_0648 ticket_0648;
         Connection connection;
+        int tnum;
 
         try {
             connection = expCallsParams.getConnection();
@@ -75,6 +76,9 @@ public class ExpCalls_0648 extends AbstractExpCalls {
             fcallsDAO = new FcallsDAO(connection, etatTicket);
             if (expCallsParams.isOpenedTicket()) {
                 fcallsDAO.filterOpenedTicket();
+            }
+            if ((tnum = expCallsParams.getTnum()) > 0) {
+                fcallsDAO.filterByProvider(tnum);
             }
             fcallsDAO.filterByDate(expCallsParams.getUnum(),
                     expCallsParams.getBegDate(), expCallsParams.getEndDate());
