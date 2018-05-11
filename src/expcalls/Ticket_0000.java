@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
  * existe. Les tickets spécifiques à un client dériveront de celui-ci.
  *
  * @author Thierry Baribaud
- * @version 0.39
+ * @version 0.45
  */
 public class Ticket_0000 {
 
@@ -191,6 +191,11 @@ public class Ticket_0000 {
      * Le ticket est-il annulé ou non ?
      */
     private boolean ticketCanceled;
+    
+    /**
+     * Un SMS a-t-il été envoyé ?
+     */
+    private boolean smsSent = false;
     
     /**
      * Contructeur principal de la classe Ticket.
@@ -391,7 +396,7 @@ public class Ticket_0000 {
         fessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
         fessaisDAO.prepareTicketCanceledStatement(this.Fcalls_0000.getCnum());
         fessais = fessaisDAO.getTicketCanceled();
-        setTicketCanceled(fessais != null);
+        this.ticketCanceled = (fessais != null);
         fessaisDAO.closeTicketCanceledPreparedStatement();
         
         // Récupération de la clôture d'appel
@@ -402,6 +407,15 @@ public class Ticket_0000 {
                 DateMissionnement2, HeureMissionnement2,
                 MyEtatTicket);
 //        System.out.println("    Une clôture d'appel trouvée : =" + this.clotureAppel);
+        
+        // UN SMS a-t-il été envoyé durant le traitement du ticket
+        fessaisDAO = new FessaisDAO(MyConnection, MyEtatTicket);
+        fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 99);
+//        fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 99);
+        fessais = fessaisDAO.getLastTrial();
+        this.smsSent = (fessais != null);
+//        fessaisDAO.closeTrialPreparedStatement();
+        fessaisDAO.closeLastTrialPreparedStatement();
     }
 
     /**
@@ -1034,5 +1048,19 @@ public class Ticket_0000 {
      */
     public void setTicketCanceled(boolean ticketCanceled) {
         this.ticketCanceled = ticketCanceled;
+    }
+
+    /**
+     * @return si un SMS a été envoyé ou non
+     */
+    public boolean isSmsSent() {
+        return smsSent;
+    }
+
+    /**
+     * @param smsSent définit si un SMS a été envoyé ou non
+     */
+    public void setSmsSent(boolean smsSent) {
+        this.smsSent = smsSent;
     }
 }
