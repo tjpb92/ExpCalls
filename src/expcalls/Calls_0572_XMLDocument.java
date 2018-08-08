@@ -15,7 +15,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.45
+ * @version 0.46
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -535,6 +535,12 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         element = MyDocument.createElement("SmsEnvoye");
         Ticket.appendChild(element);
         aString = ticket_0572.isSmsSent()?"OUI":"NON";
+        element.appendChild(MyDocument.createTextNode(aString));
+
+        // Période durant laquelle a été saisie la demande
+        element = MyDocument.createElement("Periode");
+        Ticket.appendChild(element);
+        aString = ticket_0572.getPeriod();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

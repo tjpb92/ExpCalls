@@ -17,7 +17,7 @@ import bdd.Survey;
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.40
+ * @version 0.46
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -47,6 +47,11 @@ public class Ticket_0572 extends Ticket_0000 {
     private Survey survey;
 
     /**
+     * Période durant laquelle a été saisie la demande HO/HNO
+     */
+    private String period;
+
+    /**
      * Contructeur principal de la classe Ticket.
      *
      * @param connection connexion à la base de données courante.
@@ -61,10 +66,10 @@ public class Ticket_0572 extends Ticket_0000 {
 
         Fessais fessais;
         FessaisDAO fessaisDAO;
-        int tnum = 0;
+        int tnum;
         Ftoubib ftoubib;
         FtoubibDAO ftoubibDAO;
-        boolean loop = true;
+        boolean loop;
         int n;
         int delay;
         int enumabs1 = 0;
@@ -301,6 +306,8 @@ public class Ticket_0572 extends Ticket_0000 {
             setEtatIntervention(etatIntervention.toString());
         }
         setSurvey(new Survey(connection, this.Fcalls_0000.getCnum(), this.Fcomplmt_0000.getC6int4(), etatTicket));
+        
+        setPeriod(this.Fcalls_0000.getCage());
     }
 
     /**
@@ -327,7 +334,7 @@ public class Ticket_0572 extends Ticket_0000 {
      * @param DegreDUrgence définit le degré d'urgence de la demande
      * d'intervention.
      */
-    public void setDegreDUrgence(String DegreDUrgence) {
+    public final void setDegreDUrgence(String DegreDUrgence) {
         this.DegreDUrgence = DegreDUrgence;
     }
 
@@ -341,7 +348,7 @@ public class Ticket_0572 extends Ticket_0000 {
     /**
      * @param DegatsDesEaux définit l'indication de dégâts des eaux OUI/NON.
      */
-    public void setDegatsDesEaux(String DegatsDesEaux) {
+    public final void setDegatsDesEaux(String DegatsDesEaux) {
         this.DegatsDesEaux = DegatsDesEaux;
     }
 
@@ -355,7 +362,7 @@ public class Ticket_0572 extends Ticket_0000 {
     /**
      * @param SiteEnBase définit l'indication de site trouvé en base de données.
      */
-    public void setSiteEnBase(String SiteEnBase) {
+    public final void setSiteEnBase(String SiteEnBase) {
         this.SiteEnBase = SiteEnBase;
     }
 
@@ -369,7 +376,7 @@ public class Ticket_0572 extends Ticket_0000 {
     /**
      * @param TypeDeDemande définit le type de demande.
      */
-    public void setTypeDeDemande(String TypeDeDemande) {
+    public final void setTypeDeDemande(String TypeDeDemande) {
         this.TypeDeDemande = TypeDeDemande;
     }
 
@@ -383,7 +390,39 @@ public class Ticket_0572 extends Ticket_0000 {
     /**
      * @param survey définit l'enquête de satisfaction
      */
-    public void setSurvey(Survey survey) {
+    public final void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    /**
+     * @return la période à laquelle a été saisie la demande
+     */
+    public String getPeriod() {
+        return period;
+    }
+
+    /**
+     * @param period définit la période à laquelle a été saisie la demande
+     */
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    /**
+     * @param period définit la période à laquelle a été saisie la demande
+     */
+    public final void setPeriod(int period) {
+
+        switch (period) {
+            case 0:
+                this.period = "HNO";
+                break;
+            case 1:
+                this.period = "HO";
+                break;
+            default:
+                this.period = "NA";
+                break;
+        }
     }
 }
