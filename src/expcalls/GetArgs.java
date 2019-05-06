@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.44
+ * @version 0.47
  */
 public class GetArgs {
 
@@ -206,7 +206,7 @@ public class GetArgs {
      * Les arguments en ligne de commande permettent de changer le mode de
      * fonctionnement.</p><ul>
      * <li>-dbserver : référence à la base de donnée, par défaut fait référence
-     * à la base de développement, cf. fichier de paramÃ¨tres
+     * à la base de développement, cf. fichier de paramètres
      * <i>myDatabases.prop</i> (optionnel)</li>
      * <li>-u unum : identifiant du service d'urgence (obligatoire).</li>
      * <li>-b début : date de début de l'extraction à 0h, hier par défaut,
@@ -248,7 +248,9 @@ public class GetArgs {
             ip1 = i + 1;
             if (Args[i].equals("-dbserver")) {
                 if (ip1 < n) {
-                    if (Args[ip1].equals("dev") || Args[ip1].equals("prod") || Args[ip1].equals("mysql")) {
+                    if (Args[ip1].equals("dev") || Args[ip1].equals("prod") ||
+                            Args[ip1].equals("dev2") || Args[ip1].equals("prod2") ||
+                            Args[ip1].equals("mysql")) {
                         sourceServer = Args[ip1];
                     } else {
                         throw new GetArgsException("Mauvaise source de données : " + Args[ip1]);
