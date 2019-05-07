@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.47
+ * @version 0.48
  */
 public class GetArgs {
 
@@ -68,9 +68,14 @@ public class GetArgs {
     private boolean openedTicket = false;
 
     /**
-     * Filter les tickets associés à l'intervenant
+     * Filtrer les tickets associés à l'intervenant
      */
     private int tnum;
+    
+    /**
+     * Filtrer les tickets associés à une agence
+     */
+    private int a6num;
     
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
@@ -219,6 +224,8 @@ public class GetArgs {
      * <li>-s suffixe : suffixe optionnel à ajouter au nom du fichier.</li>
      * <li>-openedTicket : permet de filtrer les tickets ouverts. inactif par
  défaut (optionnel)</li>
+     * <li>-provider tnum : identifiant du prestataire (optionnel).</li>
+     * <li>-agencyId a6num : identifiant de l'agence (optionnel).</li>
      * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux,
      * désactivé par défaut (optionnel).</li>
      * <li>-t : le programme fonctionne en mode de test, les transactions en
@@ -339,6 +346,17 @@ public class GetArgs {
                 } else {
                     throw new GetArgsException("Référence intervenant non définie");
                 }
+            } else if (Args[i].equals("-agencyId")) {
+                if (ip1 < n) {
+                    try {
+                        a6num = Integer.parseInt(Args[ip1]);
+                        i = ip1;
+                    } catch (Exception MyException) {
+                        throw new GetArgsException("La référence à l'agence doit être numérique : " + Args[ip1]);
+                    }
+                } else {
+                    throw new GetArgsException("Référence agence non définie");
+                }
             } else if (Args[i].equals("-d")) {
                 debugMode = true;
             } else if (Args[i].equals("-t")) {
@@ -362,6 +380,7 @@ public class GetArgs {
                 + " [[-b début] [-f fin]|[-n nbJour]] [-o fichier.xml]"
                 + " [-p répertoire] [-s suffixe] [-ticketOpened]"
                 + " [-provider tnum]"
+                + " [-agencyId a6num]"
                 + " [-d] [-t]");
     }
 
@@ -398,6 +417,7 @@ public class GetArgs {
                 + ", suffixe=" + suffix
                 + ", ticketOuvert=" + openedTicket
                 + ", provider=" + tnum
+                + ", agencyId=" + a6num
                 + ", debugMode=" + debugMode
                 + ", testMode=" + testMode
                 + "}";
@@ -460,5 +480,19 @@ public class GetArgs {
      */
     public void setTnum(int tnum) {
         this.tnum = tnum;
+    }
+
+    /**
+     * @return retourne la référence de l'agence à filtrer
+     */
+    public int getA6num() {
+        return a6num;
+    }
+
+    /**
+     * @param a6num définit la référence de l'agence à filter
+     */
+    public void setA6num(int a6num) {
+        this.a6num = a6num;
     }
 }

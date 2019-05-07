@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.47
+ * @version 0.48
  */
 public class ExpCallsParams {
 
@@ -79,6 +79,11 @@ public class ExpCallsParams {
      * Filter les tickets associés à l'intervenant
      */
     private int tnum;
+    
+    /**
+     * Filtrer les tickets associés à une agence
+     */
+    private int a6num;
 
     /**
      * debugMode : fonctionnement du programme en mode debug (true/false).
@@ -121,6 +126,7 @@ public class ExpCallsParams {
         ExcelFilename = DetermineExcelFilename(unum);
         openedTicket = args.isOpenedTicket();
         tnum = args.getTnum();
+        a6num = args.getA6num();
         debugMode = args.getDebugMode();
     }
 
@@ -559,6 +565,20 @@ public class ExpCallsParams {
      */
     public void setTnum(int tnum) {
         this.tnum = tnum;
+    }
+
+    /**
+     * @return retourne la référence de l'agence à filtrer
+     */
+    public int getA6num() {
+        return a6num;
+    }
+
+    /**
+     * @param a6num définit la référence de l'agence à filter
+     */
+    public void setA6num(int a6num) {
+        this.a6num = a6num;
     }
 
 }

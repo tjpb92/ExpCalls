@@ -15,7 +15,7 @@ import utils.DBServerException;
  * client 609 dans un fichier au format XML.
  *
  * @author Thierry Baribaud
- * @version 0.44
+ * @version 0.48
  */
 public class ExpCalls_0609 extends AbstractExpCalls {
 
@@ -69,6 +69,7 @@ public class ExpCalls_0609 extends AbstractExpCalls {
         Ticket_0609 ticket_0609;
         Connection connection;
         int tnum;
+        int a6num;
 
         try {
             connection = expCallsParams.getConnection();
@@ -79,6 +80,9 @@ public class ExpCalls_0609 extends AbstractExpCalls {
             }
             if ((tnum = expCallsParams.getTnum()) > 0) {
                 fcallsDAO.filterByProvider(tnum);
+            }
+            if ((a6num = expCallsParams.getA6num()) > 0) {
+                fcallsDAO.filterByAgencyId(a6num);
             }
             fcallsDAO.filterByDate(expCallsParams.getUnum(),
                     expCallsParams.getBegDate(), expCallsParams.getEndDate());
