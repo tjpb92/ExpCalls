@@ -12,7 +12,7 @@ import utils.XMLDocument;
  * clients de la famille 513.
  *
  * @author Thierry Baribaud
- * @version 0.29
+ * @version 0.50
  */
 public class Calls_0513_XMLDocument extends XMLDocument {
 
@@ -134,7 +134,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         // Code du magasin
         element = MyDocument.createElement("CodeMagasin");
         Ticket.appendChild(element);
-        aString = ticket_0513.Fcomplmt_0000.getC6alpha2();
+        aString = ticket_0513.Fcomplmt_0000 != null ? ticket_0513.Fcomplmt_0000.getC6alpha2() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -194,7 +194,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         // Libelle associé au code panne
         element = MyDocument.createElement("LibelleCodePanne");
         Ticket.appendChild(element);
-        aString = ticket_0513.Fcomplmt_0000.getC6alpha7();
+        aString = ticket_0513.Fcomplmt_0000 != null ? ticket_0513.Fcomplmt_0000.getC6alpha7() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

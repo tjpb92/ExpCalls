@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  * clients de la famille 609.
  *
  * @author Thierry Baribaud
- * @version 0.29
+ * @version 0.50
  */
 public class Calls_0609_XMLDocument extends XMLDocument {
 
@@ -73,7 +73,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
-        
+
         // Date de saisie
         element = MyDocument.createElement("DateAppel");
         Ticket.appendChild(element);
@@ -103,10 +103,11 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         // ATTENTION : Cas particulier pour client 620.
         element = MyDocument.createElement("ZoneGeographique");
         Ticket.appendChild(element);
-        if (ticket_0609.Fcalls_0000.getCseqno() == 620) 
+        if (ticket_0609.Fcalls_0000.getCseqno() == 620) {
             aString = ticket_0609.getA6name();
-        else
-            if ((aString = ticket_0609.getA6extname()) == null) aString = ticket_0609.getA6name();
+        } else if ((aString = ticket_0609.getA6extname()) == null) {
+            aString = ticket_0609.getA6name();
+        }
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -118,11 +119,11 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
-        
+
         // Numéro du site
         element = MyDocument.createElement("NumeroSite");
         Ticket.appendChild(element);
-        aString = ticket_0609.Fcomplmt_0000.getC6alpha1();
+        aString = (ticket_0609.Fcomplmt_0000 != null) ? ticket_0609.Fcomplmt_0000.getC6alpha1() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -134,7 +135,7 @@ public class Calls_0609_XMLDocument extends XMLDocument {
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
-        
+
         // Client
         element = MyDocument.createElement("Client");
         Ticket.appendChild(element);

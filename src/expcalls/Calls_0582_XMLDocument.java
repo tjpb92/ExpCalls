@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  * clients de la famille 582.
  *
  * @author Thierry Baribaud
- * @version 0.29
+ * @version 0.50
  */
 public class Calls_0582_XMLDocument extends XMLDocument {
 
@@ -141,7 +141,7 @@ public class Calls_0582_XMLDocument extends XMLDocument {
         // Numéro HUGO
         element = MyDocument.createElement("NumeroHugo");
         Ticket.appendChild(element);
-        aString = ticket_0582.Fcomplmt_0000.getC6alpha2();
+        aString = ticket_0582.Fcomplmt_0000 != null ? ticket_0582.Fcomplmt_0000.getC6alpha2() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

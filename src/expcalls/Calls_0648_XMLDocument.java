@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  * clients de la famille 648.
  *
  * @author Thierry Baribaud
- * @version 0.33
+ * @version 0.50
  */
 public class Calls_0648_XMLDocument extends XMLDocument {
 
@@ -119,7 +119,8 @@ public class Calls_0648_XMLDocument extends XMLDocument {
         // Code groupe
         element = MyDocument.createElement("CodeGroupe");
         Ticket.appendChild(element);
-        if ((aString = ticket_0648.Fcomplmt_0000.getC6alpha2()) != null) {
+        aString = ticket_0648.Fcomplmt_0000!=null?ticket_0648.Fcomplmt_0000.getC6alpha2():null;
+        if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
 

@@ -15,7 +15,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.46
+ * @version 0.50
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -128,7 +128,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Nature du site
         element = MyDocument.createElement("NatureDuSite");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6alpha1();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6alpha1() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -144,7 +144,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Code immeuble
         element = MyDocument.createElement("CodeImmeuble");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6alpha2();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6alpha2() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -193,7 +193,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Nature appelant
         element = MyDocument.createElement("NatureAppelant");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6city();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6city() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -217,7 +217,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // nom du gardien/locataire n°2
         element = MyDocument.createElement("NomGardienLocataire2");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6name();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6name() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -225,7 +225,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Téléphone de l'appelant n°2
         element = MyDocument.createElement("TelAppelant2");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6tel();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6tel() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -273,7 +273,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Numéro d'OS
         element = MyDocument.createElement("NumeroOS");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000.getC6access();
+        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6access() : null;
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }
@@ -534,7 +534,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Un SMS a-t-il été envoyé ?
         element = MyDocument.createElement("SmsEnvoye");
         Ticket.appendChild(element);
-        aString = ticket_0572.isSmsSent()?"OUI":"NON";
+        aString = ticket_0572.isSmsSent() ? "OUI" : "NON";
         element.appendChild(MyDocument.createTextNode(aString));
 
         // Période durant laquelle a été saisie la demande
