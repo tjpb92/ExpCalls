@@ -9,11 +9,12 @@ import utils.ApplicationProperties;
 import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
+import utils.GetArgsException;
 
 /**
  * TstFa2piDAO programme permettant de tester le pattern DAO pour Fa2pi.
  *
- * @version 0.33
+ * @version 0.51
  * @author Thierry Baribaud
  */
 public class TstFa2piDAO {

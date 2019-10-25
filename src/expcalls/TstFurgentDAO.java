@@ -8,11 +8,12 @@ import utils.ApplicationProperties;
 import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
+import utils.GetArgsException;
 
 /**
  * TstFurgentDAO programme permettant de tester le pattern DAO pour Furgent.
  *
- * @version 0.33
+ * @version 0.51
  * @author Thierry Baribaud
  */
 public class TstFurgentDAO {

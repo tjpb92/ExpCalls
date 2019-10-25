@@ -6,13 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import utils.GetArgsException;
 
 /**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.48
+ * @version 0.51
  */
 public class GetArgs {
 

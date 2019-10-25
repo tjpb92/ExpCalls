@@ -8,11 +8,12 @@ import utils.ApplicationProperties;
 import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
+import utils.GetArgsException;
 
 /**
  * TstFmenuitDAO programme permettant de tester le pattern DAO pour Fmenuit.
  *
- * @version 0.33
+ * @version 0.51
  * @author Thierry Baribaud
  */
 public class TstFmenuitDAO {

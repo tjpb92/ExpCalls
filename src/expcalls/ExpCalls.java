@@ -9,13 +9,14 @@ import utils.ApplicationProperties;
 import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
+import utils.GetArgsException;
 
 /**
  * Ce programme exporte les appels d'un service d'urgence dans un fichier au
  * format XML.
  *
  * @author Thierry Baribaud
- * @version 0.31
+ * @version 0.51
  */
 public class ExpCalls {
 

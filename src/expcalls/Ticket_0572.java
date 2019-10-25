@@ -12,19 +12,20 @@ import bdd.FtoubibDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import bdd.Survey;
+import java.sql.Timestamp;
 
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.46
+ * @version 0.51
  */
 public class Ticket_0572 extends Ticket_0000 {
 
     /**
-     * Degré d'urgence de la demande d'intervention.
+     * Date of first CriticalLevel definition change
      */
-    private String DegreDUrgence;
+    private final Timestamp criticalLevelFirstChangeDate = Timestamp.valueOf("2019-06-20 12:00:00.0");
 
     /**
      * Indication de dégâts des eaux OUI/NON..
@@ -37,7 +38,7 @@ public class Ticket_0572 extends Ticket_0000 {
     private String SiteEnBase;
 
     /**
-     * Type de demande.
+     * Type de demande : DIC=Courante, DI=Immédiate, Autre.
      */
     private String TypeDeDemande;
 
@@ -50,6 +51,11 @@ public class Ticket_0572 extends Ticket_0000 {
      * Période durant laquelle a été saisie la demande HO/HNO
      */
     private String period;
+
+    /**
+     * Degré de criticité de la demande
+     */
+    private String criticalLevel;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -79,18 +85,38 @@ public class Ticket_0572 extends Ticket_0000 {
         FactivityDAO factivityDAO;
         StringBuffer etatIntervention;
 
-        // Degré d'urgence cf. tra_nat_urg_0572() dans libspc0572.4gl.
+        // Degré de criticité de la demande cf. tra_nat_urg_xxxx() dans libutilxxx.4gl
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
-        switch (this.Fcalls_0000.getCdelay1()) {
-            case 1:
-                setDegreDUrgence("Immediate");
-                break;
-            case 2:
-                setDegreDUrgence("Courante");
-                break;
-            default:
-                setDegreDUrgence(null);
-                break;
+        if (this.Fcalls_0000.getCdate().after(criticalLevelFirstChangeDate)) {
+            switch (this.Fcalls_0000.getCdelay1()) {
+                case 1:
+                    setCriticalLevel("Non urgente");
+                    break;
+                case 2:
+                    setCriticalLevel("Urgente");
+                    break;
+                case 3:
+                    setCriticalLevel("Stratégique");
+                    break;
+                case 4:
+                    setCriticalLevel("Prioritaire");
+                    break;
+                default:
+                    setCriticalLevel("Non précisé");
+                    break;
+            }
+        } else {
+            switch (this.Fcalls_0000.getCdelay1()) {
+                case 1:
+                    setCriticalLevel("Urgente");
+                    break;
+                case 2:
+                    setCriticalLevel("Non urgente");
+                    break;
+                default:
+                    setCriticalLevel("Non précisé");
+                    break;
+            }
         }
 
         // Indication de dégâts des eaux cf. tra_degat_eau_0572() dans libspc0572.4gl.
@@ -107,7 +133,8 @@ public class Ticket_0572 extends Ticket_0000 {
             setSiteEnBase("OUI");
         }
 
-        // Indication du type de demande cf. tra_typinter_0572() dans libspc0572.4gl.
+        // Indication du type de demande cf. tra_typinter_xxxx() dans libutilxxx.4gl.
+//        System.out.println("  c6int2="+Fcomplmt_0000.getC6int2());
         switch (this.Fcomplmt_0000.getC6int2()) {
             case 1:
                 setTypeDeDemande("DIC");
@@ -120,27 +147,6 @@ public class Ticket_0572 extends Ticket_0000 {
                 break;
         }
 
-        // tra_type_interv_0572
-//        switch (this.Fcomplmt_0000.getC6int2()) {
-//            case 0: 
-//                setTypeDeDemande("Message");
-//                break;
-//            case 1: 
-//                setTypeDeDemande("Immédiate");
-//                break;
-//            case 2: 
-//                setTypeDeDemande("Courante");
-//                break;
-//            case 3: 
-//                setTypeDeDemande("Demande de renseignement");
-//                break;
-//            case 4: 
-//                setTypeDeDemande("Site non couvert en HO");
-//                break;
-//            default:
-//                setTypeDeDemande("Inconnu");
-//                break;
-//        }
         // Pour la famille du client 572, on gère les status Intervention/Message autrement
         this.setEtatIntervention("Message");
 
@@ -306,7 +312,7 @@ public class Ticket_0572 extends Ticket_0000 {
             setEtatIntervention(etatIntervention.toString());
         }
         setSurvey(new Survey(connection, this.Fcalls_0000.getCnum(), this.Fcomplmt_0000.getC6int4(), etatTicket));
-        
+
         setPeriod(this.Fcalls_0000.getCage());
     }
 
@@ -321,21 +327,6 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public Ticket_0572(Connection MyConnection, Fcalls Fcalls_0000, EtatTicket MyEtatTicket) throws ClassNotFoundException, SQLException {
         this(MyConnection, Fcalls_0000, null, MyEtatTicket);
-    }
-
-    /**
-     * @return DegreDUrgence le degré d'urgence de la demande d'intervention.
-     */
-    public String getDegreDUrgence() {
-        return DegreDUrgence;
-    }
-
-    /**
-     * @param DegreDUrgence définit le degré d'urgence de la demande
-     * d'intervention.
-     */
-    public final void setDegreDUrgence(String DegreDUrgence) {
-        this.DegreDUrgence = DegreDUrgence;
     }
 
     /**
@@ -424,5 +415,19 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.period = "NA";
                 break;
         }
+    }
+
+    /**
+     * @return retourne le degré de criticité de la demande
+     */
+    public String getCriticalLevel() {
+        return criticalLevel;
+    }
+
+    /**
+     * @param criticalLevel définit le degré de criticité de la demande
+     */
+    public final void setCriticalLevel(String criticalLevel) {
+        this.criticalLevel = criticalLevel;
     }
 }

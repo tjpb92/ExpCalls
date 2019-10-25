@@ -15,7 +15,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.50
+ * @version 0.51
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -112,7 +112,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Degré d'urgence
         element = MyDocument.createElement("DegreDUrgence");
         Ticket.appendChild(element);
-        aString = ticket_0572.getDegreDUrgence();
+        aString = ticket_0572.getCriticalLevel();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

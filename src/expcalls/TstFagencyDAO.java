@@ -9,11 +9,12 @@ import utils.ApplicationProperties;
 import utils.DBManager;
 import utils.DBServer;
 import utils.DBServerException;
+import utils.GetArgsException;
 
 /**
  * TstFagencyDAO programme permettant de tester le pattern DAO pour Fagency.
  *
- * @version 0.33
+ * @version 0.51
  * @author Thierry Baribaud
  */
 public class TstFagencyDAO {
