@@ -13,12 +13,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import bdd.Survey;
 import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.51
+ * @version 0.52
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -84,6 +86,8 @@ public class Ticket_0572 extends Ticket_0000 {
         Factivity factivity;
         FactivityDAO factivityDAO;
         StringBuffer etatIntervention;
+        int unum;
+        int cquery1;
 
         // Degré de criticité de la demande cf. tra_nat_urg_xxxx() dans libutilxxx.4gl
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
@@ -148,9 +152,23 @@ public class Ticket_0572 extends Ticket_0000 {
         }
 
         // Pour la famille du client 572, on gère les status Intervention/Message autrement
+        // Par défaut, le suivi donné à la demande est "Message"
         this.setEtatIntervention("Message");
 
-        // Recherche la première mise en sommeil sur un ticket de type message
+        // Evolution au 19/11/2019 : Ajout de la mention "Demande administrative" pour les clients 572 et 634
+        unum = this.Fcalls_0000.getCunum();
+        cquery1 = this.Fcalls_0000.getCquery1();
+        
+        // for debug only ...
+        this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + " - " + cquery1 + " - ");
+        
+        if (unum == 572 && (cquery1 == 17191 || cquery1 == 24041 || cquery1 == 24043)) {
+            this.setEtatIntervention("Demande administrative");
+        } else if (unum == 634 && (cquery1 == 20975)) {
+            this.setEtatIntervention("Demande administrative");
+        }
+
+        // Recherche la première mise en sommeil
 //        System.out.println("  Récupération de la première mise en sommeil");
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(connection, etatTicket);
@@ -168,6 +186,10 @@ public class Ticket_0572 extends Ticket_0000 {
                     if ((ftoubib = ftoubibDAO.select()) != null) {
                         if (!ftoubib.getTlname().contentEquals("message")) {
                             this.setEtatIntervention("Intervention");
+
+                            // for debug only ...
+                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "A");
+                            
                             this.setNomPrestataire1(ftoubib.getTlname());
                             this.setPrenomPrestataire1(ftoubib.getTfname());
                             this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
@@ -198,83 +220,36 @@ public class Ticket_0572 extends Ticket_0000 {
                 }
             }
             fessaisDAO.closeTrialPreparedStatement();
-        }
-
-        // Recherche la première transmission
+            
+            // Recherche la première transmission
 //        System.out.println("  Récupération de la première transmission");
-        fessaisDAO = new FessaisDAO(connection, etatTicket);
-        fessaisDAO.setTrialStatementOrderby("order by edate, etime");
-        fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
-        n = 0;
-        loop = true;
-        while (loop && (fessais = fessaisDAO.getTrial()) != null) {
-            n++;
-            if ((tnum = fessais.getEtnum()) > 0) {
-                ftoubibDAO = new FtoubibDAO(connection);
-                ftoubibDAO.filterById(tnum);
-                ftoubibDAO.setSelectPreparedStatement();
-                if ((ftoubib = ftoubibDAO.select()) != null) {
-                    if (!ftoubib.getTlname().contentEquals("message")) {
-                        enumabs1 = fessais.getEnumabs();
-                        this.setEtatIntervention("Intervention");
-                        this.setNomPrestataire1(ftoubib.getTlname());
-                        this.setPrenomPrestataire1(ftoubib.getTfname());
-                        this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
-                        this.setNoTelephone1(ftoubib.getTel());
-                        this.setEmail1(ftoubib.getTemail());
-                        delay = ftoubib.getTdelay1() * 60;
-                        if (delay > 0) {
-                            this.setDelaiIntervention1(CharDur(delay));
-                        }
-                        a4num = ftoubib.getTa4num();
-                        if (a4num > 0) {
-                            factivityDAO = new FactivityDAO(connection);
-                            factivityDAO.filterById(a4num);
-                            factivityDAO.setSelectPreparedStatement();
-                            factivity = factivityDAO.select();
-                            if (factivity != null) {
-                                a4name = factivity.getA4name();
-                                if (a4name != null) {
-//                                    this.setA4name1(a4name  + " , a4num=" + a4num + ", tnum=" + tnum);
-                                    this.setA4name1(a4name);
-                                }
-                            }
-                            factivityDAO.closeSelectPreparedStatement();
-                        }
-                        loop = false;
-                    }
-                }
-                ftoubibDAO.closeSelectPreparedStatement();
-            }
-        }
-        fessaisDAO.closeTrialPreparedStatement();
-
-        // Recherche la dernière transmission
-        //System.out.println("  Récupération de la dernière transmission");
-        // ATTENTION : Incorporer enumabs1 dans la requête ultérieurement
-        fessaisDAO = new FessaisDAO(connection, etatTicket);
-        fessaisDAO.setTrialStatementOrderby("order by edate desc, etime desc");
-        fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
-        n = 0;
-        loop = true;
-        while (loop && (fessais = fessaisDAO.getTrial()) != null) {
-            n++;
-            if (fessais.getEnumabs() != enumabs1) {
+            fessaisDAO = new FessaisDAO(connection, etatTicket);
+            fessaisDAO.setTrialStatementOrderby("order by edate, etime");
+            fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
+            n = 0;
+            loop = true;
+            while (loop && (fessais = fessaisDAO.getTrial()) != null) {
+                n++;
                 if ((tnum = fessais.getEtnum()) > 0) {
                     ftoubibDAO = new FtoubibDAO(connection);
                     ftoubibDAO.filterById(tnum);
                     ftoubibDAO.setSelectPreparedStatement();
                     if ((ftoubib = ftoubibDAO.select()) != null) {
                         if (!ftoubib.getTlname().contentEquals("message")) {
+                            enumabs1 = fessais.getEnumabs();
                             this.setEtatIntervention("Intervention");
-                            this.setNomPrestataire2(ftoubib.getTlname());
-                            this.setPrenomPrestataire2(ftoubib.getTfname());
-                            this.setPrestataire2(ftoubib.getTlname(), ftoubib.getTfname());
-                            this.setNoTelephone2(ftoubib.getTel());
-                            this.setEmail2(ftoubib.getTemail());
+
+                            // for debug only ...
+                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "B");
+                            
+                            this.setNomPrestataire1(ftoubib.getTlname());
+                            this.setPrenomPrestataire1(ftoubib.getTfname());
+                            this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
+                            this.setNoTelephone1(ftoubib.getTel());
+                            this.setEmail1(ftoubib.getTemail());
                             delay = ftoubib.getTdelay1() * 60;
                             if (delay > 0) {
-                                this.setDelaiIntervention2(CharDur(delay));
+                                this.setDelaiIntervention1(CharDur(delay));
                             }
                             a4num = ftoubib.getTa4num();
                             if (a4num > 0) {
@@ -285,7 +260,8 @@ public class Ticket_0572 extends Ticket_0000 {
                                 if (factivity != null) {
                                     a4name = factivity.getA4name();
                                     if (a4name != null) {
-                                        this.setA4name2(a4name);
+//                                    this.setA4name1(a4name  + " , a4num=" + a4num + ", tnum=" + tnum);
+                                        this.setA4name1(a4name);
                                     }
                                 }
                                 factivityDAO.closeSelectPreparedStatement();
@@ -295,11 +271,181 @@ public class Ticket_0572 extends Ticket_0000 {
                     }
                     ftoubibDAO.closeSelectPreparedStatement();
                 }
-            } else {
-                loop = false;
+            }
+            fessaisDAO.closeTrialPreparedStatement();
+
+        // Recherche la dernière transmission
+            //System.out.println("  Récupération de la dernière transmission");
+            // ATTENTION : Incorporer enumabs1 dans la requête ultérieurement
+            fessaisDAO = new FessaisDAO(connection, etatTicket);
+            fessaisDAO.setTrialStatementOrderby("order by edate desc, etime desc");
+            fessaisDAO.setTrialPreparedStatement(this.Fcalls_0000.getCnum(), 1);
+            n = 0;
+            loop = true;
+            while (loop && (fessais = fessaisDAO.getTrial()) != null) {
+                n++;
+                if (fessais.getEnumabs() != enumabs1) {
+                    if ((tnum = fessais.getEtnum()) > 0) {
+                        ftoubibDAO = new FtoubibDAO(connection);
+                        ftoubibDAO.filterById(tnum);
+                        ftoubibDAO.setSelectPreparedStatement();
+                        if ((ftoubib = ftoubibDAO.select()) != null) {
+                            if (!ftoubib.getTlname().contentEquals("message")) {
+                                this.setEtatIntervention("Intervention");
+
+                                // for debug only ...
+                                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "C");
+                            
+                                this.setNomPrestataire2(ftoubib.getTlname());
+                                this.setPrenomPrestataire2(ftoubib.getTfname());
+                                this.setPrestataire2(ftoubib.getTlname(), ftoubib.getTfname());
+                                this.setNoTelephone2(ftoubib.getTel());
+                                this.setEmail2(ftoubib.getTemail());
+                                delay = ftoubib.getTdelay1() * 60;
+                                if (delay > 0) {
+                                    this.setDelaiIntervention2(CharDur(delay));
+                                }
+                                a4num = ftoubib.getTa4num();
+                                if (a4num > 0) {
+                                    factivityDAO = new FactivityDAO(connection);
+                                    factivityDAO.filterById(a4num);
+                                    factivityDAO.setSelectPreparedStatement();
+                                    factivity = factivityDAO.select();
+                                    if (factivity != null) {
+                                        a4name = factivity.getA4name();
+                                        if (a4name != null) {
+                                            this.setA4name2(a4name);
+                                        }
+                                    }
+                                    factivityDAO.closeSelectPreparedStatement();
+                                }
+                                loop = false;
+                            }
+                        }
+                        ftoubibDAO.closeSelectPreparedStatement();
+                    }
+                } else {
+                    loop = false;
+                }
+            }
+            fessaisDAO.closeTrialPreparedStatement();
+        }
+        
+        // Changement vers intervention pour certains cas particuliers
+        // On ne tient pas compte de l'intervenant récupéré pour l'instant, TB, le 19/11/2019.
+        
+        // Cas DIC envoyé par mail, essais #87
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 87);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "J");
             }
         }
-        fessaisDAO.closeTrialPreparedStatement();
+        
+        // Cas DI envoyé par mail, essais #88
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 88);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "K");
+            }
+        }
+        
+        // Cas d'un envoi GMAO, essais #100
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 100);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "D");
+            }
+        }
+        
+        // Cas d'une demande de devis, essais #400
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 400);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "E");
+            }
+        }
+        
+        // Cas d'une attente de validation de devis, essais #401
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 401);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "F");
+            }
+        }
+        
+        // Cas en attente de cloture prestataire, essais #405
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 405);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "G");
+            }
+        }
+        
+        // Cas en attente retour client, essais #406
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 406);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "H");
+            }
+        }
+        
+        // Cas envoi GMAO, essais #407
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 407);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "I");
+            }
+        }
+        
 
         if (isTicketCanceled()) {
             etatIntervention = new StringBuffer(getEtatIntervention());
@@ -429,5 +575,33 @@ public class Ticket_0572 extends Ticket_0000 {
      */
     public final void setCriticalLevel(String criticalLevel) {
         this.criticalLevel = criticalLevel;
+    }
+
+    /**
+     * Vérifie si le ticket est annulé ou non
+     *
+     * @return retourne l'état du ticket : annulé ou non.
+     */
+    @Override
+    public boolean isTicketCanceled() {
+        boolean isTicketCanceled;
+        FessaisDAO fessaisDAO;
+        Fessais fessais;
+
+        isTicketCanceled = super.isTicketCanceled();
+        fessais = null;
+
+        try {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 404);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+        } catch (ClassNotFoundException | SQLException exception) {
+            Logger.getLogger(Ticket_0572.class.getName()).log(Level.WARNING, null, exception);
+        }
+
+        isTicketCanceled = isTicketCanceled || (fessais != null);
+
+        return isTicketCanceled;
     }
 }
