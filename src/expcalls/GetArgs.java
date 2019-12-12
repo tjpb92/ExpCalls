@@ -7,13 +7,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import utils.GetArgsException;
+import utils.ValidServers;
 
 /**
  * Cette classe sert à vérifier et à récupérer les arguments passés en ligne de
  * commande à un programme.
  *
  * @author Thierry Baribaud.
- * @version 0.51
+ * @version 0.53
  */
 public class GetArgs {
 
@@ -208,162 +209,139 @@ public class GetArgs {
     }
 
     /**
-     * <p>
-     * Les arguments en ligne de commande permettent de changer le mode de
-     * fonctionnement.</p><ul>
-     * <li>-dbserver : référence à la base de donnée, par défaut fait référence
-     * à la base de développement, cf. fichier de paramètres
-     * <i>myDatabases.prop</i> (optionnel)</li>
-     * <li>-u unum : identifiant du service d'urgence (obligatoire).</li>
-     * <li>-b début : date de début de l'extraction à 0h, hier par défaut,
-     * format DD/MM/AAAA (optionnel).</li>
-     * <li>-b fin : date de fin de l'extraction à 0h, aujourd'hui par défaut,
-     * format DD/MM/AAAA (optionnel).</li>
-     * <li>-o fichier : fichier vers lequel exporter les données des appels, nom
-     * par défaut <i>calls_0000.xml</i>(optionnel).</li>
-     * <li>-n nbJour : nombre de jour(s) à compter de la date courante.</li>
-     * <li>-s suffixe : suffixe optionnel à ajouter au nom du fichier.</li>
-     * <li>-openedTicket : permet de filtrer les tickets ouverts. inactif par
- défaut (optionnel)</li>
-     * <li>-provider tnum : identifiant du prestataire (optionnel).</li>
-     * <li>-agencyId a6num : identifiant de l'agence (optionnel).</li>
-     * <li>-d : le programme fonctionne en mode débug le rendant plus verbeux,
-     * désactivé par défaut (optionnel).</li>
-     * <li>-t : le programme fonctionne en mode de test, les transactions en
-     * base de données ne sont pas exécutées, désactivé par défaut
-     * (optionnel).</li>
-     * </ul>
-     *
-     * @param Args arguments de la ligne de commande.
-     * @throws expcalls.GetArgsException erreur sur les paramètres.
+     * @param args arguments de la ligne de commande.
+     * @throws GetArgsException erreur sur les paramètres.
      */
-    public GetArgs(String Args[]) throws GetArgsException {
+    public GetArgs(String args[]) throws GetArgsException {
 
         int i;
         int n;
         int ip1;
         Date MyDate;
+        String currentParam;
+        String nextParam;
 
         // Demande une analyse d'une date valide
         dateFormat.setLenient(false);
-        n = Args.length;
+        n = args.length;
 
         System.out.println("nargs=" + n);
 //    for(i=0; i<n; i++) System.out.println("args["+i+"]="+Args[i]);
         i = 0;
         while (i < n) {
 //            System.out.println("args[" + i + "]=" + Args[i]);
+            currentParam = args[i];
             ip1 = i + 1;
-            if (Args[i].equals("-dbserver")) {
+            nextParam = (ip1 < n) ? args[ip1] : null;
+            if (currentParam.equals("-dbserver")) {
                 if (ip1 < n) {
-                    if (Args[ip1].equals("dev") || Args[ip1].equals("prod") ||
-                            Args[ip1].equals("dev2") || Args[ip1].equals("prod2") ||
-                            Args[ip1].equals("mysql")) {
-                        sourceServer = Args[ip1];
+                    if (ValidServers.isAValidServer(nextParam)) {
+                        sourceServer = nextParam;
                     } else {
-                        throw new GetArgsException("Mauvaise source de données : " + Args[ip1]);
+                        throw new GetArgsException("Mauvaise source de données : " + nextParam);
                     }
                     i = ip1;
                 } else {
                     throw new GetArgsException("Base de données non définie");
                 }
-            } else if (Args[i].equals("-u")) {
+            } else if (currentParam.equals("-u")) {
                 if (ip1 < n) {
                     try {
-                        unum = Integer.parseInt(Args[ip1]);
+                        unum = Integer.parseInt(nextParam);
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La référence client doit être numérique : " + Args[ip1]);
+                        throw new GetArgsException("La référence client doit être numérique : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Référence client non définie");
                 }
-            } else if (Args[i].equals("-b")) {
+            } else if (currentParam.equals("-b")) {
                 if (ip1 < n) {
                     try {
-                        MyDate = (Date) dateFormat.parse(Args[ip1]);
+                        MyDate = (Date) dateFormat.parse(nextParam);
                         begDate = new Timestamp(MyDate.getTime());
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La date de début doit être valide jj/mm/aaaa : " + Args[ip1]);
+                        throw new GetArgsException("La date de début doit être valide jj/mm/aaaa : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Date de début non définie");
                 }
-            } else if (Args[i].equals("-e")) {
+            } else if (currentParam.equals("-e")) {
                 if (ip1 < n) {
                     try {
-                        MyDate = (Date) dateFormat.parse(Args[ip1]);
+                        MyDate = (Date) dateFormat.parse(nextParam);
                         endDate = new Timestamp(MyDate.getTime());
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La date de fin doit être valide jj/mm/aaaa : " + Args[ip1]);
+                        throw new GetArgsException("La date de fin doit être valide jj/mm/aaaa : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Date de fin non définie");
                 }
-            } else if (Args[i].equals("-n")) {
+            } else if (currentParam.equals("-n")) {
                 if (ip1 < n) {
                     try {
-                        this.setNbJour(Integer.parseInt(Args[ip1]));
+                        this.setNbJour(Integer.parseInt(nextParam));
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("Le nombre de jour(s) doit être numérique : " + Args[ip1]);
+                        throw new GetArgsException("Le nombre de jour(s) doit être numérique : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Nombre de jour(s) non défini");
                 }
-            } else if (Args[i].equals("-o")) {
+            } else if (currentParam.equals("-o")) {
                 if (ip1 < n) {
-                    filename = Args[ip1];
+                    filename = nextParam;
                     i = ip1;
                 } else {
                     throw new GetArgsException("Nom de fichier non défini");
                 }
-            } else if (Args[i].equals("-p")) {
+            } else if (currentParam.equals("-p")) {
                 if (ip1 < n) {
-                    directory = Args[ip1];
+                    directory = nextParam;
                     i = ip1;
                 } else {
                     throw new GetArgsException("Répertoire non défini");
                 }
-            } else if (Args[i].equals("-s")) {
+            } else if (currentParam.equals("-s")) {
                 if (ip1 < n) {
-                    suffix = Args[ip1];
+                    suffix = nextParam;
                     i = ip1;
                 } else {
                     throw new GetArgsException("Suffixe non défini");
                 }
-            } else if (Args[i].equals("-openedTicket")) {
+            } else if (currentParam.equals("-openedTicket")) {
                 openedTicket = true;
-            } else if (Args[i].equals("-provider")) {
+            } else if (currentParam.equals("-provider")) {
                 if (ip1 < n) {
                     try {
-                        tnum = Integer.parseInt(Args[ip1]);
+                        tnum = Integer.parseInt(nextParam);
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La référence à l'intervenant doit être numérique : " + Args[ip1]);
+                        throw new GetArgsException("La référence à l'intervenant doit être numérique : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Référence intervenant non définie");
                 }
-            } else if (Args[i].equals("-agencyId")) {
+            } else if (currentParam.equals("-agencyId")) {
                 if (ip1 < n) {
                     try {
-                        a6num = Integer.parseInt(Args[ip1]);
+                        a6num = Integer.parseInt(nextParam);
                         i = ip1;
                     } catch (Exception MyException) {
-                        throw new GetArgsException("La référence à l'agence doit être numérique : " + Args[ip1]);
+                        throw new GetArgsException("La référence à l'agence doit être numérique : " + nextParam);
                     }
                 } else {
                     throw new GetArgsException("Référence agence non définie");
                 }
-            } else if (Args[i].equals("-d")) {
+            } else if (currentParam.equals("-d")) {
                 debugMode = true;
-            } else if (Args[i].equals("-t")) {
+            } else if (currentParam.equals("-t")) {
                 testMode = true;
             } else {
-                throw new GetArgsException("Mauvais argument : " + Args[i]);
+                usage();
+                throw new GetArgsException("Mauvais argument : " + currentParam);
             }
             i++;
         }
@@ -377,7 +355,7 @@ public class GetArgs {
      * Affiche le mode d'utilisation du programme.
      */
     public static void usage() {
-        System.out.println("Usage : java ExpCalls -dbserver prod -u unum "
+        System.out.println("Usage : java ExpCalls -dbserver dbserver -u unum "
                 + " [[-b début] [-f fin]|[-n nbJour]] [-o fichier.xml]"
                 + " [-p répertoire] [-s suffixe] [-ticketOpened]"
                 + " [-provider tnum]"

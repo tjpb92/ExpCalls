@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.52
+ * @version 0.53
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -333,6 +333,48 @@ public class Ticket_0572 extends Ticket_0000 {
         
         // Changement vers intervention pour certains cas particuliers
         // On ne tient pas compte de l'intervenant récupéré pour l'instant, TB, le 19/11/2019.
+        
+        // Cas Appel sortant sur ..., essais #40
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 40);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "L");
+            }
+        }
+        
+        // Cas Réponse du ..., essais #76
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 76);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "M");
+            }
+        }
+        
+        // Cas Prise en charge, essais #77
+        if (this.getEtatIntervention().equals("Message")) {
+            fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
+            fessaisDAO.setLastTrialPreparedStatement(this.Fcalls_0000.getCnum(), 77);
+            fessais = fessaisDAO.getLastTrial();
+            fessaisDAO.closeLastTrialPreparedStatement();
+            if (fessais != null) {
+                this.setEtatIntervention("Intervention");
+
+                // for debug only ...
+                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "N");
+            }
+        }
         
         // Cas DIC envoyé par mail, essais #87
         if (this.getEtatIntervention().equals("Message")) {
