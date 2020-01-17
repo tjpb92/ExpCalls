@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.53
+ * @version 0.54
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -160,7 +160,7 @@ public class Ticket_0572 extends Ticket_0000 {
         cquery1 = this.Fcalls_0000.getCquery1();
         
         // for debug only ...
-        this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + " - " + cquery1 + " - ");
+//        this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + " - " + cquery1 + " - ");
         
         if (unum == 572 && (cquery1 == 17191 || cquery1 == 24041 || cquery1 == 24043)) {
             this.setEtatIntervention("Demande administrative");
@@ -188,7 +188,7 @@ public class Ticket_0572 extends Ticket_0000 {
                             this.setEtatIntervention("Intervention");
 
                             // for debug only ...
-                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "A");
+//                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "A");
                             
                             this.setNomPrestataire1(ftoubib.getTlname());
                             this.setPrenomPrestataire1(ftoubib.getTfname());
@@ -240,7 +240,7 @@ public class Ticket_0572 extends Ticket_0000 {
                             this.setEtatIntervention("Intervention");
 
                             // for debug only ...
-                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "B");
+//                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "B");
                             
                             this.setNomPrestataire1(ftoubib.getTlname());
                             this.setPrenomPrestataire1(ftoubib.getTfname());
@@ -294,7 +294,7 @@ public class Ticket_0572 extends Ticket_0000 {
                                 this.setEtatIntervention("Intervention");
 
                                 // for debug only ...
-                                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "C");
+//                                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "C");
                             
                                 this.setNomPrestataire2(ftoubib.getTlname());
                                 this.setPrenomPrestataire2(ftoubib.getTfname());
@@ -344,7 +344,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "L");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "L");
             }
         }
         
@@ -358,7 +358,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "M");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "M");
             }
         }
         
@@ -372,7 +372,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "N");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "N");
             }
         }
         
@@ -386,7 +386,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "J");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "J");
             }
         }
         
@@ -400,7 +400,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "K");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "K");
             }
         }
         
@@ -414,7 +414,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "D");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "D");
             }
         }
         
@@ -428,7 +428,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "E");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "E");
             }
         }
         
@@ -442,7 +442,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "F");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "F");
             }
         }
         
@@ -456,7 +456,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "G");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "G");
             }
         }
         
@@ -470,7 +470,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "H");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "H");
             }
         }
         
@@ -484,7 +484,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 this.setEtatIntervention("Intervention");
 
                 // for debug only ...
-                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "I");
+//                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "I");
             }
         }
         
