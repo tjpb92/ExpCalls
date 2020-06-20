@@ -15,7 +15,7 @@ import utils.XMLDocument;
  * clients de la famille du client 572.
  *
  * @author Thierry Baribaud
- * @version 0.51
+ * @version 0.56
  */
 public class Calls_0572_XMLDocument extends XMLDocument {
 
@@ -193,7 +193,7 @@ public class Calls_0572_XMLDocument extends XMLDocument {
         // Nature appelant
         element = MyDocument.createElement("NatureAppelant");
         Ticket.appendChild(element);
-        aString = ticket_0572.Fcomplmt_0000 != null ? ticket_0572.Fcomplmt_0000.getC6city() : null;
+        aString = ticket_0572.getNatureOfTheCaller();
         if (aString != null) {
             element.appendChild(MyDocument.createTextNode(aString));
         }

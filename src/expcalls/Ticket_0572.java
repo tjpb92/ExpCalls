@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * Classe représentant un ticket pour les clients de la famille du client 572
  *
  * @author Thierry Baribaud
- * @version 0.54
+ * @version 0.56
  */
 public class Ticket_0572 extends Ticket_0000 {
 
@@ -58,6 +58,11 @@ public class Ticket_0572 extends Ticket_0000 {
      * Degré de criticité de la demande
      */
     private String criticalLevel;
+    
+    /**
+     * Nature de l'appelant
+     */
+    private String natureOfTheCaller;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -89,38 +94,20 @@ public class Ticket_0572 extends Ticket_0000 {
         int unum;
         int cquery1;
 
+        // Nature de l'appelant cf. tra_nat_caller_xxxx() de libcontact.4gl et
+        // w2l_screen1() de libutilxxx.4gl
+        if (this.Fcalls_0000.getCunum() == 703) {
+            setNatureOfTheCaller(tra_nat_caller_0572(w2l_screen1(this.Fcomplmt_0000.getC6alpha10()), this.Fcalls_0000.getCunum()));
+        } else {
+            setNatureOfTheCaller(this.Fcomplmt_0000.getC6city());
+        }
+        
         // Degré de criticité de la demande cf. tra_nat_urg_xxxx() dans libutilxxx.4gl
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
-        if (this.Fcalls_0000.getCdate().after(criticalLevelFirstChangeDate)) {
-            switch (this.Fcalls_0000.getCdelay1()) {
-                case 1:
-                    setCriticalLevel("Non urgente");
-                    break;
-                case 2:
-                    setCriticalLevel("Urgente");
-                    break;
-                case 3:
-                    setCriticalLevel("Stratégique");
-                    break;
-                case 4:
-                    setCriticalLevel("Prioritaire");
-                    break;
-                default:
-                    setCriticalLevel("Non précisé");
-                    break;
-            }
+        if (this.Fcalls_0000.getCunum() == 703) {
+            setCriticalLevel(tra_nat_urgence(w2l_screen3(this.Fcomplmt_0000.getC6alpha10())));
         } else {
-            switch (this.Fcalls_0000.getCdelay1()) {
-                case 1:
-                    setCriticalLevel("Urgente");
-                    break;
-                case 2:
-                    setCriticalLevel("Non urgente");
-                    break;
-                default:
-                    setCriticalLevel("Non précisé");
-                    break;
-            }
+            setCriticalLevel(tra_nat_urg_0572(this.Fcalls_0000.getCdelay1(), this.Fcalls_0000.getCdate()));
         }
 
         // Indication de dégâts des eaux cf. tra_degat_eau_0572() dans libspc0572.4gl.
@@ -158,10 +145,9 @@ public class Ticket_0572 extends Ticket_0000 {
         // Evolution au 19/11/2019 : Ajout de la mention "Demande administrative" pour les clients 572 et 634
         unum = this.Fcalls_0000.getCunum();
         cquery1 = this.Fcalls_0000.getCquery1();
-        
+
         // for debug only ...
 //        this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + " - " + cquery1 + " - ");
-        
         if (unum == 572 && (cquery1 == 17191 || cquery1 == 24041 || cquery1 == 24043)) {
             this.setEtatIntervention("Demande administrative");
         } else if (unum == 634 && (cquery1 == 20975)) {
@@ -189,7 +175,6 @@ public class Ticket_0572 extends Ticket_0000 {
 
                             // for debug only ...
 //                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "A");
-                            
                             this.setNomPrestataire1(ftoubib.getTlname());
                             this.setPrenomPrestataire1(ftoubib.getTfname());
                             this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
@@ -220,7 +205,7 @@ public class Ticket_0572 extends Ticket_0000 {
                 }
             }
             fessaisDAO.closeTrialPreparedStatement();
-            
+
             // Recherche la première transmission
 //        System.out.println("  Récupération de la première transmission");
             fessaisDAO = new FessaisDAO(connection, etatTicket);
@@ -241,7 +226,6 @@ public class Ticket_0572 extends Ticket_0000 {
 
                             // for debug only ...
 //                            this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "B");
-                            
                             this.setNomPrestataire1(ftoubib.getTlname());
                             this.setPrenomPrestataire1(ftoubib.getTfname());
                             this.setPrestataire1(ftoubib.getTlname(), ftoubib.getTfname());
@@ -274,7 +258,7 @@ public class Ticket_0572 extends Ticket_0000 {
             }
             fessaisDAO.closeTrialPreparedStatement();
 
-        // Recherche la dernière transmission
+            // Recherche la dernière transmission
             //System.out.println("  Récupération de la dernière transmission");
             // ATTENTION : Incorporer enumabs1 dans la requête ultérieurement
             fessaisDAO = new FessaisDAO(connection, etatTicket);
@@ -295,7 +279,6 @@ public class Ticket_0572 extends Ticket_0000 {
 
                                 // for debug only ...
 //                                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "C");
-                            
                                 this.setNomPrestataire2(ftoubib.getTlname());
                                 this.setPrenomPrestataire2(ftoubib.getTfname());
                                 this.setPrestataire2(ftoubib.getTlname(), ftoubib.getTfname());
@@ -330,10 +313,9 @@ public class Ticket_0572 extends Ticket_0000 {
             }
             fessaisDAO.closeTrialPreparedStatement();
         }
-        
+
         // Changement vers intervention pour certains cas particuliers
         // On ne tient pas compte de l'intervenant récupéré pour l'instant, TB, le 19/11/2019.
-        
         // Cas Appel sortant sur ..., essais #40
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -347,7 +329,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "L");
             }
         }
-        
+
         // Cas Réponse du ..., essais #76
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -361,7 +343,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "M");
             }
         }
-        
+
         // Cas Prise en charge, essais #77
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -375,7 +357,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "N");
             }
         }
-        
+
         // Cas DIC envoyé par mail, essais #87
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -389,7 +371,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "J");
             }
         }
-        
+
         // Cas DI envoyé par mail, essais #88
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -403,7 +385,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "K");
             }
         }
-        
+
         // Cas d'un envoi GMAO, essais #100
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -417,7 +399,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "D");
             }
         }
-        
+
         // Cas d'une demande de devis, essais #400
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -431,7 +413,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "E");
             }
         }
-        
+
         // Cas d'une attente de validation de devis, essais #401
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -445,7 +427,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "F");
             }
         }
-        
+
         // Cas en attente de cloture prestataire, essais #405
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -459,7 +441,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "G");
             }
         }
-        
+
         // Cas en attente retour client, essais #406
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -473,7 +455,7 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "H");
             }
         }
-        
+
         // Cas envoi GMAO, essais #407
         if (this.getEtatIntervention().equals("Message")) {
             fessaisDAO = new FessaisDAO(super.getConnection(), super.getMyEtatTicket());
@@ -487,7 +469,6 @@ public class Ticket_0572 extends Ticket_0000 {
 //                this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + "I");
             }
         }
-        
 
         if (isTicketCanceled()) {
             etatIntervention = new StringBuffer(getEtatIntervention());
@@ -620,6 +601,20 @@ public class Ticket_0572 extends Ticket_0000 {
     }
 
     /**
+     * @return retourne la nature de l'appelant
+     */
+    public String getNatureOfTheCaller() {
+        return natureOfTheCaller;
+    }
+
+    /**
+     * @param natureOfTheCaller définit la nature de l'appelant
+     */
+    public final void setNatureOfTheCaller(String natureOfTheCaller) {
+        this.natureOfTheCaller = natureOfTheCaller;
+    }
+
+    /**
      * Vérifie si le ticket est annulé ou non
      *
      * @return retourne l'état du ticket : annulé ou non.
@@ -645,5 +640,179 @@ public class Ticket_0572 extends Ticket_0000 {
         isTicketCanceled = isTicketCanceled || (fessais != null);
 
         return isTicketCanceled;
+    }
+
+    /**
+     * Traduction de degré d'urgence basée sur tra_nat_urg_xxxx() de
+     * libutilxxx.4gl
+     */
+    private String tra_nat_urg_0572(int code, Timestamp cdate) {
+        String label = "Non précisé";
+
+        if (cdate.after(criticalLevelFirstChangeDate)) {
+            switch (code) {
+                case 1:
+                    label = "Non urgente";
+                    break;
+                case 2:
+                    label = "Urgente";
+                    break;
+                case 3:
+                    label = "Stratégique";
+                    break;
+                case 4:
+                    label = "Prioritaire";
+                    break;
+            }
+        } else {
+            switch (code) {
+                case 1:
+                    label = "Urgente";
+                    break;
+                case 2:
+                    label = "Non urgente";
+                    break;
+            }
+        }
+
+        return label;
+    }
+
+    /**
+     * Traduction du degré d'urgence basée sur tra_nat_urgence() de
+     * libutilxxx.4gl
+     *
+     * @param code code désignant le degré d'urgence
+     * @return le libellé correspondant
+     */
+    private String tra_nat_urgence(int code) {
+        String label = "NA";
+
+        switch (code) {
+            case 1:
+                label = "Urgente";
+                break;
+            case 2:
+                label = "Non Urgente";
+                break;
+            case 3:
+                label = "Crise avérée";
+                break;
+            case 4:
+                label = "Ne sais pas";
+                break;
+        }
+
+        return label;
+    }
+
+    /**
+     * Décodage de la nature de l'appelant pour le client 703 basée sur 
+     * w2l_screen1() de libtuilxxx.4gl
+     * La nature de l'appelant est stockée dans les deux premiers caractères.
+     *
+     * @param c6alpha10 chaine de caractères contenant l'encodage de la nature de l'appelant
+     * @return le codage de la nature de l'appelant
+     */
+    private int w2l_screen1(String c6alpha10) {
+
+        int code = 0;
+
+        try {
+            code = Math.max(Character.getNumericValue(c6alpha10.charAt(0)), 0);
+            code = code * 10 + Math.max(Character.getNumericValue(c6alpha10.charAt(1)), 0);
+//            System.out.println("  c6alpha10:" + c6alpha10 + ", code:" + code);
+        }
+        catch (Exception exception) {
+            System.out.println("WARNING : index out of bound in c6alpha10 in w2l_screen1()");
+        }
+        
+        return code;
+    }
+
+    /**
+     * Décodage du degré d'urgence pour le client 703 basée sur w2l_screen3() de
+     * libtuilxxx.4gl
+     * Le degré d'urgence est stocké dans le 25ième caractère.
+     *
+     * @param c6alpha10 chaine de caractères contenant l'encodage du degré d'urgence
+     * @return le codage du degré d'urgence
+     */
+    private int w2l_screen3(String c6alpha10) {
+
+        int code = 0;
+
+        try {
+            code = Math.max(Character.getNumericValue(c6alpha10.charAt(24)), 0);
+//            System.out.println("  c6alpha10:" + c6alpha10 + ", code:" + code);
+        }
+        catch (Exception exception) {
+            System.out.println("WARNING : index out of bound in c6alpha10 in w2l_screen3()");
+        }
+        
+        return code;
+    }
+
+    /**
+     * Traduction de la nature de l'appelant basée sur tra_nat_caller_xxxx() de
+     * libcontact.4gl
+     *
+     * @param code code désignant la nature de l'appelant
+     * @return le libellé correspondant
+     */
+    private String tra_nat_caller_0572(int code, int unum) {
+        String label = "NA";
+
+        if (unum == 703) {
+            switch (code) {
+                case 1:
+                    label = "Responsable site";
+                    break;
+                case 2:
+                    label = "Gardien";
+                    break;
+                case 3:
+                    label = "PC Securite";
+                    break;
+                case 4:
+                    label = "Gestionnaire";
+                    break;
+                case 5:
+                    label = "Manager";
+                    break;
+                case 6:
+                    label = "Inspecteur Technique";
+                    break;
+                case 7:
+                    label = "Responsable technique";
+                    break;
+                case 8:
+                    label = "Telesurveillance";
+                    break;
+                case 9:
+                    label = "Cadre astreinte";
+                    break;
+                case 10:
+                    label = "Locataire";
+                    break;
+                case 11:
+                    label = "Proprietaire";
+                    break;
+                case 12:
+                    label = "Syndic";
+                    break;
+                case 13:
+                    label = "Promoteur";
+                    break;
+                case 14:
+                    label = "Accueil";
+                    break;
+                case 15:
+                    label = "Autre";
+                    break;
+            }
+        }
+
+        return label;
     }
 }
