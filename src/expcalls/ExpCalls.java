@@ -16,7 +16,7 @@ import utils.GetArgsException;
  * format XML.
  *
  * @author Thierry Baribaud
- * @version 0.51
+ * @version 0.57
  */
 public class ExpCalls {
 
@@ -55,20 +55,25 @@ public class ExpCalls {
         ExpCalls_0582 expCalls_0582;
         ExpCalls_0609 expCalls_0609;
         ExpCalls_0648 expCalls_0648;
+        ExpCalls_0703 expCalls_0703;
 
         try {
             System.out.println("Analyse des arguments de la ligne de commande ...");
             getArgs = new GetArgs(args);
             setDebugMode(getArgs.getDebugMode());
             setTestMode(getArgs.getTestMode());
-            if (debugMode) System.out.println(getArgs);
+            if (debugMode) {
+                System.out.println(getArgs);
+            }
 
             System.out.println("Lecture des paramètres d'exécution ...");
             applicationProperties = new ApplicationProperties("ExpCalls.prop");
 
             System.out.println("Lecture des paramètres de base de données ...");
             dBServer = new DBServer(getArgs.getSourceServer(), applicationProperties);
-            if (debugMode) System.out.println("  " + dBServer);
+            if (debugMode) {
+                System.out.println("  " + dBServer);
+            }
 
             dBManager = new DBManager(dBServer);
 
@@ -91,6 +96,9 @@ public class ExpCalls {
                 case MIQ:
                     expCalls_0648 = new ExpCalls_0648(expCallsParams);
                     break;
+                case BRE:
+                    expCalls_0703 = new ExpCalls_0703(expCallsParams);
+                    break;
                 default:
                     expCalls_0000 = new ExpCalls_0000(expCallsParams);
                     break;
@@ -99,9 +107,7 @@ public class ExpCalls {
         } catch (GetArgsException exception) {
             Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
             GetArgs.usage();
-        } catch (ClassNotFoundException exception) {
-            Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
-        } catch (SQLException exception) {
+        } catch (ClassNotFoundException | SQLException exception) {
             Logger.getLogger(ExpCalls.class.getName()).log(Level.SEVERE, null, exception);
         }
 

@@ -17,12 +17,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Classe représentant un ticket pour les clients de la famille du client 572
+ * Classe représentant un ticket pour les clients de la famille du client 703
  *
  * @author Thierry Baribaud
  * @version 0.57
  */
-public class Ticket_0572 extends Ticket_0000 {
+public class Ticket_0703 extends Ticket_0000 {
 
     /**
      * Date of first CriticalLevel definition change
@@ -74,7 +74,7 @@ public class Ticket_0572 extends Ticket_0000 {
      * @throws java.lang.ClassNotFoundException en cas de classe non trouvée.
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
-    public Ticket_0572(Connection connection, Fcalls Fcalls_0000, Fcomplmt Fcomplmt_0000, EtatTicket etatTicket) throws ClassNotFoundException, SQLException {
+    public Ticket_0703(Connection connection, Fcalls Fcalls_0000, Fcomplmt Fcomplmt_0000, EtatTicket etatTicket) throws ClassNotFoundException, SQLException {
         super(connection, Fcalls_0000, Fcomplmt_0000, etatTicket);
 
         Fessais fessais;
@@ -96,11 +96,11 @@ public class Ticket_0572 extends Ticket_0000 {
 
         // Nature de l'appelant cf. tra_nat_caller_xxxx() de libcontact.4gl et
         // w2l_screen1() de libutilxxx.4gl
-        setNatureOfTheCaller(this.Fcomplmt_0000.getC6city());
+        setNatureOfTheCaller(tra_nat_caller_0572(w2l_screen1(this.Fcomplmt_0000.getC6alpha10()), this.Fcalls_0000.getCunum()));
 
         // Degré de criticité de la demande cf. tra_nat_urg_xxxx() dans libutilxxx.4gl
 //        System.out.println("  cdelay1="+Fcalls_0000.getCdelay1());
-        setCriticalLevel(tra_nat_urg_0572(this.Fcalls_0000.getCdelay1(), this.Fcalls_0000.getCdate()));
+        setCriticalLevel(tra_nat_urgence(w2l_screen3(this.Fcomplmt_0000.getC6alpha10())));
 
         // Indication de dégâts des eaux cf. tra_degat_eau_0572() dans libspc0572.4gl.
         if ("1".equals(this.Fcalls_0000.getCsector1())) {
@@ -140,6 +140,7 @@ public class Ticket_0572 extends Ticket_0000 {
 
         // for debug only ...
 //        this.Fcalls_0000.setCname(this.Fcalls_0000.getCname() + " - " + cquery1 + " - ");
+        // TODO : A enleverplus tard
         if (unum == 572 && (cquery1 == 17191 || cquery1 == 24041 || cquery1 == 24043)) {
             this.setEtatIntervention("Demande administrative");
         } else if (unum == 634 && (cquery1 == 20975)) {
@@ -486,7 +487,7 @@ public class Ticket_0572 extends Ticket_0000 {
      * @throws java.lang.ClassNotFoundException en cas de classe non trouvée.
      * @throws java.sql.SQLException en cas d'erreur SQL.
      */
-    public Ticket_0572(Connection MyConnection, Fcalls Fcalls_0000, EtatTicket MyEtatTicket) throws ClassNotFoundException, SQLException {
+    public Ticket_0703(Connection MyConnection, Fcalls Fcalls_0000, EtatTicket MyEtatTicket) throws ClassNotFoundException, SQLException {
         this(MyConnection, Fcalls_0000, null, MyEtatTicket);
     }
 
@@ -626,48 +627,12 @@ public class Ticket_0572 extends Ticket_0000 {
             fessais = fessaisDAO.getLastTrial();
             fessaisDAO.closeLastTrialPreparedStatement();
         } catch (ClassNotFoundException | SQLException exception) {
-            Logger.getLogger(Ticket_0572.class.getName()).log(Level.WARNING, null, exception);
+            Logger.getLogger(Ticket_0703.class.getName()).log(Level.WARNING, null, exception);
         }
 
         isTicketCanceled = isTicketCanceled || (fessais != null);
 
         return isTicketCanceled;
-    }
-
-    /**
-     * Traduction de degré d'urgence basée sur tra_nat_urg_xxxx() de
-     * libutilxxx.4gl
-     */
-    private String tra_nat_urg_0572(int code, Timestamp cdate) {
-        String label = "Non précisé";
-
-        if (cdate.after(criticalLevelFirstChangeDate)) {
-            switch (code) {
-                case 1:
-                    label = "Non urgente";
-                    break;
-                case 2:
-                    label = "Urgente";
-                    break;
-                case 3:
-                    label = "Stratégique";
-                    break;
-                case 4:
-                    label = "Prioritaire";
-                    break;
-            }
-        } else {
-            switch (code) {
-                case 1:
-                    label = "Urgente";
-                    break;
-                case 2:
-                    label = "Non urgente";
-                    break;
-            }
-        }
-
-        return label;
     }
 
     /**
@@ -693,6 +658,115 @@ public class Ticket_0572 extends Ticket_0000 {
             case 4:
                 label = "Ne sais pas";
                 break;
+        }
+
+        return label;
+    }
+
+    /**
+     * Décodage de la nature de l'appelant pour le client 703 basée sur
+     * w2l_screen1() de libtuilxxx.4gl La nature de l'appelant est stockée dans
+     * les deux premiers caractères.
+     *
+     * @param c6alpha10 chaine de caractères contenant l'encodage de la nature
+     * de l'appelant
+     * @return le codage de la nature de l'appelant
+     */
+    private int w2l_screen1(String c6alpha10) {
+
+        int code = 0;
+
+        try {
+            code = Math.max(Character.getNumericValue(c6alpha10.charAt(0)), 0);
+            code = code * 10 + Math.max(Character.getNumericValue(c6alpha10.charAt(1)), 0);
+//            System.out.println("  c6alpha10:" + c6alpha10 + ", code:" + code);
+        } catch (Exception exception) {
+            System.out.println("WARNING : index out of bound in c6alpha10 in w2l_screen1()");
+        }
+
+        return code;
+    }
+
+    /**
+     * Décodage du degré d'urgence pour le client 703 basée sur w2l_screen3() de
+     * libtuilxxx.4gl Le degré d'urgence est stocké dans le 25ième caractère.
+     *
+     * @param c6alpha10 chaine de caractères contenant l'encodage du degré
+     * d'urgence
+     * @return le codage du degré d'urgence
+     */
+    private int w2l_screen3(String c6alpha10) {
+
+        int code = 0;
+
+        try {
+            code = Math.max(Character.getNumericValue(c6alpha10.charAt(24)), 0);
+//            System.out.println("  c6alpha10:" + c6alpha10 + ", code:" + code);
+        } catch (Exception exception) {
+            System.out.println("WARNING : index out of bound in c6alpha10 in w2l_screen3()");
+        }
+
+        return code;
+    }
+
+    /**
+     * Traduction de la nature de l'appelant basée sur tra_nat_caller_xxxx() de
+     * libcontact.4gl
+     *
+     * @param code code désignant la nature de l'appelant
+     * @return le libellé correspondant
+     */
+    private String tra_nat_caller_0572(int code, int unum) {
+        String label = "NA";
+
+        if (unum == 703) {
+            switch (code) {
+                case 1:
+                    label = "Responsable site";
+                    break;
+                case 2:
+                    label = "Gardien";
+                    break;
+                case 3:
+                    label = "PC Securite";
+                    break;
+                case 4:
+                    label = "Gestionnaire";
+                    break;
+                case 5:
+                    label = "Manager";
+                    break;
+                case 6:
+                    label = "Inspecteur Technique";
+                    break;
+                case 7:
+                    label = "Responsable technique";
+                    break;
+                case 8:
+                    label = "Telesurveillance";
+                    break;
+                case 9:
+                    label = "Cadre astreinte";
+                    break;
+                case 10:
+                    label = "Locataire";
+                    break;
+                case 11:
+                    label = "Proprietaire";
+                    break;
+                case 12:
+                    label = "Syndic";
+                    break;
+                case 13:
+                    label = "Promoteur";
+                    break;
+                case 14:
+                    label = "Accueil";
+                    break;
+                case 15:
+                    label = "Autre";
+                    break;
+            }
         }
 
         return label;

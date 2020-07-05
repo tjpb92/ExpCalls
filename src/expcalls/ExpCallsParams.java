@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  * Classe servant à stocker les paramètres pour exporter les appels.
  *
  * @author Thierry Baribaud
- * @version 0.55
+ * @version 0.57
  */
 public class ExpCallsParams {
 
@@ -79,7 +79,7 @@ public class ExpCallsParams {
      * Filter les tickets associés à l'intervenant
      */
     private int tnum;
-    
+
     /**
      * Filtrer les tickets associés à une agence
      */
@@ -389,7 +389,7 @@ public class ExpCallsParams {
                 setModeleDeRapport(ModeleDeRapport.VF);
                 break;
             case 703:
-                setModeleDeRapport(ModeleDeRapport.NEX);
+                setModeleDeRapport(ModeleDeRapport.BRE);
                 break;
             default:
                 setModeleDeRapport(ModeleDeRapport.STD);
