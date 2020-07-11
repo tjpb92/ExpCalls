@@ -32,6 +32,8 @@
             <xs:element type="xs:string" name="DateMissionnement2" minOccurs="0"/>
             <xs:element type="xs:string" name="HeureMissionnement2" minOccurs="0"/>
             <xs:element type="xs:string" name="LogOperateur" minOccurs="0"/>
+            <xs:element type="xs:string" name="NumeroDevis" minOccurs="0"/>
+            <xs:element type="xs:string" name="DICloturee" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>

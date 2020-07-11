@@ -12,29 +12,29 @@ import utils.XMLDocument;
  * clients de la famille 513.
  *
  * @author Thierry Baribaud
- * @version 0.50
+ * @version 0.58
  */
 public class Calls_0513_XMLDocument extends XMLDocument {
 
     /**
      * Initialise le document XML - constructeur principal.
      *
-     * @param RootName nom de la racine du document XML.
-     * @param XsdFile nom du fichier contenant le schéma XML.
-     * @param MyComment commentaire sur le contenu du fichier.
+     * @param rootName nom de la racine du document XML.
+     * @param xsdFile nom du fichier contenant le schéma XML.
+     * @param comment commentaire sur le contenu du fichier.
      */
-    public Calls_0513_XMLDocument(String RootName, String XsdFile, String MyComment) {
-        super(RootName, XsdFile, MyComment);
+    public Calls_0513_XMLDocument(String rootName, String xsdFile, String comment) {
+        super(rootName, xsdFile, comment);
     }
 
     /**
      * Initialise le document XML - constructeur secondaire.
      *
-     * @param RootName nom de la racine du document XML.
-     * @param XsdFile nom du fichier contenant le schéma XML.
+     * @param rootName nom de la racine du document XML.
+     * @param xsdFile nom du fichier contenant le schéma XML.
      */
-    public Calls_0513_XMLDocument(String RootName, String XsdFile) {
-        this(RootName, XsdFile, null);
+    public Calls_0513_XMLDocument(String rootName, String xsdFile) {
+        this(rootName, xsdFile, null);
     }
 
     /**
@@ -53,7 +53,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
 
         Element Ticket;
 
-        DateFormat MyDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         aString = "Ticket ref=" + ticket_0513.Fcalls_0000.getCnum();
         if (aString != null) {
@@ -94,7 +94,7 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         Ticket.appendChild(element);
         aTimestamp = ticket_0513.Fcalls_0000.getCdate();
         if (aTimestamp != null) {
-            element.appendChild(MyDocument.createTextNode(MyDateFormat.format(aTimestamp)));
+            element.appendChild(MyDocument.createTextNode(dateFormat.format(aTimestamp)));
         }
 
         // Heure de saisie
@@ -262,5 +262,19 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         if (anInt > 2000) {
             element.appendChild(MyDocument.createTextNode(String.valueOf(anInt)));
         }
+
+        // Numéro du devis - cnumber8
+        element = MyDocument.createElement("NumeroDevis");
+        Ticket.appendChild(element);
+        aString = ticket_0513.Fcalls_0000.getCnumber8();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // DI Clôturée - cnote
+        element = MyDocument.createElement("DICloturee");
+        Ticket.appendChild(element);
+        aString = ticket_0513.Fcalls_0000.getCnote() == 1 ? "Oui" : "Non";
+        element.appendChild(MyDocument.createTextNode(aString));
     }
 }
