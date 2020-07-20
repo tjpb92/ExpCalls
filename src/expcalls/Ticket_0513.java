@@ -14,7 +14,7 @@ import java.sql.Time;
 /**
  * Classe représentant un ticket pour les clients de la famille du client 513
  *
- * @version Juillet 2016
+ * @version 0.59
  * @author Thierry Baribaud
  */
 public class Ticket_0513 extends Ticket_0000 {
@@ -48,6 +48,11 @@ public class Ticket_0513 extends Ticket_0000 {
      * Qualification de la demande.
      */
     private String Qualification;
+
+    /**
+     * Type d'OT
+     */
+    private String otType;
 
     /**
      * Contructeur principal de la classe Ticket.
@@ -88,6 +93,9 @@ public class Ticket_0513 extends Ticket_0000 {
 
         // Numéro de poste de l'opérateur.
         setLogOperateur(Fcalls_0000.getConum(), 0);
+        
+        // Type d'OT
+        setOtType(this.Fcomplmt_0000.getC6int3());
     }
 
     /**
@@ -246,6 +254,27 @@ public class Ticket_0513 extends Ticket_0000 {
     }
 
     /**
+     * @return otType type d'OT
+     */
+    public String getOtType() {
+        return otType;
+    }
+
+    /**
+     * @param otType définit le type d'OT.
+     */
+    public void setOtType(String otType) {
+        this.otType = otType;
+    }
+
+    /**
+     * @param otTypeCode définit le type d'OT.
+     */
+    public void setOtType(int otTypeCode) {
+        this.otType = tra_type_ot(otTypeCode);
+    }
+
+    /**
      * Définit la qualification de la demande à partir de x et y.
      *
      * @param unum identifiant unique du client via furgent.
@@ -267,4 +296,28 @@ public class Ticket_0513 extends Ticket_0000 {
         MyFtypeDAO.closeSelectPreparedStatement();
     }
 
+    /**
+     * Fonction servant à convertir le code du type OT en libellé
+     *
+     * @param otTypeCode code du type d'OT (c6int3)
+     * @return le libellé du type d'OT.
+     */
+    private String tra_type_ot(int otTypeCode) {
+        String retString;
+
+//      Indication du type d'OT cf. tra_type_ot() dans libutilxxx.4gl.
+        switch (otTypeCode) {
+            case 2:
+                retString = "Préventif";
+                break;
+            case 3:
+                retString = "Réglementaire";
+                break;
+            default:
+                retString = "Curative";
+                break;
+        }
+
+        return retString;
+    }
 }

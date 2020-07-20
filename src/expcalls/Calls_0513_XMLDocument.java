@@ -12,7 +12,7 @@ import utils.XMLDocument;
  * clients de la famille 513.
  *
  * @author Thierry Baribaud
- * @version 0.58
+ * @version 0.59
  */
 public class Calls_0513_XMLDocument extends XMLDocument {
 
@@ -276,5 +276,22 @@ public class Calls_0513_XMLDocument extends XMLDocument {
         Ticket.appendChild(element);
         aString = ticket_0513.Fcalls_0000.getCnote() == 1 ? "Oui" : "Non";
         element.appendChild(MyDocument.createTextNode(aString));
+        
+        // Type d'OT - tra_type_ot(c6int3)
+        element = MyDocument.createElement("TypeOT");
+        Ticket.appendChild(element);
+        aString = ticket_0513.getOtType();
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+
+        // Type de magasin - c6alpha1
+        element = MyDocument.createElement("TypeMagasin");
+        Ticket.appendChild(element);
+        aString = ticket_0513.Fcomplmt_0000 != null ? ticket_0513.Fcomplmt_0000.getC6alpha1() : null;
+        if (aString != null) {
+            element.appendChild(MyDocument.createTextNode(aString));
+        }
+        
     }
 }
